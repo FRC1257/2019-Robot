@@ -12,6 +12,12 @@ import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import jaci.pathfinder.followers.EncoderFollower;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.modifiers.*;
+import jaci.pathfinder.followers.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -41,6 +47,45 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_timer.reset();
     m_timer.start();
+
+    Waypoint[] points = new Waypoint[] {
+      new Waypoint(-4, -1, Pathfinder.d2r(-45)),      // Waypoint @ x=-4, y=-1, exit angle=-45 degrees
+      new Waypoint(-2, -2, 0),                        // Waypoint @ x=-2, y=-2, exit angle=0 radians
+      new Waypoint(0, 0, 0)                           // Waypoint @ x=0, y=0,   exit angle=0 radians
+  };
+  
+  // Create the Trajectory Configuration
+  //
+  // Arguments:
+  // Fit Method:          HERMITE_CUBIC or HERMITE_QUINTIC
+  // Sample Count:        SAMPLES_HIGH (100 000)
+  //                      SAMPLES_LOW  (10 000)
+  //                      SAMPLES_FAST (1 000)
+  // Time Step:           0.05 Seconds
+  // Max Velocity:        1.7 m/s
+  // Max Acceleration:    2.0 m/s/s
+  // Max Jerk:            60.0 m/s/s/s
+  Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, 1.7, 2.0, 60.0);
+  
+  // Generate the trajectory
+  Trajectory trajectory = Pathfinder.generate(points, config);
+
+  // The distance between the left and right sides of the wheelbase is 0.6m
+double wheelbase_width = 0.6;
+
+// Create the Modifier Object
+TankModifier modifier = new TankModifier(trajectory);
+
+// Generate the Left and Right trajectories using the original trajectory
+// as the centre
+modifier.modify(wheelbase_width);
+
+Trajectory left  = modifier.getLeftTrajectory();       // Get the Left Side
+Trajectory right = modifier.getRightTrajectory();      // Get the Right Side
+
+left.configureEncoder(encoder_position, 1000, wheel_diameter);
+right.configureEncoder(encoder_position, 1000, wheel_diameter);
+
   }
 
   /**
