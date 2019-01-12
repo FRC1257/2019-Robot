@@ -7,5 +7,5 @@ public class RobotMap {
     public static final double kv = 1500; // Placeholder
     public static final int NEOconsts[] = {105, 1, 5500, 10}; // for NEO: stall current, running current, RPM limit, limitRPM
 
-    public static final int motors[] = {1, 2, 3, 4}; // In this order: FL, FR, BL, BR
+    public static final int motors[] = {0, 1, 2, 3}; // In this order: FL, FR, BL, BR
 }
