@@ -3,9 +3,6 @@ package frc.drivetrain;
 import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
-import java.util.StringJoiner;
 
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
