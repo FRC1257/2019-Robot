@@ -1,6 +1,7 @@
 package frc.drivetrain;
 
 import java.util.StringJoiner;
+import frc.drivetrain.DriveTrain;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -19,6 +20,8 @@ public class IntegralDrive extends DifferentialDrive {
 
     private final SpeedController m_leftMotor;
     private final SpeedController m_rightMotor;
+
+    private DriveTrain driveTrain;
 
     private double m_quickStopThreshold = kDefaultQuickStopThreshold;
     private double m_quickStopAlpha = kDefaultQuickStopAlpha;
@@ -56,7 +59,10 @@ public class IntegralDrive extends DifferentialDrive {
       // Override acradeDrive, implementing closed-loop
       @Override
       @SuppressWarnings("ParameterName")
-    public void arcadeDrive(double xSpeed, double zRotation, boolean squareInputs) {
+    public void arcadeDrive(double xSpeed, double zRotation, boolean squareInputs) { 
+        DriveTrain driveTrain;
+        driveTrain = DriveTrain.getInstance();
+
         if (!m_reported) {
         HAL.report(tResourceType.kResourceType_RobotDrive, 2,
                  tInstances.kRobotDrive2_DifferentialArcade);
@@ -101,8 +107,9 @@ public class IntegralDrive extends DifferentialDrive {
         }
         }
 
-        m_leftMotor.set(limit(leftMotorOutput) * m_maxOutput);
-        m_rightMotor.set(limit(rightMotorOutput) * m_maxOutput * m_rightSideInvertMultiplier);
+        // This is awful code, I'll try to come up with something else.
+        // This sends these outputs to a PID loop in DriveTrain, where the closed-loop actually happens.
+        driveTrain.setSetPIDlr(limit(leftMotorOutput * m_maxOutput), limit(rightMotorOutput * m_maxOutput * m_rightSideInvertMultiplier));
 
         feed();
     }
