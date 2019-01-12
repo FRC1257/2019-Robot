@@ -5,19 +5,20 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.*;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType; //needed to instantie motor type
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class CargoIntake {
+    
     private static CargoIntake instance = null;
 
-    private CANSparkMax ciMotor;
+    private CANSparkMax cargoIntakeMotor;
 
     private AnalogInput distanceSensor;
 
     private CargoIntake() {
-        ciMotor = new CANSparkMax(RobotMap.motors[4], MotorType.kBrushless);
+        cargoIntakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE_MOTOR, MotorType.kBrushless);
 
-        distanceSensor = new AnalogInput(RobotMap.analogInputs[0]);
+        distanceSensor = new AnalogInput(RobotMap.CARGO_INTAKE_DISTANCE_SENSOR);
     }
     
     
