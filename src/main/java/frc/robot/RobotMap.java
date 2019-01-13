@@ -8,5 +8,5 @@ public class RobotMap {
      * The units of each measurement should be specified in a comment
      */
 
-    
+    // Vision
 }
