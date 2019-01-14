@@ -4,23 +4,26 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class CargoIntake {
     
     private static CargoIntake instance = null;
-
-    private CANSparkMax cargoIntakeMotor;
-
-    private AnalogInput distanceSensor;
+    WPI_TalonSRX intakeMotor;
 
     private CargoIntake() {
-        cargoIntakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE_MOTOR, MotorType.kBrushless);
-
-        distanceSensor = new AnalogInput(RobotMap.CARGO_INTAKE_DISTANCE_SENSOR);
+        intakeMotor = new WPI_TalonSRX(5);
+    }
+    public void setOuttake() {
+        intakeMotor.set(RobotMap.OUTTAKE_SPEED);
+    }
+    public void setIntake() {
+        intakeMotor.set(RobotMap.INTAKE_SPEED);
     }
     
+    // Shoot when hit left trigger
     
 
     public static CargoIntake getInstance() {

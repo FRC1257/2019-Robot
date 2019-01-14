@@ -1,8 +1,10 @@
 package frc.robot;
-
 import edu.wpi.first.wpilibj.*;
 
+import frc.subsystems.*;
+
 public class Robot extends TimedRobot {
+    CargoIntake intake;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -10,7 +12,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-
+        intake = CargoIntake.getInstance();
     }
 
     /**
