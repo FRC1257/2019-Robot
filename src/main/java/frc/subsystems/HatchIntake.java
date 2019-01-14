@@ -15,7 +15,17 @@ public class HatchIntake {
 
     }
     
-    
+    public void pickup(boolean loadingStation) {
+
+    }
+
+    public void extend() {
+
+    }
+
+    public void retract() {
+        
+    }
 
     public static HatchIntake getInstance() {
         if (instance == null) {
