@@ -30,8 +30,13 @@ public class IntakeArm {
         }
         return instance;
     }
-    
+
+    /*
     public void PID() {
-        
+        if (!IntakeArmPIDController.isEnabled()) {
+            IntakeArmMotor.set();
+        }
+        IntakeArmPIDController.enable();
     }
+    */
 }
