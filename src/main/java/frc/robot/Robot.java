@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 
 public class Robot extends TimedRobot {
+    Climb climb;
+    XboxController controller;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -10,7 +12,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-
+    climb = new Climb();
+    climb.reset();
+    controller= new XboxController(1);
     }
 
     /**
@@ -42,6 +46,19 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+    boolean FrontOn = false;
+    boolean BackOn = false;
+    if(controller.getAButton && FrontOn==false)
+    {
+    climb.frontforward();
+    FrontOn=true;
+    }
+    if(controller.getAButton && FrontOn==true)
+    {
+    climb.frontreverse();
+    FrontOn=false;
+    }
+
 
     }
 
