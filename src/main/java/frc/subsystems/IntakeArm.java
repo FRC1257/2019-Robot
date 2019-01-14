@@ -8,13 +8,20 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeArm {
-    
     private static IntakeArm instance = null;
+
+    if ((controller.getBumper(GenericHID.Hand.kRight)) && (forwardLimitSwitch.get())) {
+        // forwardLimitSwitch is the switch that is pressed when the arm reaches its upper limit
+        IntakeArmMotor.set(1);
+    }
+    else if ((controller.getBumper(GenericHID.Hand.kLeft)) && (reverseLimitSwitch.get())) {
+        // reverseLimitSwitch is the switch that is pressed when the arm reaches its lower limit
+        IntakeArmMotor.set(-1);
+    }
 
     private IntakeArm() {
 
     }
-    
     
 
     public static IntakeArm getInstance() {
@@ -22,5 +29,9 @@ public class IntakeArm {
             instance = new IntakeArm();
         }
         return instance;
+    }
+    
+    public void PID() {
+        
     }
 }
