@@ -13,13 +13,19 @@ public class HatchIntake {
     private Solenoid pickupSolenoid;
     private Solenoid ejectSolenoid;
     private CANSparkMax hatchPivotMotor;
+    private CANPIDController hatchPivotPID;
 
     public HatchIntake() {
         pickupSolenoid = new Solenoid(1, 2);
         ejectSolenoid = new Solenoid(3, 4);
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR, MotorType.kBrushless);
+        hatchPivotPID = hatchPivotMotor.getPIDController();
 
-        hatchPivotMotor.getPID();
+        hatchPivotPID.setD(RobotMap.P_VALUE);
+        hatchPivotPID.setI(RobotMap.I_VALUE);
+        hatchPivotPID.setD(RobotMap.D_VALUE);
+        hatchPivotPID.setFF(RobotMap.FF_VALUE);
+
     }
     
     // public void pickup(boolean loadingStation) {
