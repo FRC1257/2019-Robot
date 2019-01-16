@@ -9,8 +9,11 @@ public class RobotMap {
      */
     
      // Cargo Intake
-     public static final int CARGO_PID = 4;
+     public static final int CARGO_P = 4;
+    //
      public static final double OUTTAKE_SPEED = 1.0;
      public static final double INTAKE_SPEED = -1.0;
+     public static final int CARGO_INTAKE = 1;
+     public static final int OPERATOR_CONTROLLER = 1;
 
 }

@@ -11,21 +11,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class CargoIntake {
     
     private static CargoIntake instance = null;
-    WPI_TalonSRX intakeMotor;
+    CANSparkMax intakeMotor; 
 
     private CargoIntake() {
-        intakeMotor = new WPI_TalonSRX(5);
+        intakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE, MotorType.kBrushless);
     }
-    public void setOuttake() {
+
+    public void shoot() {
         intakeMotor.set(RobotMap.OUTTAKE_SPEED);
     }
-    public void setIntake() {
+
+    public void intake() {
         intakeMotor.set(RobotMap.INTAKE_SPEED);
     }
     
-    // Shoot when hit left trigger
-    
-
     public static CargoIntake getInstance() {
         if (instance == null) {
             instance = new CargoIntake();
