@@ -13,22 +13,30 @@ public class HatchIntake {
     private static HatchIntake instance = null;
     DoubleSolenoid pickupSolenoid;
     DoubleSolenoid ejectSolenoid;
-    
+    private CANSparkMax hatchPivotMotor;
+
     public HatchIntake() {
         pickupSolenoid = new DoubleSolenoid(1, 2);
         ejectSolenoid = new DoubleSolenoid(3, 4);
+        hatchPivotMotor = new CANSparkMax(RobotMap.MOTORS[0], MotorType.kBrushless);
+
+        hatchPivotMotor.getPID();
+
     }
     
-    public void pickup(boolean loadingStation) {
+    // public void pickup(boolean loadingStation) {
+    // }
 
+    public void extend(type_solenoid) {
+        type_solenoid.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void extend() {
-
+    public void retract(type_solenoid) {
+        type_solenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void retract() {
-        
+    public void hatchPivot(speed) {
+        hatchPivotMotor.set(speed);
     }
 
     public static HatchIntake getInstance() {
