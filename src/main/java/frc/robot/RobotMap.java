@@ -20,4 +20,8 @@ public class RobotMap {
      public static final int OPERATOR_CONTROLLER = 1;
      //Xbox Controller Port
 
+     // Infared Sensor
+     public static final int CARGO_INFARED_PORT = 1;
+     public static final int CARGO_PONR = 20;
+     // Point of no return for when cargo starts to fall out (cm) - Random value, must input real value
 }
