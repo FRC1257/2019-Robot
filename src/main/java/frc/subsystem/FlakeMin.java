@@ -6,6 +6,7 @@ import com.revrobotics.*;
 
 public class FlakeMin extends CANSparkMax {
     public CANPIDController PID;
+    public CANEncoder Encoder;
     private double currentSpeed;
 
     public FlakeMin(int deviceID, CANSparkMaxLowLevel.MotorType type, boolean left) {
@@ -19,6 +20,7 @@ public class FlakeMin extends CANSparkMax {
             }
 
         currentSpeed = 0.0;
+        Encoder = getEncoder();
     }
 
     private double updateInput(double currentInput, double targetInput) {
@@ -43,5 +45,11 @@ public class FlakeMin extends CANSparkMax {
 
     public void getPID() {
         PID = getPIDController();
+    }
+    public double getSpeed() {
+        return Encoder.getVelocity();
+    }
+    public double getPlace() {
+        return Encoder.getPosition();
     }
 }
