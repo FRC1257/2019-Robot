@@ -2,9 +2,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 
+import frc.subsystems.*;
+
 public class Robot extends TimedRobot {
     Climb climb;
-    XboxController controller;
+    XboxController Controller;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -14,7 +16,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
     climb = new Climb();
     climb.reset();
-    controller= new XboxController(1);
+    Controller = new XboxController(1);
     }
 
     /**
@@ -46,19 +48,23 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-    boolean FrontOn = false;
-    boolean BackOn = false;
-    if(controller.getAButton && FrontOn==false)
-    {
-    climb.frontforward();
-    FrontOn=true;
-    }
-    if(controller.getAButton && FrontOn==true)
-    {
-    climb.frontreverse();
-    FrontOn=false;
-    }
-
+      
+      if(Controller.getXButton() && climb.FrontOn == false)
+      {
+        climb.frontForward();
+      }
+      else if(Controller.getXButton() && climb.FrontOn == true)
+      {
+        climb.frontReverse();
+      }
+      if(Controller.getYButton() && climb.BackOn == false)
+      {
+        climb.backForward();
+      }
+      else if(Controller.getYButton() && climb.BackOn == true)
+      {
+        climb.backReverse();
+      }
 
     }
 
