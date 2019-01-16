@@ -19,7 +19,7 @@ public class IntakeArm {
         intakeArmMotor = new CANSparkMax(RobotMap.intakeArmMotorPort, MotorType.kBrushless);
     }
 
-    public void IntakeArmMotionSetSpeed(double speed) {
+    public void setSpeed(double speed) {
         intakeArmMotor.set(speed);
     }
 

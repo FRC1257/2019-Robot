@@ -47,12 +47,12 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         if (controller.getBumper(GenericHID.Hand.kRight)) {
-            intakeArm.IntakeArmMotionSetSpeed(1);
+            intakeArm.setSpeed(1);
             //double driveSpeed = controller.getY(GenericHID.Hand kLeft);
             //double turnSpeed = controller.getX(GenericHID.Hand kRight);
         }
         else if (controller.getBumper(GenericHID.Hand.kLeft)) {
-            intakeArm.IntakeArmMotionSetSpeed(-1);
+            intakeArm.setSpeed(-1);
         }
     }
 
