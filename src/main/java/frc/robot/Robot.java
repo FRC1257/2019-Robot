@@ -2,7 +2,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 
+import frc.subsystems.*;
+
 public class Robot extends TimedRobot {
+    IntakeArm intakeArm;
+    XboxController controller;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -10,7 +14,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-
+        controller = new XboxController(1);
     }
 
     /**
@@ -43,12 +47,12 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         if (controller.getBumper(GenericHID.Hand.kRight)) {
-            IntakeArmMotion(1);
+            intakeArm.IntakeArmMotionSetSpeed(1);
             //double driveSpeed = controller.getY(GenericHID.Hand kLeft);
             //double turnSpeed = controller.getX(GenericHID.Hand kRight);
         }
         else if (controller.getBumper(GenericHID.Hand.kLeft)) {
-            IntakeArmMotion(-1);
+            intakeArm.IntakeArmMotionSetSpeed(-1);
         }
     }
 

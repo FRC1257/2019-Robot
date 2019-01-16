@@ -4,7 +4,7 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,7 +22,7 @@ public class IntakeArm {
         IntakeArmMotor = new WPI_TalonSRX(1);
     }
 
-    public void IntakeArmMotion(double speed) {
+    public void IntakeArmMotionSetSpeed(double speed) {
         IntakeArmMotor.set(speed);
     }
 
