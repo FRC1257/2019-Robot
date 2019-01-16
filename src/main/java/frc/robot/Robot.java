@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
       {
         climb.backReverse();
       }
-      if(Controller.getAButton())
+      if(Controller.getBButton())
       {
         climb.reset();
       }
