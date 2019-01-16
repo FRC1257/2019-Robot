@@ -4,25 +4,28 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeArm {
+    // 1 NEO motor with 1 Spark MAX
+
     private static IntakeArm instance = null;
+    //DigitalInput forwardLimitSwitch;
+    //DigitalInput reverseLimitSwitch;
+    WPI_TalonSRX IntakeArmMotor;
 
-    if ((controller.getBumper(GenericHID.Hand.kRight)) && (forwardLimitSwitch.get())) {
-        // forwardLimitSwitch is the switch that is pressed when the arm reaches its upper limit
-        IntakeArmMotor.set(1);
-    }
-    else if ((controller.getBumper(GenericHID.Hand.kLeft)) && (reverseLimitSwitch.get())) {
-        // reverseLimitSwitch is the switch that is pressed when the arm reaches its lower limit
-        IntakeArmMotor.set(-1);
+    public IntakeArm() {
+        //forwardLimitSwitch = new DigitalInput(1);
+        //reverseLimitSwitch = new DigitalInput(2);
+        IntakeArmMotor = new WPI_TalonSRX(1);
     }
 
-    private IntakeArm() {
+    public void IntakeArmMotion(double speed) {
+        IntakeArmMotor.set(speed);
 
     }
-    
 
     public static IntakeArm getInstance() {
         if (instance == null) {
@@ -32,6 +35,15 @@ public class IntakeArm {
     }
 
     /*
+    if ((controller.getBumper(GenericHID.Hand.kRight)) && !(forwardLimitSwitch.get())) {
+        // forwardLimitSwitch is the switch that is pressed when the arm reaches its upper limit
+        IntakeArmMotor.set(1);
+    }
+    else if ((controller.getBumper(GenericHID.Hand.kLeft)) && !(reverseLimitSwitch.get())) {
+        // reverseLimitSwitch is the switch that is pressed when the arm reaches its lower limit
+        IntakeArmMotor.set(-1);
+    }
+    
     public void PID() {
         if (!IntakeArmPIDController.isEnabled()) {
             IntakeArmMotor.set();
