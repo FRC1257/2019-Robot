@@ -4,12 +4,18 @@ import edu.wpi.first.wpilibj.*;
 
 public class Robot extends TimedRobot {
 
+    HatchIntake hatchIntake;
+    XboxController Controller;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     @Override
     public void robotInit() {
+        hatchIntake = new HatchIntake();
+        hatchIntake.reset();
+        Controller = new XboxController(1);
 
     }
 
@@ -42,6 +48,28 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+
+        if(Controller.getXButton())
+        {
+            hatchIntake.pickupExtend();
+        }
+
+        if(Controller.getYButton())
+        {
+            hatchIntake.pickupRetract();
+        }
+
+        if(Controller.getAButton())
+        {
+            hatchIntake.ejectExtend();
+        }
+
+        if(Controller.getYButton())
+        {
+            hatchIntake.ejectRetract();
+        }
+
+        hatchIntake.hatchPivot(Controller.getTriggerAxis​(GenericHID.Hand kRight));
 
     }
 
