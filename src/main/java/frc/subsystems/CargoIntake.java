@@ -14,7 +14,7 @@ public class CargoIntake {
     CANSparkMax intakeMotor; 
 
     private CargoIntake() {
-        intakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE_PORT, MotorType.kBrushless);
     }
 
     public void shoot() {

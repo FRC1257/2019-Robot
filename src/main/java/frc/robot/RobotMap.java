@@ -10,10 +10,14 @@ public class RobotMap {
     
      // Cargo Intake
      public static final int CARGO_P = 4;
-    //
+     //Proportional Value for Cargo Intake
      public static final double OUTTAKE_SPEED = 1.0;
+     //Maximum possible speed for cargo ejection as a percentage of total motor capacity
      public static final double INTAKE_SPEED = -1.0;
-     public static final int CARGO_INTAKE = 1;
+     //Maximum possible speed for cargo intake as a percentage of total motor capacity
+     public static final int CARGO_INTAKE_PORT = 1;
+     //Port of Intake Motor
      public static final int OPERATOR_CONTROLLER = 1;
+     //Xbox Controller Port
 
 }
