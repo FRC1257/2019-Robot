@@ -8,5 +8,6 @@ public class RobotMap {
      * The units of each measurement should be specified in a comment
      */
 
+    public static final int intakeArmMotorPort = 0;
     
 }

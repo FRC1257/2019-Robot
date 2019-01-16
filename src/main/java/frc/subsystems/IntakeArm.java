@@ -4,26 +4,23 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeArm {
-    // 1 NEO motor with 1 Spark MAX
-
     private static IntakeArm instance = null;
     //DigitalInput forwardLimitSwitch;
     //DigitalInput reverseLimitSwitch;
-    WPI_TalonSRX IntakeArmMotor;
+    CANSparkMax intakeArmMotor;
 
     public IntakeArm() {
         //forwardLimitSwitch = new DigitalInput(1);
         //reverseLimitSwitch = new DigitalInput(2);
-        IntakeArmMotor = new WPI_TalonSRX(1);
+        intakeArmMotor = new CANSparkMax(RobotMap.intakeArmMotorPort, MotorType.kBrushless);
     }
 
     public void IntakeArmMotionSetSpeed(double speed) {
-        IntakeArmMotor.set(speed);
+        intakeArmMotor.set(speed);
     }
 
     public static IntakeArm getInstance() {
