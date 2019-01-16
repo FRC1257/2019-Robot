@@ -6,6 +6,7 @@ import com.revrobotics.*;
 
 public class FlakeMin extends CANSparkMax {
     public CANPIDController PID;
+    private double currentSpeed;
 
     public FlakeMin(int deviceID, CANSparkMaxLowLevel.MotorType type, boolean left) {
         super(deviceID, type);
@@ -16,11 +17,21 @@ public class FlakeMin extends CANSparkMax {
                 yourPIDfunctionsucks(RobotMap.PID_RIGHT[0], RobotMap.PID_RIGHT[1], 
                     RobotMap.PID_RIGHT[2], RobotMap.PID_RIGHT[3]);
             }
+
+        currentSpeed = 0.0;
+    }
+
+    private double updateInput(double currentInput, double targetInput) {
+        double error;
+        error = targetInput - currentInput;
+        currentInput += RobotMap.P_WASHOUT * error;
+        return currentInput;
     }
 
     @Override
     public void set(double speed) {
-        PID.setReference(RobotMap.NEO_CONSTS[2] * speed, ControlType.kVelocity);
+        PID.setReference(RobotMap.NEO_CONSTS[2] * updateInput(currentSpeed, speed), ControlType.kVelocity);
+        currentSpeed = updateInput(currentSpeed, speed);
     }
 
     public void yourPIDfunctionsucks(double kFF, double kP, double kI, double kD) {

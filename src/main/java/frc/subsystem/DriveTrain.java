@@ -17,8 +17,6 @@ public class DriveTrain {
 
     double m_maxOutput;
 
-    private double currentInput;
-
     private DriveTrain() {
         DifferentialDrive driveTrain;
 
@@ -50,10 +48,14 @@ public class DriveTrain {
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
     }
 
-    private double updateInput(double targetInput) {
+    private double updateInput(double currentInput, double targetInput) {
         double error;
         error = targetInput - currentInput;
         currentInput += RobotMap.P_WASHOUT * error;
         return currentInput;
+    }
+
+    private void drive(double x, double z) {
+        arcadeDrive(x, z);
     }
 }
