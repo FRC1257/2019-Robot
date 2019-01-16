@@ -17,6 +17,8 @@ public class DriveTrain {
 
     double m_maxOutput;
 
+    private double currentInput;
+
     private DriveTrain() {
         DifferentialDrive driveTrain;
 
@@ -46,5 +48,12 @@ public class DriveTrain {
     private void configSpeedControllers() {
         flDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
+    }
+
+    private double updateInput(double targetInput) {
+        double error;
+        error = targetInput - currentInput;
+        currentInput += RobotMap.P_WASHOUT * error;
+        return currentInput;
     }
 }
