@@ -2,16 +2,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
 import frc.subsystems.*;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.networktables.*;
 
 public class Robot extends TimedRobot {
 
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
+    XboxController Controller;
+    
     @Override
     public void robotInit() {
-
+        Controller = new XboxController(0);
     }
 
     /**
@@ -43,7 +43,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
+        if(Controller.getTriggerAxis(GenericHID.Hand.kLeft) > 0.5){ //If left trigger pressed and a target on screen then turn to it
+            DriveTrain.arcadeDrive(0, Vision.angleCorrect(table)); //Add when actual drivetrain exists
+        }
     }
 
     /**
