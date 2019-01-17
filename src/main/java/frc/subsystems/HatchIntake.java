@@ -3,6 +3,7 @@ package frc.subsystems;
 import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -50,20 +51,6 @@ public class HatchIntake {
         ejectSolenoid.set(false);
     }
 
-<<<<<<< HEAD
-
-    public void hatchPivot(float speed) {
-        hatchPivotMotor.set(speed);
-    }
-
-    public void reset() {
-
-    }
-
-    // public void automaticIntake() {
-    //     hatchPivotMotor.set(speed)    
-    // }
-=======
     public void automaticIntake() {
         if(limitSwitch.get()) {
             hatchPivotPID.setReference(1, ControlType.kPosition); //dummy values
@@ -77,7 +64,6 @@ public class HatchIntake {
 
     public void reset() {
     }
->>>>>>> e1ccefc4af2bc9f48ba757b0d2aeb3501e41addc
 
     public static HatchIntake getInstance() {
         if (instance == null) {
