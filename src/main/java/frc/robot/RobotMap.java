@@ -9,5 +9,8 @@ public class RobotMap {
      */
 
     public static final int intakeArmMotorPort = 0;
-    
+    public static final double INTAKEARM_P_VALUE = 1;
+    public static final double INTAKEARM_I_VALUE = 1;
+    public static final double INTAKEARM_D_VALUE = 1;
+    public static final double INTAKEARM_FF_VALUE = 1;
 }
