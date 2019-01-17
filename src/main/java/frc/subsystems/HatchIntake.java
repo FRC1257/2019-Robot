@@ -55,6 +55,8 @@ public class HatchIntake {
         hatchPivotMotor.set(speed);
     }
 
+    public void reset() {
+    }
     // public void automaticIntake() {
     //     hatchPivotMotor.set(speed)    
     // }

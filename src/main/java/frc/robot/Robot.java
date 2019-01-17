@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import frc.subsystems.HatchIntake;
 
 public class Robot extends TimedRobot {
 
