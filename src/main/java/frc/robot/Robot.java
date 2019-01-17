@@ -16,7 +16,6 @@ public class Robot extends TimedRobot {
         hatchIntake = new HatchIntake();
         hatchIntake.reset();
         Controller = new XboxController(1);
-
     }
 
     /**
@@ -48,28 +47,48 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        hatchState = False // False means it is not down
 
-        if(Controller.getXButton())
+        //Pickup solenoids will be down while X button is pressed
+        if(Controller.getXButtonPressed())
         {
             hatchIntake.pickupExtend();
         }
 
-        if(Controller.getYButton())
+        if(Controller.getXButtonReleased())
         {
             hatchIntake.pickupRetract();
         }
 
-        if(Controller.getAButton())
+        //Eject solenoids will be down while Y button is pressed
+        if(Controller.getYButton())
         {
             hatchIntake.ejectExtend();
         }
 
-        if(Controller.getYButton())
+        if(Controller.getYButtonReleased())
         {
             hatchIntake.ejectRetract();
         }
 
+        //A button will toggle the hatch pivot up and down
+        if (Controller.getAButton())
+        {
+            if (hatchState == False)
+            {
+                hatchPivotPID.setReference(1, ControlType.kPosition); // value incorrect
+            }
+            else
+            {
+                hatchPivotPID.setReference(2, ControlType.kPosition); // value incorrect
+            }
+        }
+
+        //the right trigger will move hatch pivot up and down manually
         hatchIntake.hatchPivot(Controller.getTriggerAxis​(GenericHID.Hand kRight));
+
+        // hatch sequence will automatically occur when limit switch is touched
+        automaticIntake()
 
     }
 

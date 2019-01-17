@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANPIDController;
 import frc.robot.RobotMap;
 
@@ -16,22 +17,21 @@ public class HatchIntake {
     private Solenoid ejectSolenoid;
     private CANSparkMax hatchPivotMotor;
     private CANPIDController hatchPivotPID;
+    private DigitalInput limitSwitch;
 
     public HatchIntake() {
         pickupSolenoid = new Solenoid(1);   //temporary value for port #
         ejectSolenoid = new Solenoid(2);    //temporary value for port #
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR, MotorType.kBrushless);
         hatchPivotPID = hatchPivotMotor.getPIDController();
+        limitSwitch = new DigitalInput(1);
 
-        hatchPivotPID.setD(RobotMap.P_VALUE);
+        hatchPivotPID.setP(RobotMap.P_VALUE);
         hatchPivotPID.setI(RobotMap.I_VALUE);
         hatchPivotPID.setD(RobotMap.D_VALUE);
         hatchPivotPID.setFF(RobotMap.FF_VALUE);
 
     }
-    
-    // public void pickup(boolean loadingStation) {
-    // }
 
     public void pickupExtend() {
         pickupSolenoid.set(1);
@@ -49,14 +49,16 @@ public class HatchIntake {
         ejectSolenoid.set(0);
     }
 
-
-    public void hatchPivot(speed) {
-        hatchPivotMotor.set(speed);
+    public void automaticIntake() {
+        if(limitSwitch.get()) {
+            hatchPivotPID.setReference(1, ControlType.kPosition); //dummy values
+            pickupExtend();
+            pickupRetract();
+            ejectExtend();
+            ejectRetract();
+            hatchPivotPID.setReference(10, ControlType.kPosition); //dummy values
+        }
     }
-
-    // public void automaticIntake() {
-    //     hatchPivotMotor.set(speed)    
-    // }
 
     public static HatchIntake getInstance() {
         if (instance == null) {
