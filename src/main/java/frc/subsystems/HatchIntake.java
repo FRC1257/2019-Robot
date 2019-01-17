@@ -2,10 +2,12 @@ package frc.subsystems;
 
 import frc.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANPIDController;
+import frc.robot.RobotMap;
 
 public class HatchIntake {
     
