@@ -5,6 +5,7 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.Solenoid;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANPIDController;
 import frc.robot.RobotMap;
@@ -23,7 +24,7 @@ public class HatchIntake {
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR, MotorType.kBrushless);
         hatchPivotPID = hatchPivotMotor.getPIDController();
 
-        hatchPivotPID.setD(RobotMap.HATCH_P_VALUE);
+        hatchPivotPID.setP(RobotMap.HATCH_P_VALUE);
         hatchPivotPID.setI(RobotMap.HATCH_I_VALUE);
         hatchPivotPID.setD(RobotMap.HATCH_D_VALUE);
         hatchPivotPID.setFF(RobotMap.HATCH_FF_VALUE);
