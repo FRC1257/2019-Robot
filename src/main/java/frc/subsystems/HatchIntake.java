@@ -5,6 +5,7 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.Solenoid;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANPIDController;
@@ -26,10 +27,10 @@ public class HatchIntake {
         hatchPivotPID = hatchPivotMotor.getPIDController();
         limitSwitch = new DigitalInput(1);
 
-        hatchPivotPID.setP(RobotMap.P_VALUE);
-        hatchPivotPID.setI(RobotMap.I_VALUE);
-        hatchPivotPID.setD(RobotMap.D_VALUE);
-        hatchPivotPID.setFF(RobotMap.FF_VALUE);
+        hatchPivotPID.setP(RobotMap.HATCH_P_VALUE);
+        hatchPivotPID.setI(RobotMap.HATCH_I_VALUE);
+        hatchPivotPID.setD(RobotMap.HATCH_D_VALUE);
+        hatchPivotPID.setFF(RobotMap.HATCH_FF_VALUE);
 
     }
 
@@ -58,6 +59,9 @@ public class HatchIntake {
             ejectRetract();
             hatchPivotPID.setReference(10, ControlType.kPosition); //dummy values
         }
+    }
+
+    public void reset() {
     }
 
     public static HatchIntake getInstance() {
