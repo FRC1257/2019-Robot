@@ -70,6 +70,11 @@ public class Robot extends TimedRobot {
         climb.reset();
       }
 
+      if(climb.FrontOn == true || climb.BackOn == true) {
+        double climbDriveSpeed = (-1 * Controller.getY(GenericHID.Hand.kLeft));
+        climb.climbDrive(climbDriveSpeed);
+      }
+
     }
 
     /**

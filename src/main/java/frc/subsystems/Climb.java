@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,8 +17,10 @@ public class Climb {
     DoubleSolenoid front;
     DoubleSolenoid back;
 
-    VictorSPX motorF;
-    VictorSPX motorB;
+    WPI_VictorSPX motorF;
+    WPI_VictorSPX motorB;
+
+    DifferentialDrive climbDrive;
 
     public boolean FrontOn;
     public boolean BackOn;
@@ -26,10 +28,14 @@ public class Climb {
     public Climb() {
         front = new DoubleSolenoid(1, 2);
         back = new DoubleSolenoid(3, 4);
-        motorF = new VictorSPX(5);
-        motorB = new VictorSPX(6);
+
+        motorF = new WPI_VictorSPX(5);
+        motorB = new WPI_VictorSPX(6);
+
         FrontOn = false;
         BackOn = false;
+
+        climbDrive = new DifferentialDrive(motorF, motorB);
     }
 
     public static Climb getInstance() {
@@ -64,6 +70,10 @@ public class Climb {
         back.set(DoubleSolenoid.Value.kReverse);
         FrontOn = false;
         BackOn = false;
+    }
+
+    public void climbDrive(double f) {
+        climbDrive.arcadeDrive(f, 0);
     }
     
 
