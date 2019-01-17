@@ -54,6 +54,8 @@ public class Robot extends TimedRobot {
         else if (controller.getBumper(GenericHID.Hand.kLeft)) {
             intakeArm.setSpeed(-1);
         }
+
+        intakeArm.restrictMotion();
     }
 
     /**

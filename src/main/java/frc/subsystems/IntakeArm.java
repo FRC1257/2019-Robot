@@ -9,20 +9,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeArm {
     private static IntakeArm instance = null;
-    //DigitalInput forwardLimitSwitch;
-    //DigitalInput reverseLimitSwitch;
     CANSparkMax intakeArmMotor;
+    DigitalInput forwardLimitSwitch;
+    DigitalInput reverseLimitSwitch;
 
     public IntakeArm() {
-        //forwardLimitSwitch = new DigitalInput(1);
-        //reverseLimitSwitch = new DigitalInput(2);
+        forwardLimitSwitch = new DigitalInput(1);
+        reverseLimitSwitch = new DigitalInput(2);
         intakeArmMotor = new CANSparkMax(RobotMap.intakeArmMotorPort, MotorType.kBrushless);
     }
-
-    public void setSpeed(double speed) {
-        intakeArmMotor.set(speed);
-    }
-
+    
     public static IntakeArm getInstance() {
         if (instance == null) {
             instance = new IntakeArm();
@@ -30,16 +26,20 @@ public class IntakeArm {
         return instance;
     }
 
+    public void setSpeed(double speed) {
+        intakeArmMotor.set(speed);
+    }
+
+    public void restrictMotion(){
+        if (forwardLimitSwitch.get()) {
+            intakeArmMotor.set(0);
+        }
+        else if (reverseLimitSwitch.get()){
+            intakeArmMotor.set(0);
+        }
+    }    
+
     /*
-    if ((controller.getBumper(GenericHID.Hand.kRight)) && !(forwardLimitSwitch.get())) {
-        // forwardLimitSwitch is the switch that is pressed when the arm reaches its upper limit
-        IntakeArmMotor.set(1);
-    }
-    else if ((controller.getBumper(GenericHID.Hand.kLeft)) && !(reverseLimitSwitch.get())) {
-        // reverseLimitSwitch is the switch that is pressed when the arm reaches its lower limit
-        IntakeArmMotor.set(-1);
-    }
-    
     public void PID() {
         if (!IntakeArmPIDController.isEnabled()) {
             IntakeArmMotor.set();
