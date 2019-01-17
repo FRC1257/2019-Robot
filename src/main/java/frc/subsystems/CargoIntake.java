@@ -26,7 +26,7 @@ public class CargoIntake {
     public void intake() {
         intakeMotor.set(RobotMap.INTAKE_SPEED);
     }
-    private double getDistanceToCargo() {
+    public double getDistanceToCargo() {
         double voltage = cargoInfrared.getAverageVoltage();
         return voltage*(2.6/-70);//Not correct equation
     }

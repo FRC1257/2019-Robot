@@ -2,6 +2,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 
 import frc.subsystems.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
     CargoIntake intake;
@@ -15,6 +16,8 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         intake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
+        SmartDashboard.putString("Auto Status", "Hi");
+		SmartDashboard.putNumber("Auto Delay", 5);
     }
 
     /**
@@ -54,8 +57,9 @@ public class Robot extends TimedRobot {
         {
             intake.intake();
         }
+        SmartDashboard.putNumber("Distance to Cargo", intake.getDistanceToCargo());
 
-
+        intake.pointOfNoReturn(operatorController);
 
     }
 
