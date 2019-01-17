@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANPIDController;
+import com.revrobotics.ControlType;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
                                                 
 public class IntakeArm { 
     private static IntakeArm instance = null;
@@ -26,6 +28,7 @@ public class IntakeArm {
         intakeArmPID.setI(RobotMap.INTAKEARM_I_VALUE);
         intakeArmPID.setD(RobotMap.INTAKEARM_D_VALUE);
         intakeArmPID.setFF(RobotMap.INTAKEARM_FF_VALUE);
+
     }
     
     public static IntakeArm getInstance() {
@@ -48,11 +51,10 @@ public class IntakeArm {
         else if (reverseLimitSwitch.get()) {
             intakeArmMotor.set(0);
         }
-    }    
-
-    /*
-    public void PID() {
-        c = pid(Kp, Ki, Kd);
     }
-    */
+    
+    public void PID() {
+        intakeArmPID.setReference(10, ControlType.kPosition);
+        //figure out how to make it move up and down. 
+    }
 }
