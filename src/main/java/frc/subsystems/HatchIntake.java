@@ -16,8 +16,8 @@ public class HatchIntake {
     private CANPIDController hatchPivotPID;
 
     public HatchIntake() {
-        pickupSolenoid = new Solenoid(1, 2);
-        ejectSolenoid = new Solenoid(3, 4);
+        pickupSolenoid = new Solenoid(1);   //temporary value for port #
+        ejectSolenoid = new Solenoid(2);    //temporary value for port #
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR, MotorType.kBrushless);
         hatchPivotPID = hatchPivotMotor.getPIDController();
 
@@ -51,6 +51,10 @@ public class HatchIntake {
     public void hatchPivot(speed) {
         hatchPivotMotor.set(speed);
     }
+
+    // public void automaticIntake() {
+    //     hatchPivotMotor.set(speed)    
+    // }
 
     public static HatchIntake getInstance() {
         if (instance == null) {
