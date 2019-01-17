@@ -35,24 +35,28 @@ public class HatchIntake {
     // }
 
     public void pickupExtend() {
-        pickupSolenoid.set(1);
+        pickupSolenoid.set(true);
     }
 
     public void pickupRetract() {
-        pickupSolenoid.set(0);
+        pickupSolenoid.set(false);
     }
 
     public void ejectExtend() {
-        ejectSolenoid.set(1);
+        ejectSolenoid.set(true);
     }
 
     public void ejectRetract() {
-        ejectSolenoid.set(0);
+        ejectSolenoid.set(false);
     }
 
 
-    public void hatchPivot(speed) {
+    public void hatchPivot(float speed) {
         hatchPivotMotor.set(speed);
+    }
+
+    public void reset() {
+
     }
 
     // public void automaticIntake() {
