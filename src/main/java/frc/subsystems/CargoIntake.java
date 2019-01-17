@@ -26,14 +26,21 @@ public class CargoIntake {
     public void intake() {
         intakeMotor.set(RobotMap.INTAKE_SPEED);
     }
-    public void pointOfNoReturn() {
-        
+    private double getDistanceToCargo() {
+        double voltage = cargoInfrared.getAverageVoltage();
+        return voltage*(2.6/-70);//Not correct equation
     }
 
-    public double voltToCm(double voltage) {
-        // return voltage * ___;
+    public void pointOfNoReturn(XboxController controller) {
+        //4 in wheel, max speed 24 ft/s
+        if(getDistanceToCargo() <= RobotMap.CARGO_PONR && !controller.getAButton()) { // if within target range and not pressing eject
+            double speed = RobotMap.INTAKE_SPEED * getDistanceToCargo() / RobotMap.kP;
+            intakeMotor.set(speed); // set to (intake speed * current distance / constant value)
+        }
     }
-    
+
+
+
     public static CargoIntake getInstance() {
         if (instance == null) {
             instance = new CargoIntake();

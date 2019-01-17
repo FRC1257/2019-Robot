@@ -23,5 +23,6 @@ public class RobotMap {
      // Infared Sensor
      public static final int CARGO_INFARED_PORT = 1;
      public static final int CARGO_PONR = 20;
+     public static final double kP = INTAKE_SPEED/CARGO_PONR;
      // Point of no return for when cargo starts to fall out (cm) - Random value, must input real value
 }
