@@ -26,6 +26,7 @@ import frc.subsystem.DriveTrain;
 public class Robot extends TimedRobot {
   SnailController controller;
   DriveTrain drive;
+  boolean ReverseDriveOn = false;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -69,6 +70,14 @@ public class Robot extends TimedRobot {
     double turnSpeed = controller.getTurnSpeed();
     double forwardSpeed = controller.getForwardSpeed();
     if(controller.getBButton()){
+      if(ReverseDriveOn = false){
+        ReverseDriveOn = true;
+      }
+      else{
+        ReverseDriveOn = false;
+      }
+    }
+    if(ReverseDriveOn){
       forwardSpeed = -1 * forwardSpeed;
       turnSpeed = -1 * turnSpeed;
     }
