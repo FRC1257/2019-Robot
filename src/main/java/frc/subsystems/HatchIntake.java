@@ -23,10 +23,10 @@ public class HatchIntake {
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR, MotorType.kBrushless);
         hatchPivotPID = hatchPivotMotor.getPIDController();
 
-        hatchPivotPID.setD(RobotMap.P_VALUE);
-        hatchPivotPID.setI(RobotMap.I_VALUE);
-        hatchPivotPID.setD(RobotMap.D_VALUE);
-        hatchPivotPID.setFF(RobotMap.FF_VALUE);
+        hatchPivotPID.setD(RobotMap.HATCH_P_VALUE);
+        hatchPivotPID.setI(RobotMap.HATCH_I_VALUE);
+        hatchPivotPID.setD(RobotMap.HATCH_D_VALUE);
+        hatchPivotPID.setFF(RobotMap.HATCH_FF_VALUE);
 
     }
     
