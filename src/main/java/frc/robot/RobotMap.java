@@ -12,4 +12,5 @@ public class RobotMap {
     public static final double pi = 3.14159265359;
     // Channel IDs
     public static final int MOTORS[] = {0, 1, 2, 3}; // In this order: FL, FR, BL, BR
+    public static final int controllerPort = 0;
 }

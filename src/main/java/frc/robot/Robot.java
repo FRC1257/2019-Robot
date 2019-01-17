@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.util.SnailController;
+import frc.subsystem.DriveTrain;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,6 +24,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * directory.
  */
 public class Robot extends TimedRobot {
+  SnailController controller;
+  DriveTrain drive;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -28,6 +33,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    controller = new SnailController(RobotMap.controllerPort);
+    drive = new DriveTrain();
+    
   }
 
   /**
@@ -58,7 +66,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    
+    double turnSpeed = controller.getTurnSpeed();
+    double forwardSpeed = controller.getForwardSpeed();
+    if(controller.getBButton()){
+      forwardSpeed = -1 * forwardSpeed;
+      turnSpeed = -1 * turnSpeed;
+    }
+    drive.drive(forwardSpeed, turnSpeed);
+
   }
 
   /**
