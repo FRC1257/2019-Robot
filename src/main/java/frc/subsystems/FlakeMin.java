@@ -1,4 +1,4 @@
-package frc.subsystem;
+package frc.subsystems;
 
 import frc.robot.*;
 
@@ -18,7 +18,6 @@ public class FlakeMin extends CANSparkMax {
                 yourPIDfunctionsucks(RobotMap.PID_RIGHT[0], RobotMap.PID_RIGHT[1], 
                     RobotMap.PID_RIGHT[2], RobotMap.PID_RIGHT[3]);
             }
-
         currentSpeed = 0.0;
         Encoder = getEncoder();
     }
@@ -52,4 +51,16 @@ public class FlakeMin extends CANSparkMax {
     public double getPlace() {
         return Encoder.getPosition();
     }
+    
+    public double getPlaceInches() {
+        return Encoder.getPosition() * RobotMap.diameter * RobotMap.pi;
+    }
+    public double getSpeedFeet() {
+        return Encoder.getVelocity() * RobotMap.diameter * RobotMap.pi * 12;
+    }
+    // Reset Encoder might be added
+    // public void resetEncoder() {
+    //     Encoder.getPosition() = 0;
+    // }
+
 }

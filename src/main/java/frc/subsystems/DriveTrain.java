@@ -1,4 +1,4 @@
-package frc.subsystem;
+package frc.subsystems;
 
 import frc.robot.RobotMap;
 
@@ -19,7 +19,7 @@ public class DriveTrain {
 
     double m_maxOutput;
 
-    private DriveTrain() {
+    public DriveTrain() {
 
         flDrive = new FlakeMin(RobotMap.MOTORS[0], MotorType.kBrushless, true);
         frDrive = new FlakeMin(RobotMap.MOTORS[1], MotorType.kBrushless, false);
@@ -44,12 +44,12 @@ public class DriveTrain {
         return instance;
     }
 
-    private void configSpeedControllers() {
+    public void configSpeedControllers() {
         flDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
     }
 
-    private void drive(double x, double z) {
+    public void drive(double x, double z) {
         driveTrain.arcadeDrive(x, z);
     }
 }
