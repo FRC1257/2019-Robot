@@ -15,10 +15,11 @@ public class DriveTrain {
     private CANSparkMax blDrive;
     private CANSparkMax brDrive;
 
+    private DifferentialDrive driveTrain;
+
     double m_maxOutput;
 
     private DriveTrain() {
-        DifferentialDrive driveTrain;
 
         flDrive = new FlakeMin(RobotMap.MOTORS[0], MotorType.kBrushless, true);
         frDrive = new FlakeMin(RobotMap.MOTORS[1], MotorType.kBrushless, false);
@@ -49,6 +50,6 @@ public class DriveTrain {
     }
 
     private void drive(double x, double z) {
-        arcadeDrive(x, z);
+        driveTrain.arcadeDrive(x, z);
     }
 }
