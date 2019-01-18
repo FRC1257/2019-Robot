@@ -1,7 +1,8 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
 import frc.subsystems.*;
+import frc.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,8 +14,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Controller = new XboxController(0);
-        SmartDashboard.putNumber("kP", -0.3);
-        SmartDashboard.putNumber("min_command", 0.05); 
+        SmartDashboard.putNumber("kP", RobotMap.TURN_CORRECT_KP);
+        SmartDashboard.putNumber("min_command", RobotMap.TURN_CORRECT_MIN_COMMAND); 
     }
 
     /**
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
         if(Controller.getTriggerAxis(GenericHID.Hand.kLeft) > 0.5){ //If left trigger pressed and a target on screen then turn to it
-            // DriveTrain.arcadeDrive(0, Vision.angleCorrect(table)); //Add when actual drivetrain exists
+            // DriveTrain.arcadeDrive(0, Vision.turnCorrect(table)); //Add when actual drivetrain exists
         }
     }
 
