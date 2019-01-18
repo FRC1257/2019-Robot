@@ -4,27 +4,29 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.*;
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class CargoIntake {
     
     private static CargoIntake instance = null;
-    CANSparkMax intakeMotor; 
+    VictorSPX intakeMotor; 
     AnalogInput cargoInfrared;
 
     private CargoIntake() {
-        intakeMotor = new CANSparkMax(RobotMap.CARGO_INTAKE_PORT, MotorType.kBrushless);
+        intakeMotor = new VictorSPX(RobotMap.CARGO_INTAKE_PORT);
         cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
     }
 
     public void shoot() {
-        intakeMotor.set(RobotMap.OUTTAKE_SPEED);
+        intakeMotor.set(ControlMode.PercentOutput, RobotMap.OUTTAKE_SPEED);
     }
 
     public void intake() {
-        intakeMotor.set(RobotMap.INTAKE_SPEED);
+        intakeMotor.set(ControlMode.PercentOutput, RobotMap.INTAKE_SPEED);
     }
     public double getDistanceToCargo() {
         double voltage = cargoInfrared.getAverageVoltage();
@@ -35,7 +37,7 @@ public class CargoIntake {
         //4 in wheel, max speed 24 ft/s
         if(getDistanceToCargo() <= RobotMap.CARGO_PONR && !controller.getAButton()) { // if within target range and not pressing eject
             double speed = RobotMap.INTAKE_SPEED * getDistanceToCargo() / RobotMap.kP;
-            intakeMotor.set(speed); // set to (intake speed * current distance / constant value)
+            intakeMotor.set(ControlMode.Current, speed); // set to (intake speed * current distance / constant value)
         }
     }
 

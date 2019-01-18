@@ -5,7 +5,7 @@ import frc.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
-    CargoIntake intake;
+    CargoIntake cargoIntake;
     XboxController operatorController;
 
     /**
@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        intake = CargoIntake.getInstance();
+        cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
         SmartDashboard.putString("Auto Status", "Hi");
 		SmartDashboard.putNumber("Auto Delay", 5);
@@ -51,15 +51,15 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         if(operatorController.getAButton())
         {
-            intake.shoot();
+            cargoIntake.shoot();
         }
         if(operatorController.getBButton())
         {
-            intake.intake();
+            cargoIntake.intake();
         }
-        SmartDashboard.putNumber("Distance to Cargo", intake.getDistanceToCargo());
+        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
 
-        intake.pointOfNoReturn(operatorController);
+        cargoIntake.pointOfNoReturn(operatorController);
 
     }
 
