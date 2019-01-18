@@ -2,6 +2,7 @@ package frc.subsystems;
 
 import frc.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.*;
 
 public class Vision{
@@ -11,8 +12,8 @@ public class Vision{
       NetworkTableEntry txE = table.getEntry("tx");
       double tx = txE.getDouble(0); //Gets the angle of how far away from the corsshair the object is
 
-      double min_command = 0.05; //Minimum motor input to move robot in case P can't do it 
-      double Kp = -0.03; // for PID
+      double min_command = SmartDashboard.getNumber("min_command", 0.05);  //Minimum motor input to move robot in case P can't do it 
+      double Kp = SmartDashboard.getNumber("kP", -0.03); // for PID
       double heading_error = tx; 
       double steering_adjust = 0.0;
 
