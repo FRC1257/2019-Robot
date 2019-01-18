@@ -16,8 +16,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
-        SmartDashboard.putString("Auto Status", "Hi");
-		SmartDashboard.putNumber("Auto Delay", 5);
+        
+		SmartDashboard.putNumber("Intake Speed", RobotMap.INTAKE_SPEED);
+		SmartDashboard.putNumber("Outake Speed", RobotMap.OUTTAKE_SPEED);
+		SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
 
     /**
