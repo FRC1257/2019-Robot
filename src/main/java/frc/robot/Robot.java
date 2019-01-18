@@ -25,7 +25,7 @@ import frc.util.*;
  */
 public class Robot extends TimedRobot {
 
-  DriveTrain drive;
+  DriveTrain Drive;
   SnailController controller;
   /**
    * This function is run when the robot is first started up and should be
@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    drive = DriveTrain.getInstance();
+    Drive = DriveTrain.getInstance();
     controller = new SnailController(RobotMap.CONTROLLER);
   }
 
@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
+    Drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
   }
 
   /**

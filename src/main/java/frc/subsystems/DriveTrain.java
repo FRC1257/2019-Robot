@@ -38,10 +38,7 @@ public class DriveTrain {
         return instance;
     }
 
-    private void configSpeedControllers() {
-    }
-
     public void drive(double x, double z) {
-        driveTrain.arcadeDrive(x, z);
+        driveTrain.arcadeDrive(x, z, false);
     }
 }
