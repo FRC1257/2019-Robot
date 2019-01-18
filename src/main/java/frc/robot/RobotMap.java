@@ -11,9 +11,9 @@ public class RobotMap {
      // Cargo Intake
      public static final int CARGO_P = 4;
      //Proportional Value for Cargo Intake
-     public static final double CARGO_OUTTAKE_SPEED = 1.0;
+     public static double CARGO_OUTTAKE_SPEED = 1.0;
      //Maximum possible speed for cargo ejection as a percentage of total motor capacity
-     public static final double CARGON_INTAKE_SPEED = -1.0;
+     public static double CARGON_INTAKE_SPEED = -1.0;
      //Maximum possible speed for cargo intake as a percentage of total motor capacity
      public static final int CARGO_INTAKE_PORT = 1;
      //Port of Intake Motor
@@ -22,7 +22,7 @@ public class RobotMap {
 
      // Infared Sensor
      public static final int CARGO_INFARED_PORT = 1;
-     public static final int CARGO_PONR = 20; // Point at which the cargo needs to be pulled back
+     public static int CARGO_PONR = 20; // Point at which the cargo needs to be pulled back
      public static final double kP = CARGON_INTAKE_SPEED/CARGO_PONR;
      // Point of no return for when cargo starts to fall out (cm) - Random value, must input real value
 }
