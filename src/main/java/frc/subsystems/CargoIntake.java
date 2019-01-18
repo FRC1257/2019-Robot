@@ -26,7 +26,7 @@ public class CargoIntake {
     }
 
     public void intake() {
-        intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGON_INTAKE_SPEED);
+        intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_INTAKE_SPEED);
     }
     public double getDistanceToCargo() {
         double voltage = cargoInfrared.getAverageVoltage();
@@ -36,7 +36,7 @@ public class CargoIntake {
     public void pointOfNoReturn(XboxController controller) {
         //4 in wheel, max speed 24 ft/s
         if(getDistanceToCargo() <= RobotMap.CARGO_PONR && !controller.getAButton()) { // if within target range and not pressing eject
-            double speed = RobotMap.CARGON_INTAKE_SPEED * getDistanceToCargo() / RobotMap.kP;
+            double speed = RobotMap.CARGO_INTAKE_SPEED * getDistanceToCargo() / RobotMap.kP;
             intakeMotor.set(ControlMode.Current, speed); // set to (intake speed * current distance / constant value)
         }
     }
