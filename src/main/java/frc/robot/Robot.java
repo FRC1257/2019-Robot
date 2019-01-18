@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
             cargoIntake.intake();
         }
         SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
-        SmartDashboard.putNumber("Intake Speed", RobotMap.CARGON_INTAKE_SPEED);
+        SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
 		SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
 		SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
 
