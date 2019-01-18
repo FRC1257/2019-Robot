@@ -1,7 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
-import frc.subsystems.HatchIntake;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.TimedRobot;
+
+import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
 
@@ -15,7 +17,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         hatchIntake = new HatchIntake();
-        hatchIntake.reset();
         Controller = new XboxController(1);
     }
 
