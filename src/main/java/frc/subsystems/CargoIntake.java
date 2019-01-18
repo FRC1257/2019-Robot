@@ -37,7 +37,7 @@ public class CargoIntake {
         //4 in wheel, max speed 24 ft/s
         if(getDistanceToCargo() <= RobotMap.CARGO_PONR && !controller.getAButton()) { // if within target range and not pressing eject
             double speed = RobotMap.CARGO_INTAKE_SPEED * getDistanceToCargo() / RobotMap.kP;
-            intakeMotor.set(ControlMode.Current, speed); // set to (intake speed * current distance / constant value)
+            intakeMotor.set(ControlMode.PercentOutput, speed); // set to (intake speed * current distance / constant value)
         }
     }
 
