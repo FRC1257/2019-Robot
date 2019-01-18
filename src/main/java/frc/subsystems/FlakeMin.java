@@ -56,7 +56,7 @@ public class FlakeMin extends CANSparkMax {
         return Encoder.getPosition() * RobotMap.diameter * RobotMap.pi;
     }
     public double getSpeedFeet() {
-        return Encoder.getVelocity() * RobotMap.diameter * RobotMap.pi * 12;
+        return Encoder.getVelocity() * RobotMap.diameter * RobotMap.pi / 12;
     }
     // Reset Encoder might be added
     // public void resetEncoder() {
