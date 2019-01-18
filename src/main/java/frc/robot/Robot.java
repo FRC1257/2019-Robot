@@ -16,7 +16,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
-        
+        SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
+		SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+        SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
+        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
     }
 
     /**
@@ -48,6 +51,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
+        RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
+		RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+        RobotMap.CARGO_PONR = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_PONR);
         if(operatorController.getAButton())
         {
             cargoIntake.shoot();
@@ -56,13 +63,7 @@ public class Robot extends TimedRobot {
         {
             cargoIntake.intake();
         }
-        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
-        SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-		SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
-		SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
-
         cargoIntake.pointOfNoReturn(operatorController);
-
     }
 
     /**
