@@ -1,8 +1,8 @@
 package frc.subsystems;
 
 import frc.robot.RobotMap;
+import frc.util.SnailSolenoid;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Notifier;
@@ -17,23 +17,26 @@ public class HatchIntake {
     
     private static HatchIntake instance = null;
 
-    private Solenoid pickupSolenoid;
-    private Solenoid ejectSolenoid;
+    private SnailSolenoid pickupSolenoid;
+    private SnailSolenoid ejectSolenoid;
 
     private CANSparkMax hatchPivotMotor;
     private CANEncoder hatchPivotEncoder;
     private CANPIDController hatchPivotPID;
 
-    private DigitalInput limitSwitch;
+    private DigitalInput limitSwitchPivot;
+    private DigitalInput limitSwitchHatch;
 
     private Notifier notifier;                // looper for updating PID loop for pivot
     private double currentPIDSetpoint;        // current target position of pivot
     private double pidTime;                   // the timestamp for when the PID enters the tolerance range
     private boolean running;                  // whether or not the PID loop is currently running
 
+    private boolean lowered;
+
     public HatchIntake() {
-        pickupSolenoid = new Solenoid(RobotMap.HATCH_PICKUP_ID);
-        ejectSolenoid = new Solenoid(RobotMap.HATCH_EJECT_ID);
+        pickupSolenoid = new SnailSolenoid(RobotMap.HATCH_PICKUP_SOLENOID_ID);
+        ejectSolenoid = new SnailSolenoid(RobotMap.HATCH_EJECT_SOLENOID_ID);
 
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
@@ -43,14 +46,28 @@ public class HatchIntake {
         hatchPivotPID.setD(RobotMap.HATCH_PID_D);
         hatchPivotPID.setFF(RobotMap.HATCH_PID_F);
 
-        limitSwitch = new DigitalInput(RobotMap.HATCH_LIMIT_ID);
+        limitSwitchPivot = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_PIVOT_ID);
+        limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
 
         notifier = new Notifier(this::updatePID);
         
         reset();
     }
 
-    public void setPickup(boolean pickup){
+    public void reset() {
+        pickupSolenoid.set(false);
+        ejectSolenoid.set(false);
+        hatchPivotMotor.set(0);
+
+        currentPIDSetpoint = 0;
+        pidTime = -1;
+        running = false;
+        resetEncoder();
+
+        lowered = false;
+    }
+
+    public void setPickup(boolean pickup) {
         pickupSolenoid.set(pickup);
     }
 
@@ -62,7 +79,7 @@ public class HatchIntake {
         pickupSolenoid.set(false);
     }
     
-    public void setEject(boolean eject){
+    public void setEject(boolean eject) {
         ejectSolenoid.set(eject);
     }
 
@@ -74,14 +91,23 @@ public class HatchIntake {
         ejectSolenoid.set(false);
     }
 
-    public void reset() {
-        pickupSolenoid.set(false);
-        ejectSolenoid.set(false);
-        hatchPivotMotor.set(0);
+    public void setPivot(double value) {
+        hatchPivotMotor.set(value);
+    }
 
-        currentPIDSetpoint = 0;
-        pidTime = -1;
-        running = false;
+    public void togglePivot() {
+        if(lowered) raisePivot();
+        else lowerPivot();
+    }
+
+    public void raisePivot() {
+        lowered = false;
+        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
+    }
+
+    public void lowerPivot() {
+        lowered = true;
+        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
     }
     
     public void setPIDPosition(double value) {
@@ -110,6 +136,10 @@ public class HatchIntake {
             pidTime = -1;
         }
     }
+    
+    public void resetEncoder() {
+        // Reset Encoder (TODO when Spark MAX API is updated)
+    }
 
     public double getEncoderPosition() {
         return hatchPivotEncoder.getPosition();
@@ -119,8 +149,20 @@ public class HatchIntake {
         return hatchPivotEncoder.getVelocity();
     }
 
-    public boolean getLimitSwitch() {
-        return limitSwitch.get();
+    public boolean getPickupExtended() {
+        return pickupSolenoid.get();
+    }
+    
+    public boolean getEjectExtended() {
+        return ejectSolenoid.get();
+    }
+
+    public boolean getLimitSwitchPivot() {
+        return limitSwitchPivot.get();
+    }
+    
+    public boolean getLimitSwitchHatch() {
+        return limitSwitchHatch.get();
     }
 
     public boolean getPIDRunning() {

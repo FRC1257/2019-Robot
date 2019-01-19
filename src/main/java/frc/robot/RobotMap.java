@@ -8,9 +8,13 @@ public class RobotMap {
      * The units of each measurement should be specified in a comment
      */
     public static final int HATCH_PIVOT_MOTOR_ID = 1;
-    public static final int HATCH_PICKUP_ID = 1;
-    public static final int HATCH_EJECT_ID = 2;
-    public static final int HATCH_LIMIT_ID = 1;
+    public static final int HATCH_PICKUP_SOLENOID_ID = 1;
+    public static final int HATCH_EJECT_SOLENOID_ID = 2;
+    public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 1;
+    public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 2;
+
+    public static final double HATCH_PID_LOWERED = 0;           // Position of the hatch intake when lowered
+    public static final double HATCH_PID_RAISED = 10;           // Position of the hatch intake when raised 
 
     public static final double HATCH_PID_P = 1;
     public static final double HATCH_PID_I = 1;

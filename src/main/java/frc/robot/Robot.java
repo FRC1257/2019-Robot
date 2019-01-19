@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import frc.subsystems.*;
@@ -8,7 +9,7 @@ import frc.subsystems.*;
 public class Robot extends TimedRobot {
 
     HatchIntake hatchIntake;
-    XboxController Controller;
+    XboxController operatorController;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -17,7 +18,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         hatchIntake = new HatchIntake();
-        Controller = new XboxController(1);
+
+        operatorController = new XboxController(1);
     }
 
     /**
@@ -49,49 +51,26 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        hatchState = False // False means it is not down
+        // Hatch Intake
+        if(operatorController.getXButton()) hatchIntake.togglePivot();
 
-        //Pickup solenoids will be down while X button is pressed
-        if(Controller.getXButtonPressed())
-        {
-            hatchIntake.pickupExtend();
-        }
+        if(!hatchIntake.getPIDRunning()) {
+            hatchIntake.setPickup(operatorController.getAButton());
 
-        if(Controller.getXButtonReleased())
-        {
-            hatchIntake.pickupRetract();
-        }
-
-        //Eject solenoids will be down while Y button is pressed
-        if(Controller.getYButton())
-        {
-            hatchIntake.ejectExtend();
-        }
-
-        if(Controller.getYButtonReleased())
-        {
-            hatchIntake.ejectRetract();
-        }
-
-        //A button will toggle the hatch pivot up and down
-        if (Controller.getAButton())
-        {
-            if (hatchState == False)
-            {
-                hatchPivotPID.setReference(1, ControlType.kPosition); // value incorrect
+            // Only allow the hatch to eject if the hatch is not lowered
+            if(!hatchIntake.getLimitSwitchHatch()) {
+                hatchIntake.setEject(operatorController.getBButton());
             }
-            else
-            {
-                hatchPivotPID.setReference(2, ControlType.kPosition); // value incorrect
+            else {
+                hatchIntake.ejectRetract();
+            }
+
+            hatchIntake.setPivot(operatorController.getY(Hand.kLeft));
+
+            if(hatchIntake.getLimitSwitchPivot()) {
+                hatchIntake.resetEncoder();
             }
         }
-
-        //the right trigger will move hatch pivot up and down manually
-        hatchIntake.hatchPivot(Controller.getTriggerAxis​(GenericHID.Hand kRight));
-
-        // hatch sequence will automatically occur when limit switch is touched
-        automaticIntake()
-
     }
 
     /**
