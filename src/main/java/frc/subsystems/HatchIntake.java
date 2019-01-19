@@ -34,7 +34,7 @@ public class HatchIntake {
 
     private boolean lowered;
 
-    public HatchIntake() {
+    private HatchIntake() {
         pickupSolenoid = new SnailSolenoid(RobotMap.HATCH_PICKUP_SOLENOID_ID);
         ejectSolenoid = new SnailSolenoid(RobotMap.HATCH_EJECT_SOLENOID_ID);
 

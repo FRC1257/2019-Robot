@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import frc.subsystems.*;
@@ -9,7 +7,7 @@ import frc.subsystems.*;
 public class Robot extends TimedRobot {
 
     HatchIntake hatchIntake;
-    XboxController operatorController;
+    OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -17,9 +15,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        hatchIntake = new HatchIntake();
-
-        operatorController = new XboxController(1);
+        hatchIntake = HatchIntake.getInstance();
+        oi = OI.getInstance();
     }
 
     /**
@@ -52,20 +49,20 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         // Hatch Intake
-        if(operatorController.getXButton()) hatchIntake.togglePivot();
+        if(oi.getTogglePivot()) hatchIntake.togglePivot();
 
         if(!hatchIntake.getPIDRunning()) {
-            hatchIntake.setPickup(operatorController.getAButton());
+            hatchIntake.setPickup(oi.getHatchPickup());
 
             // Only allow the hatch to eject if the hatch is not lowered
             if(!hatchIntake.getLimitSwitchHatch()) {
-                hatchIntake.setEject(operatorController.getBButton());
+                hatchIntake.setEject(oi.getHatchEject());
             }
             else {
                 hatchIntake.ejectRetract();
             }
 
-            hatchIntake.setPivot(operatorController.getY(Hand.kLeft));
+            hatchIntake.setPivot(oi.getHatchPivot());
 
             if(hatchIntake.getLimitSwitchPivot()) {
                 hatchIntake.resetEncoder();

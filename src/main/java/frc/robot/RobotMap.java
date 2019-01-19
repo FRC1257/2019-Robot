@@ -7,6 +7,12 @@ public class RobotMap {
      * All constants should be ordered by subsystem/use
      * The units of each measurement should be specified in a comment
      */
+
+    // Controllers
+    public static final int CONTROLLER_DRIVE_PORT = 1;
+    public static final int CONTROLLER_OPERATOR_PORT = 2;
+
+    // Hatch Intake
     public static final int HATCH_PIVOT_MOTOR_ID = 1;
     public static final int HATCH_PICKUP_SOLENOID_ID = 1;
     public static final int HATCH_EJECT_SOLENOID_ID = 2;
