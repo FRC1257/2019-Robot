@@ -3,6 +3,7 @@ package frc.subsystems;
 import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Notifier;
 
@@ -27,8 +28,8 @@ public class HatchIntake {
 
     private Notifier notifier;                // looper for updating PID loop for pivot
     private double currentPIDSetpoint;        // current target position of pivot
-    private int count;                        // the amount of consecutive times the PID loop has been inside tolerance range
-    private boolean running;                  // whether or not the notifier is currently running
+    private double pidTime;                   // the timestamp for when the PID enters the tolerance range
+    private boolean running;                  // whether or not the PID loop is currently running
 
     public HatchIntake() {
         pickupSolenoid = new Solenoid(RobotMap.HATCH_PICKUP_ID);
@@ -37,10 +38,10 @@ public class HatchIntake {
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
-        hatchPivotPID.setP(RobotMap.HATCH_PID_P_VALUE);
-        hatchPivotPID.setI(RobotMap.HATCH_PID_I_VALUE);
-        hatchPivotPID.setD(RobotMap.HATCH_PID_D_VALUE);
-        hatchPivotPID.setFF(RobotMap.HATCH_PID_FF_VALUE);
+        hatchPivotPID.setP(RobotMap.HATCH_PID_P);
+        hatchPivotPID.setI(RobotMap.HATCH_PID_I);
+        hatchPivotPID.setD(RobotMap.HATCH_PID_D);
+        hatchPivotPID.setFF(RobotMap.HATCH_PID_F);
 
         limitSwitch = new DigitalInput(RobotMap.HATCH_LIMIT_ID);
 
@@ -73,34 +74,40 @@ public class HatchIntake {
         ejectSolenoid.set(false);
     }
 
-    public void setPIDPosition(double value) {
-        hatchPivotPID.setReference(value, ControlType.kPosition);
-        currentPIDSetpoint = value;
-        notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
-    }
-
     public void reset() {
         pickupSolenoid.set(false);
         ejectSolenoid.set(false);
         hatchPivotMotor.set(0);
 
         currentPIDSetpoint = 0;
-        count = 0;
+        pidTime = -1;
         running = false;
+    }
+    
+    public void setPIDPosition(double value) {
+        hatchPivotPID.setReference(value, ControlType.kPosition);
+        currentPIDSetpoint = value;
+        notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
+
+        // Check if the pivot's position is within the tolerance
         if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
-            count++;
+            // If this is the first time it has been detected, then update the timestamp
+            if(pidTime == -1) {
+                pidTime = Timer.getFPGATimestamp();
+            }
+
+            // Check if the pivot's position has been inside the tolerance for long enough
+            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
+                notifier.stop();
+                running = false;
+            }
         }
         else {
-            count = 0;
-        }
-
-        if(count >= RobotMap.HATCH_PID_COUNT) {
-            notifier.stop();
-            running = false;
+            pidTime = -1;
         }
     }
 
