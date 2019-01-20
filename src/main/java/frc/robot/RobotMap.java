@@ -25,7 +25,7 @@ public class RobotMap {
      //Port of Infrared Sensor
      public static final int CARGO_INFARED_PORT = 1;
      //Factor for converting analogue voltage to centimeter value
-     public static final CARGO_INFRARED_CONVERSION_FACTOR = (2.6/-70);
+     public static final double CARGO_INFRARED_CONVERSION_FACTOR = (2.6/-70);
      //Point of no return at which the cargo needs to be pulled back; defines upper threshold for P-loop
      public static double CARGO_PONR = 30.0;
      //Furtherst distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
