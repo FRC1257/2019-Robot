@@ -17,7 +17,7 @@ public class CargoIntake {
     private static CargoIntake instance = null;
     
     // Variables Allocated for Member Objects & Global Variables
-    private double motorSpeed
+    private double motorSpeed;
     private AnalogInput cargoInfrared;
     private VictorSPX intakeMotor;
         // 4 in wheel diameter
@@ -36,7 +36,7 @@ public class CargoIntake {
     
     
     // Infrared analogue voltage >> Distance in centimeters
-    private double getDistanceToCargo() {
+    public double getDistanceToCargo() {
         return cargoInfrared.getAverageVoltage()*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
     }
     
