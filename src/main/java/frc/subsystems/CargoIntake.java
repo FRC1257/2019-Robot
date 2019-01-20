@@ -54,14 +54,14 @@ public class CargoIntake {
     //Constants initialized in Shuffle Board during teleopInit 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+	SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
         SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
     
     //Updated Constants to be continually read from Shuffle Board during teleopPeriodic 
     public void getConstantTuning() {
         RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	    RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+	RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
         RobotMap.CARGO_PONR = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
     
