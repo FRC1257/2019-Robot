@@ -51,7 +51,7 @@ public class CargoIntake {
         SmartDashboard.putNumber("Motor.set value for Cargo Retention", motorSpeed);
     }
     
-    //Constants initialized in Shuffle Board during teleopInit 
+    //Constants initialized in Shuffle Board during robotInit 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
 	SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
