@@ -16,30 +16,27 @@ public class CargoIntake {
     // Singleton instance flag; used with Singleton static method (bottommost function)
     private static CargoIntake instance = null;
     
-    
-    // Variables Allocated for Member Objects
-    AnalogInput cargoInfrared;
-    VictorSPX intakeMotor;
+    // Variables Allocated for Member Objects & Global Variables
+    private double motorSpeed
+    private AnalogInput cargoInfrared;
+    private VictorSPX intakeMotor;
         // 4 in wheel diameter
-    
-    // voltage recieved from Infrared Sensor
-    // double voltage = cargoInfrared.getAverageVoltage();
-        
-    // Feedback-control—derived percentage value
-    double motorSpeed = getDistanceToCargo() * RobotMap.kP;
-    // ((intake speed * current distance) / PONR)
 
     // constructor
     private CargoIntake() {
         // Instantiates relevant Member Objects
         intakeMotor = new VictorSPX(RobotMap.CARGO_INTAKE_PORT);
         cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
+	
+	 // Feedback-control—derived percentage value
+	 motorSpeed = getDistanceToCargo() * RobotMap.kP;
+	 // ((intake speed * current distance) / PONR)
     }
     
     
     
     // Infrared analogue voltage >> Distance in centimeters
-    public double getDistanceToCargo() {
+    private double getDistanceToCargo() {
         return cargoInfrared.getAverageVoltage()*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
     }
     
@@ -56,14 +53,14 @@ public class CargoIntake {
     // Constants initialized in Shuffle Board during robotInit 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+	SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
         SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
     
     // Updated Constants to be continually read from Shuffle Board during teleopPeriodic 
     public void getConstantTuning() {
         RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	    RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+	RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
         RobotMap.CARGO_PONR = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
     
