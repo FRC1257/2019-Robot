@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.*;
 import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
-    //Allocates variable for relevant objects
+    // Allocates variable for relevant objects
     CargoIntake cargoIntake;
     XboxController operatorController;
 
@@ -14,12 +14,13 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-	//Instantiates relevant objects
+	    // Instantiates relevant objects
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
-	//Creates SmartDashboard Tabs 
-	cargoIntake.telemetry();
-	cargoIntake.setConstantTuning();
+        
+        // Creates SmartDashboard Tabs 
+        cargoIntake.telemetry();
+        cargoIntake.setConstantTuning();
     }
 
     /**
@@ -51,18 +52,21 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-	//Sends diagnostics to SmartDashboard
+	    // Sends diagnostics to SmartDashboard
     	cargoIntake.telemetry();
-	//Assigns constants to values retrieved from SmartDashboard
-	cargoIntake.getConstantTuning();
+	    // Assigns constants to values retrieved from SmartDashboard
+	    cargoIntake.getConstantTuning();
 	
-	//if A Button is depressed
-        if(operatorController.getAButton())
-		cargoIntake.shoot();
-	//else if B Button is depressed AND Cargo is NOT within PONR (Cargo is on field/not within intake mechanism)
-        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_PONR))
-            	cargoIntake.intake();
-	//Keeps cargo in intake mechanism
+	    // if A Button is depressed
+        if(operatorController.getAButton()) {
+            cargoIntake.shoot();
+        }
+	    // else if B Button is depressed AND Cargo is NOT within PONR (Cargo is on field/not within intake mechanism)
+        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_PONR)) {
+            cargoIntake.intake();
+        }
+        
+        // Keeps cargo in intake mechanism
         cargoIntake.retainCargo(operatorController);
     }
 

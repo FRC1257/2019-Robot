@@ -8,33 +8,33 @@ public class RobotMap {
      * The units of each measurement should be specified in a comment
      */
     
-     //CARGO INTAKE MOTOR
+     // CARGO INTAKE MOTOR
      
-     //Port of Intake Motor
+     // Port of Intake Motor
      public static final int CARGO_INTAKE_PORT = 1;
-     //Maximum possible speed for cargo ejection as a percentage of total motor capacity
+     // Maximum possible speed for cargo ejection as a percentage of total motor capacity
      public static double CARGO_OUTTAKE_SPEED = 1.0;
-     //Maximum possible speed for cargo intake as a percentage of total motor capacity
+     // Maximum possible speed for cargo intake as a percentage of total motor capacity
      public static double CARGO_INTAKE_SPEED = -1.0;
-        //ideal speed twice that of robot drive speed (12ft/s * 2 = 24 ft/s)
+        // ideal speed twice that of robot drive speed (12ft/s * 2 = 24 ft/s)
     
-     //CARGO INFRARED SENSOR
-     //https://home.roboticlab.eu/en/examples/sensor/ir_distance
+     // CARGO INFRARED SENSOR
+     // https://home.roboticlab.eu/en/examples/sensor/ir_distance
      
-     //Port of Infrared Sensor
+     // Port of Infrared Sensor
      public static final int CARGO_INFARED_PORT = 1;
-     //Factor for converting analogue voltage to centimeter value
-     public static final double CARGO_INFRARED_CONVERSION_FACTOR = (2.6/-70); //incorrect conversion factor
-     //Point of no return at which the cargo needs to be pulled back; defines upper threshold for P-loop
+     // Factor for converting analogue voltage to centimeter value
+     public static final double CARGO_INFRARED_CONVERSION_FACTOR = (2.6/-70); // incorrect conversion factor
+     // Point of no return at which the cargo needs to be pulled back; defines upper threshold for P-loop
      public static double CARGO_PONR = 30.0;
-     //Furtherst distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
+     // Furtherst distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
      public static double CARGO_SENSOR_LOWER_THRESHOLD = 10.0;
-     //kP = ratio of maximum intake speed to distance upper bound (PONR)
+     // kP = ratio of maximum intake speed to distance upper bound (PONR)
      public static double kP = CARGO_INTAKE_SPEED/CARGO_PONR;
     
     
-     //MISCELLANEOUS
+     // MISCELLANEOUS
     
-     //Xbox Controller Port
+     // Xbox Controller Port
      public static final int OPERATOR_CONTROLLER = 1;
 }
