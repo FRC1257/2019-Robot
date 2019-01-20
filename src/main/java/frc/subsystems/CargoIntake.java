@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.*;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 // import com.revrobotics.CANSparkMax;
 // import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,19 +22,20 @@ public class CargoIntake {
     VictorSPX intakeMotor;
         //4 in wheel diameter
     
+    //voltage recieved from Infrared Sensor
+    double voltage = cargoInfrared.getAverageVoltage();
+        
+    //Feedback-control—derived percentage value
+    double motorSpeed = getDistanceToCargo() * RobotMap.kP;
+    //((intake speed * current distance) / PONR)
+
     //constructor
     private CargoIntake() {
         //Instantiates relevant Member Objects
         intakeMotor = new VictorSPX(RobotMap.CARGO_INTAKE_PORT);
         cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
-        
-        //voltage recieved from Infrared Sensor
-        double voltage = cargoInfrared.getAverageVoltage();
-        
-        //Feedback-control—derived percentage value
-        double motorSpeed = getDistanceToCargo() * RobotMap.kP;
-        //((intake speed * current distance) / PONR)
     }
+    
     
     
     //Infrared analogue voltage >> Distance in centimeters
@@ -54,7 +56,7 @@ public class CargoIntake {
     //Constants initialized in Shuffle Board during teleopInit 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
         SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
     }
     
@@ -81,7 +83,8 @@ public class CargoIntake {
     //Retains the Cargo within Intake while robot is in transit via proportional feedback control 
     public void retainCargo(XboxController controller) {
         //if within target range for Cargo distance from Infrared 
-        if(getDistanceToCargo() <= RobotMap.CARGO_PONR && getDistanceToCargo() >= CARGO_SENSOR_LOWER_THRESHOLD
+        if(getDistanceToCargo() <= RobotMap.CARGO_PONR && getDistanceToCargo() >= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD
+
            //AND if not pressing the Eject Button
            && !controller.getAButton()){
            //set motor to proportinal value
