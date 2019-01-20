@@ -23,7 +23,7 @@ public class CargoIntake {
         //4 in wheel diameter
     
     //voltage recieved from Infrared Sensor
-    double voltage = cargoInfrared.getAverageVoltage();
+    // double voltage = cargoInfrared.getAverageVoltage();
         
     //Feedback-control—derived percentage value
     double motorSpeed = getDistanceToCargo() * RobotMap.kP;
@@ -40,7 +40,7 @@ public class CargoIntake {
     
     //Infrared analogue voltage >> Distance in centimeters
     public double getDistanceToCargo() {
-        return voltage*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
+        return cargoInfrared.getAverageVoltage()*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
     }
     
     
@@ -49,7 +49,7 @@ public class CargoIntake {
     //Diagnostic Data to be continually pushed to Shuffle Board during teleopPeriodic
     public void telemetry() {
         SmartDashboard.putNumber("Distance to Cargo", getDistanceToCargo());
-        SmartDashboard.putNumber("Voltage Recieved from Analogue Sensor", voltage);
+        SmartDashboard.putNumber("Voltage Recieved from Analogue Sensor", cargoInfrared.getAverageVoltage());
         SmartDashboard.putNumber("Motor.set value for Cargo Retention", motorSpeed);
     }
     
