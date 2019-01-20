@@ -20,9 +20,12 @@ public class RobotMap {
 
 
      //Infared Sensor
+     //https://home.roboticlab.eu/en/examples/sensor/ir_distance
      public static final int CARGO_INFARED_PORT = 1;
      //Port of Infrared Sensor
-     public static double CARGO_PONR = 20.0;
-     //Point of no return at which the cargo needs to be pulled back; threshold for P-loop
-     public static final double kP = CARGO_INTAKE_SPEED/CARGO_PONR;
+     public static double CARGO_PONR = 30.0;
+     //Point of no return at which the cargo needs to be pulled back; defines upper threshold for P-loop
+     public static double CARGO_SENSOR_LOWER_THRESHOLD = 10.0;
+     //Furtherst distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
+     public static double kP = CARGO_INTAKE_SPEED/CARGO_PONR;
 }
