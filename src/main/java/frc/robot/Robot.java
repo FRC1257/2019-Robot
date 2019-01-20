@@ -5,6 +5,7 @@ import frc.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
+    //Allocates variable for relevant objects
     CargoIntake cargoIntake;
     XboxController operatorController;
 
@@ -14,12 +15,12 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+	//Instantiates relevant objects
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
-        SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-		SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
-        SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
-        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
+	//Creates SmartDashboard Tabs 
+	cargoIntake.telemetry();
+	cargoIntake.setConstantTuning();
     }
 
     /**
@@ -51,19 +52,19 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Distance to Cargo", cargoIntake.getDistanceToCargo());
-        RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-		RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
-        RobotMap.CARGO_PONR = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_PONR);
+	//Sends diagnostics to SmartDashboard
+    	cargoIntake.telemetry();
+	//Assigns constants to values retrieved from SmartDashboard
+	cargoIntake.getConstantTuning();
+	
+	//if A Button is depressed
         if(operatorController.getAButton())
-        {
-            cargoIntake.shoot();
-        }
-        if(operatorController.getBButton())
-        {
-            cargoIntake.intake();
-        }
-        cargoIntake.pointOfNoReturn(operatorController);
+		cargoIntake.shoot();
+	//else if B Button is depressed AND Cargo is NOT within PONR (Cargo is on field/not within intake mechanism)
+        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_PONR))
+            	cargoIntake.intake();
+	//Keeps cargo in intake mechanism
+        cargoIntake.retainCargo(operatorController);
     }
 
     /**
