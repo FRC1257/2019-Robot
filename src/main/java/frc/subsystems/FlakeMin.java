@@ -5,9 +5,12 @@ import frc.robot.*;
 import com.revrobotics.*;
 
 public class FlakeMin extends CANSparkMax {
+
     public CANPIDController PID;
     public CANEncoder Encoder;
     private double currentSpeed;
+    private double Speed;
+    private double Distance;
 
     public FlakeMin(int deviceID, CANSparkMaxLowLevel.MotorType type, boolean left) {
         super(deviceID, type);
@@ -46,21 +49,42 @@ public class FlakeMin extends CANSparkMax {
         PID = getPIDController();
     }
     public double getSpeed() {
-        return Encoder.getVelocity();
+        Speed = Encoder.getVelocity();
+        return Speed;
     }
     public double getPlace() {
-        return Encoder.getPosition();
+        Distance = Encoder.getPosition();
+        return Distance;
     }
     
     public double getPlaceInches() {
-        return Encoder.getPosition() * RobotMap.diameter * RobotMap.pi;
+        return getPlace() * RobotMap.diameter * RobotMap.pi;
     }
-    public double getSpeedFeet() {
-        return Encoder.getVelocity() * RobotMap.diameter * RobotMap.pi / 12;
-    }
-    // Reset Encoder might be added
-    // public void resetEncoder() {
-    //     Encoder.getPosition() = 0;
-    // }
 
+    public double getPlaceFeet() {
+        return getPlaceInches() / 12;
+    }
+
+    public double getSpeedFeet() {
+        return getSpeed() * RobotMap.diameter * RobotMap.pi / 12;
+    }
+
+    public double getSpeedInches() {
+        return getSpeedFeet() / 12;
+    }
+
+    public void resetVelocity() {
+        double temp = getSpeed();
+        Speed = Speed - temp;
+    }
+
+    public void resetPlace() {
+        double temp = getPlace();
+        Distance = Distance - temp;
+    }
+
+    public void resetAll() {
+        resetVelocity();
+        resetPlace();
+    }
 }
