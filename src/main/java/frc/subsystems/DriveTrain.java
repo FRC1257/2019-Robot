@@ -33,9 +33,6 @@ public class DriveTrain {
         blDrive = new CANSparkMax(RobotMap.MOTORS[2], MotorType.kBrushless);
         brDrive = new CANSparkMax(RobotMap.MOTORS[3], MotorType.kBrushless);
 
-        flDrive.getPID();
-        frDrive.getPID();
-
         configSpeedControllers();
 
         blDrive.follow(flDrive);
