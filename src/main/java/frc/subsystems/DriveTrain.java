@@ -7,6 +7,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+/**
+ * <h1>Drivetrain</h1>
+ * This is the drivetrain subsystem.
+ * @author Allen Du, Arthur Chen, Om Desai, and Nicole Giron
+ * @since 2019-01-21
+ */
 public class DriveTrain {
     private static DriveTrain instance = null;
 
@@ -17,8 +23,9 @@ public class DriveTrain {
 
     private DifferentialDrive driveTrain;
 
-    double m_maxOutput;
-
+    /**
+     * Constructs a new {@code DriveTrain} object.
+     */
     public DriveTrain() {
 
         flDrive = new FlakeMin(RobotMap.MOTORS[0], MotorType.kBrushless, true);
@@ -37,6 +44,9 @@ public class DriveTrain {
         driveTrain = new DifferentialDrive(flDrive, frDrive);
     }
 
+    /**
+     * Singleton.
+     */
     public static DriveTrain getInstance() {
         if(instance == null) {
             instance = new DriveTrain();
@@ -49,6 +59,11 @@ public class DriveTrain {
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
     }
 
+    /**
+     * This is just {@code arcadeDrive}.
+     * @param x
+     * @param z
+     */
     public void drive(double x, double z) {
         driveTrain.arcadeDrive(x, z);
     }

@@ -4,6 +4,12 @@ import frc.robot.*;
 
 import com.revrobotics.*;
 
+/**
+ * <h1>FlakeMin</h1>
+ * This allows us to perform closed-loop drivetrain as well as other fun things.
+ * @author Allen Du, Arthur Chen, Om Desai, and Nicole Giron
+ * @since 2019-01-21
+ */
 public class FlakeMin extends CANSparkMax {
 
     public CANPIDController PID;
@@ -12,6 +18,12 @@ public class FlakeMin extends CANSparkMax {
     private double Speed;
     private double Distance;
 
+    /**
+     * Constructs a new {@code FlakeMin} object.
+     * @param deviceID The port it's wired to.
+     * @param type Brushed or brushless, depending on the motor.
+     * @param left If it's on the left side or not.
+     */
     public FlakeMin(int deviceID, CANSparkMaxLowLevel.MotorType type, boolean left) {
         super(deviceID, type);
             if(left) {
