@@ -102,7 +102,7 @@ public class HatchIntake {
 
     public void raisePivot() {
         lowered = false;
-        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
+        setPIDPosition(RobotMap.HATCH_PID_RAISED);
     }
 
     public void lowerPivot() {
