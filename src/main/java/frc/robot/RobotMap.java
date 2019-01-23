@@ -26,11 +26,11 @@ public class RobotMap {
      // Factor for converting analogue voltage to centimeter value
      public static final double CARGO_INFRARED_CONVERSION_FACTOR = (2.6/-70); // incorrect conversion factor
      // Point of no return at which the cargo needs to be pulled back; defines upper threshold for P-loop
-     public static double CARGO_PONR = 30.0;
-     // Furtherst distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
+     public static double CARGO_SENSOR_UPPER_THRESHOLD = 30.0;
+     // Furthest distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
      public static double CARGO_SENSOR_LOWER_THRESHOLD = 10.0;
-     // kP = ratio of maximum intake speed to distance upper bound (PONR)
-     public static double kP = CARGO_INTAKE_SPEED/CARGO_PONR;
+     // kP = ratio of maximum intake speed to distance upper bound 
+     public static double kP = CARGO_INTAKE_SPEED/CARGO_SENSOR_UPPER_THRESHOLD;
     
     
      // MISCELLANEOUS

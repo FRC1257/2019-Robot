@@ -17,7 +17,6 @@ public class CargoIntake {
     private static CargoIntake instance = null;
     
     // Variables Allocated for Member Objects & Global Variables
-    private double motorSpeed;
     private AnalogInput cargoInfrared;
     private VictorSPX intakeMotor;
         // 4 in wheel diameter
@@ -28,14 +27,12 @@ public class CargoIntake {
         intakeMotor = new VictorSPX(RobotMap.CARGO_INTAKE_PORT);
         cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
 	
-	 // Feedback-control—derived percentage value
-	 motorSpeed = getDistanceToCargo() * RobotMap.kP;
-	 // ((intake speed * current distance) / PONR)
+
     }
     
     
     
-    // Infrared analogue voltage >> Distance in centimeters
+    // Infrared analog voltage >> Distance in centimeters
     public double getDistanceToCargo() {
         return cargoInfrared.getAverageVoltage()*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
     }
@@ -43,25 +40,25 @@ public class CargoIntake {
     
     // SMART DASHBOARD
     
-    // Diagnostic Data to be continually pushed to Shuffle Board during teleopPeriodic
+    // Diagnostic Data to  continually pushed to Shuffle Board during teleopPeriodic
     public void telemetry() {
         SmartDashboard.putNumber("Distance to Cargo", getDistanceToCargo());
-        SmartDashboard.putNumber("Voltage Recieved from Analogue Sensor", cargoInfrared.getAverageVoltage());
-        SmartDashboard.putNumber("Motor.set value for Cargo Retention", motorSpeed);
+        SmartDashboard.putNumber("Voltage Recieved from Analog Sensor", cargoInfrared.getAverageVoltage());
+       
     }
     
     // Constants initialized in Shuffle Board during robotInit 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
-        SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_PONR);
+	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+        SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
     // Updated Constants to be continually read from Shuffle Board during teleopPeriodic 
     public void getConstantTuning() {
         RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
-	RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
-        RobotMap.CARGO_PONR = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_PONR);
+	    RobotMap.CARGO_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
+        RobotMap.CARGO_SENSOR_UPPER_THRESHOLD = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
 
@@ -78,12 +75,16 @@ public class CargoIntake {
     }
 
     // Retains the Cargo within Intake while robot is in transit via proportional feedback control 
-    public void retainCargo(XboxController controller) {
-        // if within target range for Cargo distance from Infrared 
-        if(getDistanceToCargo() <= RobotMap.CARGO_PONR && getDistanceToCargo() >= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD
-           // AND if not pressing the Eject Button
-           && !controller.getAButton()) {
-           // set motor to proportinal value
+    public void retainCargo() {
+        // if within target range for Cargo distance from Infrared
+
+        // Feedback-control—derived percentage value
+	    double motorSpeed = getDistanceToCargo() * RobotMap.kP;
+	    // ((intake speed * current distance) / upper limit)
+        
+        double distance = getDistanceToCargo();
+        if(distance <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD && distance >= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) {
+           // set motor to proportional value
            intakeMotor.set(ControlMode.PercentOutput, motorSpeed);
         }
     }

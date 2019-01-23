@@ -60,14 +60,20 @@ public class Robot extends TimedRobot {
 	    // if A Button is depressed
         if(operatorController.getAButton()) {
             cargoIntake.shoot();
+
         }
-	    // else if B Button is depressed AND Cargo is NOT within PONR (Cargo is on field/not within intake mechanism)
-        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_PONR)) {
+	    // else if B Button is depressed AND Cargo is NOT within UPPER RANGE (Cargo is on field/not within intake mechanism)
+        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD)) {
             cargoIntake.intake();
         }
-        
-        // Keeps cargo in intake mechanism
-        cargoIntake.retainCargo(operatorController);
+
+        else {
+            cargoIntake.retainCargo();
+        }
+
+   
+
+
     }
 
     /**
