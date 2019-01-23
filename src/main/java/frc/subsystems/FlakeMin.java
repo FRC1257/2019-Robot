@@ -71,10 +71,10 @@ public class FlakeMin extends CANSparkMax {
 
     /**
      * Sets the controller's PID more efficiently than the default functions.
-     * @param kFF
-     * @param kP
-     * @param kI
-     * @param kD
+     * @param kFF Feedfoward term
+     * @param kP Proportional term
+     * @param kI Integral term
+     * @param kD Differential term
      */
     public void yourPIDfunctionsucks(double kFF, double kP, double kI, double kD) {
         PID.setFF(kFF);

@@ -43,6 +43,7 @@ public class Gyro {
 
     /**
      * Gets the current yaw angle.
+     * @return The angle in degrees.
      */
     public double getAngle() {
         return navx.getYaw();
