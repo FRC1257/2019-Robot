@@ -23,7 +23,7 @@ public class DriveTrain {
 
     private DifferentialDrive driveTrain;
 
-    public boolean reverse;
+    public boolean reverse = false;
 
     /**
      * Constructs a new {@code DriveTrain} object.
@@ -39,8 +39,6 @@ public class DriveTrain {
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
-
-        reverse = false;
 
         driveTrain = new DifferentialDrive(flDrive, frDrive);
     }
