@@ -23,6 +23,8 @@ public class DriveTrain {
 
     private DifferentialDrive driveTrain;
 
+    public boolean reverse;
+
     /**
      * Constructs a new {@code DriveTrain} object.
      */
@@ -38,11 +40,14 @@ public class DriveTrain {
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
 
+        reverse = false;
+
         driveTrain = new DifferentialDrive(flDrive, frDrive);
     }
 
     /**
      * Singleton.
+     * @return A Drivetrain object.
      */
     public static DriveTrain getInstance() {
         if(instance == null) {
@@ -51,17 +56,24 @@ public class DriveTrain {
         return instance;
     }
 
+    /**
+     * Sets voltage and RPM limits on motor controllers.
+     */
     public void configSpeedControllers() {
         flDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
     }
 
     /**
-     * This is just {@code arcadeDrive}.
-     * @param x
-     * @param z
+     * This is {@code arcadeDrive}.
+     * Modified to accomodate a reverse drive mode.
+     * @param x Forward speed, from -1 to 1.
+     * @param z Rate of rotation, from -1 to 1.
      */
     public void drive(double x, double z) {
         driveTrain.arcadeDrive(x, z);
+        if(reverse) {
+            driveTrain.arcadeDrive(-x, z);
+        }
     }
 }

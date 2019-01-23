@@ -49,22 +49,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    double turnSpeed = controller.getTurnSpeed();
-    double forwardSpeed = controller.getForwardSpeed();
-    if(controller.getBButton()){
-      if(ReverseDriveOn = false){
-        ReverseDriveOn = true;
-      }
-      else{
-        ReverseDriveOn = false;
-      }
+    if(controller.getBButton()) {
+      drive.reverse = true;
     }
-    if(ReverseDriveOn){
-      forwardSpeed = -1 * forwardSpeed;
-      turnSpeed = -1 * turnSpeed;
-    }
-    drive.drive(forwardSpeed, turnSpeed);
-
+    drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
   }
 
     /**
