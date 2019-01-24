@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
+//import com.qualcomm.robotcore.hardware.PIDCoefficients;
                                                 
 public class IntakeArm { 
     private static IntakeArm instance = null;
