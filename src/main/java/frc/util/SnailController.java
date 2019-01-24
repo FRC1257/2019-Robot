@@ -24,6 +24,11 @@ public class SnailController extends XboxController {
 	 * If they press the right bumper, use the right joystick for forward and
 	 * backward motion and the left joystick for turning
 	 */
+
+	/**
+	 * Gets the forward speed of the controller (for {@code arcadeDrive}) based on the driver configuration.
+	 * @return The forward speed ({@code xSpeed}) of the controller.
+	 */
 	public double getForwardSpeed() {
 		if (getAButton())
 			return getY(Hand.kLeft);
@@ -34,7 +39,10 @@ public class SnailController extends XboxController {
 		else
 			return 0;
 	}
-
+	/**
+	 * Gets the turn speed of the controller (for {@code arcadeDrive}) based on the driver configuration.
+	 * @return The turn speed ({@code zRotation}) of the controller.
+	 */
 	public double getTurnSpeed() {
 		if (getAButton())
 			return getX(Hand.kLeft);
