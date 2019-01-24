@@ -49,19 +49,19 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
       
-      if(Controller.getXButton() && climb.FrontOn == false)
+      if(Controller.getXButton() && !climb.FrontOn)
       {
         climb.frontForward();
       }
-      else if(Controller.getXButton() && climb.FrontOn == true)
+      else if(Controller.getXButton() && climb.FrontOn)
       {
         climb.frontReverse();
       }
-      if(Controller.getYButton() && climb.BackOn == false)
+      if(Controller.getYButton() && !climb.BackOn)
       {
         climb.backForward();
       }
-      else if(Controller.getYButton() && climb.BackOn == true)
+      else if(Controller.getYButton() && climb.BackOn)
       {
         climb.backReverse();
       }
