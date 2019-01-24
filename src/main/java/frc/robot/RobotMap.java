@@ -9,6 +9,6 @@ public class RobotMap {
     public static final double P_WASHOUT = 1.0; // Placeholder: P control for washout
 
     // Channel IDs
-    public static final int MOTORS[] = {1, 2, 3, 6}; // In this order: FL, FR, BL, BR
+    public static final int MOTORS[] = {3, 2, 6, 1}; // In this order: FL, FR, BL, BR
     public static final int CONTROLLER = 0; // Controller ID
 }
