@@ -71,22 +71,27 @@ public class Robot extends TimedRobot {
   Trajectory trajectory = Pathfinder.generate(points, config);
 
   // The distance between the left and right sides of the wheelbase is 0.6m
-double wheelbase_width = 0.6;
+  double wheelbase_width = 0.6;
 
-// Create the Modifier Object
-TankModifier modifier = new TankModifier(trajectory);
+  // Create the Modifier Object
+  TankModifier modifier = new TankModifier(trajectory);
 
-// Generate the Left and Right trajectories using the original trajectory
-// as the centre
-modifier.modify(wheelbase_width);
+  // Generate the Left and Right trajectories using the original trajectory
+  // as the centre
+  modifier.modify(wheelbase_width);
 
-Trajectory left  = modifier.getLeftTrajectory();       // Get the Left Side
-Trajectory right = modifier.getRightTrajectory();      // Get the Right Side
+  Trajectory left  = modifier.getLeftTrajectory();       // Get the Left Side
+  Trajectory right = modifier.getRightTrajectory();      // Get the Right Side
 
-left.configureEncoder(encoder_position, 1000, wheel_diameter);
-right.configureEncoder(encoder_position, 1000, wheel_diameter);
+  EncoderFollower Left = new EncoderFollower(left);
+  EncoderFollower Right = new EncoderFollower(right);
 
-  }
+  Left.configureEncoder(0, 1000, 0.1524);
+  Right.configureEncoder(0, 1000, 0.1524);
+
+  Left.configurePIDVA(1.0, 0.0, 0.0, 1/5500, 0);
+  Right.configurePIDVA(1.0, 0.0, 0.0, 1/5500, 0);
+}
 
   /**
    * This function is called periodically during autonomous.
