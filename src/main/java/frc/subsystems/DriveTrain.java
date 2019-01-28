@@ -30,10 +30,10 @@ public class DriveTrain {
      */
     public DriveTrain() {
 
-        flDrive = new FlakeMin(RobotMap.MOTORS[0], MotorType.kBrushless, true);
-        frDrive = new FlakeMin(RobotMap.MOTORS[1], MotorType.kBrushless, false);
-        blDrive = new CANSparkMax(RobotMap.MOTORS[2], MotorType.kBrushless);
-        brDrive = new CANSparkMax(RobotMap.MOTORS[3], MotorType.kBrushless);
+        flDrive = new FlakeMin(RobotMap.DRIVE_MOTORS[0], MotorType.kBrushless, true);
+        frDrive = new FlakeMin(RobotMap.DRIVE_MOTORS[1], MotorType.kBrushless, false);
+        blDrive = new CANSparkMax(RobotMap.DRIVE_MOTORS[2], MotorType.kBrushless);
+        brDrive = new CANSparkMax(RobotMap.DRIVE_MOTORS[3], MotorType.kBrushless);
 
         configSpeedControllers();
 
@@ -58,8 +58,8 @@ public class DriveTrain {
      * Sets voltage and RPM limits on motor controllers.
      */
     public void configSpeedControllers() {
-        flDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
-        frDrive.setSmartCurrentLimit(RobotMap.NEO_CONSTS[0], RobotMap.NEO_CONSTS[1], RobotMap.NEO_CONSTS[3]);
+        flDrive.setSmartCurrentLimit(RobotMap.DRIVE_NEO_CONSTS[0], RobotMap.DRIVE_NEO_CONSTS[1], RobotMap.DRIVE_NEO_CONSTS[3]);
+        frDrive.setSmartCurrentLimit(RobotMap.DRIVE_NEO_CONSTS[0], RobotMap.DRIVE_NEO_CONSTS[1], RobotMap.DRIVE_NEO_CONSTS[3]);
     }
 
     /**
