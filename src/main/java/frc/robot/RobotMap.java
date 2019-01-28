@@ -10,12 +10,9 @@ public class RobotMap {
     
      // CARGO INTAKE MOTOR
      
-     // Port of Intake Motor
      public static final int CARGO_INTAKE_PORT = 1;
-     // Maximum possible speed for cargo ejection as a percentage of total motor capacity
-     public static double CARGO_OUTTAKE_SPEED = 1.0;
-     // Maximum possible speed for cargo intake as a percentage of total motor capacity
-     public static double CARGO_INTAKE_SPEED = -1.0;
+     public static double CARGO_MAX_OUTTAKE_SPEED = 1.0; // percentage
+     public static double CARGO_MAX_INTAKE_SPEED = -1.0;
         // ideal speed twice that of robot drive speed (12ft/s * 2 = 24 ft/s)
     
      // CARGO INFRARED SENSOR
@@ -30,7 +27,17 @@ public class RobotMap {
      // Furthest distance at which cargo is too close to be accurately measured; defines lower threshold for P-loop
      public static double CARGO_SENSOR_LOWER_THRESHOLD = 10.0;
      // kP = ratio of maximum intake speed to distance upper bound 
-     public static double kP = CARGO_INTAKE_SPEED/CARGO_SENSOR_UPPER_THRESHOLD;
+     public static double kP = CARGO_MAX_INTAKE_SPEED/CARGO_SENSOR_UPPER_THRESHOLD;
+
+
+      public static final double[] CARGO_KNOWN_VOLTAGE_PTS = {
+         0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+      };
+      public static final double[] CARGO_KNOWN_DISTANCE_PTS = {
+         0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+      }; // sample values - not real data points
+
+     
     
     
      // MISCELLANEOUS
