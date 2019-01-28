@@ -61,10 +61,10 @@ public class Robot extends TimedRobot {
     if(controller.getAButton() && controller.getForwardSpeed() > 0) {
       if(controller.getTurnSpeed() > 0) {
         drive.flDrive.set(0.6);
-        drive.flDrive.printAll();
+        drive.flDrive.outputValues();
       } else {
         drive.frDrive.set(0.6);
-        drive.flDrive.printAll();
+        drive.flDrive.outputValues();
       }
     } 
   }

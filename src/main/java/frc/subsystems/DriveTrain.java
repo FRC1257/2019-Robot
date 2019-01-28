@@ -43,16 +43,7 @@ public class DriveTrain {
         driveTrain = new DifferentialDrive(flDrive, frDrive);
     }
 
-    /**
-     * Singleton.
-     * @return A Drivetrain object.
-     */
-    public static DriveTrain getInstance() {
-        if(instance == null) {
-            instance = new DriveTrain();
-        }
-        return instance;
-    }
+    
 
     /**
      * Sets voltage and RPM limits on motor controllers.
@@ -73,5 +64,29 @@ public class DriveTrain {
         if(reverse) {
             driveTrain.arcadeDrive(-x, z);
         }
+    }
+
+    public void getLeftEncoderPosition(){
+        flDrive.getEncoderPosition();
+    }
+    public void getRightEncoderPosition(){
+        frDrive.getEncoderPosition();
+    }
+    public void getRightEncoderVelocity(){
+        frDrive.getEncoderVelocity();
+    }
+    public void getLeftEncoderVelocity(){
+        flDrive.getEncoderVelocity();
+    }
+
+    /**
+     * Singleton.
+     * @return A Drivetrain object.
+     */
+    public static DriveTrain getInstance() {
+        if(instance == null) {
+            instance = new DriveTrain();
+        }
+        return instance;
     }
 }
