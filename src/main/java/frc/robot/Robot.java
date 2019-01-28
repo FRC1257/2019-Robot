@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if(controller.getBButtonPressed()) {
-      if(drive.reverse == false){
+      if(!drive.reverse){
         drive.reverse = true;
       }
       else{
@@ -58,6 +58,15 @@ public class Robot extends TimedRobot {
       }
     }
     drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
+    if(controller.getAButton() && controller.getForwardSpeed() > 0) {
+      if(controller.getTurnSpeed() > 0) {
+        drive.flDrive.set(0.6);
+        drive.flDrive.printAll();
+      } else {
+        drive.frDrive.set(0.6);
+        drive.flDrive.printAll();
+      }
+    } 
   }
 
     /**

@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class DriveTrain {
     private static DriveTrain instance = null;
 
-    private FlakeMin flDrive;
-    private FlakeMin frDrive;
-    private CANSparkMax blDrive;
-    private CANSparkMax brDrive;
+    public FlakeMin flDrive;
+    public FlakeMin frDrive;
+    public CANSparkMax blDrive;
+    public CANSparkMax brDrive;
 
     private DifferentialDrive driveTrain;
 
