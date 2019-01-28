@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
       }
 
       // pushes front down
-      else if(Controller.getXButton() && C()) {
+      else if(Controller.getXButton() && climb.getFront()) {
         climb.frontReverse();
       }
 
