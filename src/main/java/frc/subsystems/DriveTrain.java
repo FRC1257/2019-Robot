@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 /**
  * <h1>Drivetrain</h1>
  * This is the drivetrain subsystem.
- * @author Allen Du, Arthur Chen, Om Desai, and Nicole Giron
+ * @author Allen Du
  * @since 2019-01-21
  */
 public class DriveTrain {
