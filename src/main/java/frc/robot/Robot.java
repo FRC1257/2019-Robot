@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    controller = new SnailController(RobotMap.controllerPort);
+    controller = new SnailController(RobotMap.DRIVE_CONTROLLER_PORT);
     drive = new DriveTrain();
     
   }
@@ -49,8 +49,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    if(controller.getBButton()) {
-      drive.reverse = true;
+    if(controller.getBButtonPressed()) {
+      if(drive.reverse == false){
+        drive.reverse = true;
+      }
+      else{
+        drive.reverse = false;
+      }
     }
     drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
   }

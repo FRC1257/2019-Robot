@@ -36,11 +36,11 @@ public class FlakeMin extends CANSparkMax {
         super(deviceID, type);
         getPID();
         if(left) {
-            yourPIDfunctionsucks(RobotMap.PID_LEFT[0], RobotMap.PID_LEFT[1], 
-                RobotMap.PID_LEFT[2], RobotMap.PID_LEFT[3]);
+            yourPIDfunctionsucks(RobotMap.DRIVE_PID_LEFT[0], RobotMap.DRIVE_PID_LEFT[1], 
+                RobotMap.DRIVE_PID_LEFT[2], RobotMap.DRIVE_PID_LEFT[3]);
         } else {
-            yourPIDfunctionsucks(RobotMap.PID_RIGHT[0], RobotMap.PID_RIGHT[1], 
-                RobotMap.PID_RIGHT[2], RobotMap.PID_RIGHT[3]);
+            yourPIDfunctionsucks(RobotMap.DRIVE_PID_RIGHT[0], RobotMap.DRIVE_PID_RIGHT[1], 
+                RobotMap.DRIVE_PID_RIGHT[2], RobotMap.DRIVE_PID_RIGHT[3]);
         }
         
         currentVelocity = 0.0;
@@ -56,7 +56,7 @@ public class FlakeMin extends CANSparkMax {
     private double updateInput(double currentInput, double targetInput) {
         double error;
         error = targetInput - currentInput;
-        currentInput += RobotMap.P_WASHOUT * error;
+        currentInput += RobotMap.DRIVE_P_WASHOUT * error;
         return currentInput;
     }
 
@@ -66,7 +66,7 @@ public class FlakeMin extends CANSparkMax {
      * @param speed The desired speed.
      */
     public void set(double speed) {
-        PID.setReference(RobotMap.NEO_CONSTS[2] * updateInput(currentVelocity, speed), ControlType.kVelocity);
+        PID.setReference(RobotMap.DRIVE_NEO_CONSTS[2] * updateInput(currentVelocity, speed), ControlType.kVelocity);
         currentVelocity = updateInput(currentVelocity, speed);
     }
 
@@ -114,7 +114,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The distance in inches.
      */
     public double getPlaceInches() {
-        return getPlace() * RobotMap.diameter * RobotMap.pi;
+        return getPlace() * RobotMap.DRIVE_DIAMETER * RobotMap.PI;
     }
 
     /**
@@ -130,7 +130,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The speed in feet.
      */
     public double getSpeedFeet() {
-        return getSpeed() * RobotMap.diameter * RobotMap.pi / 12;
+        return getSpeed() * RobotMap.DRIVE_DIAMETER * RobotMap.PI / 12;
     }
 
     /**
