@@ -42,6 +42,7 @@ public class FlakeMin extends CANSparkMax {
             PIDSetup(RobotMap.DRIVE_PID_RIGHT[0], RobotMap.DRIVE_PID_RIGHT[1], 
                 RobotMap.DRIVE_PID_RIGHT[2], RobotMap.DRIVE_PID_RIGHT[3]);
         }
+        
         currentVelocity = 0.0;
         encoder = getEncoder();
     }
