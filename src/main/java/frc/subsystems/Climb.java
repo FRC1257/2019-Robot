@@ -33,10 +33,12 @@ public class Climb {
         
         
     }
+
     // gets value of climbState
     public int getState() {
         return climbState;
-    } 
+    }
+
     // gets value of frontOn
     public boolean getFront() {
         return frontOn;
@@ -70,6 +72,8 @@ public class Climb {
         back.set(DoubleSolenoid.Value.kReverse);
         this.backOn = false;
     }
+
+    // phases of the climb
     public void phase1Climb(){
         front.set(DoubleSolenoid.Value.kForward);
         back.set(DoubleSolenoid.Value.kForward);
@@ -77,18 +81,18 @@ public class Climb {
         this.frontOn = true;
         this.climbState = 2;
     }
+
     public void phase2Climb(){
         front.set(DoubleSolenoid.Value.kReverse);
         this.frontOn = false;
         this.climbState = 3;
     }
+
     public void phase3Climb(){
         back.set(DoubleSolenoid.Value.kReverse);
         this.backOn = false;
         this.climbState = 1;
-    } 
-    //phases of the climb
-
+    }
 
     // resets solenoids
     public void reset() {
