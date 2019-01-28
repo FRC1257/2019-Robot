@@ -16,8 +16,8 @@ public class Climb {
     WPI_VictorSPX motorF;
     WPI_VictorSPX motorB;
 
-    public boolean FrontOn;
-    public boolean BackOn;
+    private boolean frontOn;
+    private boolean backOn;
 
     public Climb() {
         front = new DoubleSolenoid(RobotMap.ClimbSolenoidFPort1, RobotMap.ClimbSolenoidFPort2);
@@ -26,8 +26,8 @@ public class Climb {
         motorF = new WPI_VictorSPX(RobotMap.ClimbMotorsF);
         motorB = new WPI_VictorSPX(RobotMap.ClimbMotorsB);
 
-        FrontOn = false;
-        BackOn = false;
+        frontOn = false;
+        backOn = false;
 
         
     }
@@ -38,38 +38,43 @@ public class Climb {
         }
         return instance;
     }
-
+    public boolean getFront()
+    {
+        return frontOn;
+    }
+    public boolean getBack()
+    {
+        return backOn;    
+    }
     public void frontForward() {  //pushes forwards front solenoid
         front.set(DoubleSolenoid.Value.kForward);
-        this.FrontOn=true;
+        this.frontOn=true;
     }
 
     public void frontReverse() { // reverses front solenoid
         front.set(DoubleSolenoid.Value.kReverse);
-        this.FrontOn=false; 
+        this.frontOn=false; 
     }
 
     public void backForward() {  //pushes forward back solenoid
         back.set(DoubleSolenoid.Value.kForward);
-        this.BackOn = true;
+        this.backOn = true;
     }
 
     public void backReverse() { // reverses back solenoid
         back.set(DoubleSolenoid.Value.kReverse);
-        this.BackOn = false;
+        this.backOn = false;
     }
 
     public void reset() { // resets solenoids
         front.set(DoubleSolenoid.Value.kReverse);
         back.set(DoubleSolenoid.Value.kReverse);
-        FrontOn = false;
-        BackOn = false;
+        frontOn = false;
+        backOn = false;
     }
 
     public void climbDrive(double f) { // drives the robot front/back
         motorF.set(f);
         motorB.set(f);
     }
-    
-
 }
