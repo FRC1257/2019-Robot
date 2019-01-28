@@ -51,7 +51,7 @@ public class Climb {
         this.frontOn=true;
     }
 
-    public void frontReverse() { // reverses front solenoid
+    public void frontReverse() { //reverses front solenoid
         front.set(DoubleSolenoid.Value.kReverse);
         this.frontOn=false; 
     }
@@ -61,19 +61,19 @@ public class Climb {
         this.backOn = true;
     }
 
-    public void backReverse() { // reverses back solenoid
+    public void backReverse() { //reverses back solenoid
         back.set(DoubleSolenoid.Value.kReverse);
         this.backOn = false;
     }
 
-    public void reset() { // resets solenoids
+    public void reset() { //resets solenoids
         front.set(DoubleSolenoid.Value.kReverse);
         back.set(DoubleSolenoid.Value.kReverse);
         frontOn = false;
         backOn = false;
     }
 
-    public void climbDrive(double f) { // drives the robot front/back
+    public void climbDrive(double f) { //drives the robot front/back
         motorF.set(f);
         motorB.set(f);
     }
