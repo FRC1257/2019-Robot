@@ -20,11 +20,11 @@ public class Climb {
     public boolean BackOn;
 
     public Climb() {
-        front = new DoubleSolenoid(RobotMap.ClimbSolenoids[0], RobotMap.ClimbSolenoids[1]);
-        back = new DoubleSolenoid(RobotMap.ClimbSolenoids[2], RobotMap.ClimbSolenoids[3]);
+        front = new DoubleSolenoid(RobotMap.ClimbSolenoidFPort1, RobotMap.ClimbSolenoidFPort2);
+        back = new DoubleSolenoid(RobotMap.ClimbSolenoidBPort1, RobotMap.ClimbSolenoidBPort2);
 
-        motorF = new WPI_VictorSPX(RobotMap.ClimbMotors[0]);
-        motorB = new WPI_VictorSPX(RobotMap.ClimbMotors[1]);
+        motorF = new WPI_VictorSPX(RobotMap.ClimbMotorsF);
+        motorB = new WPI_VictorSPX(RobotMap.ClimbMotorsB);
 
         FrontOn = false;
         BackOn = false;
