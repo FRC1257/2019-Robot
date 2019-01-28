@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class FlakeMin extends CANSparkMax {
 
     public CANPIDController PID;
-    public CANEncoder Encoder;
+    public CANEncoder encoder;
 
     private double currentVelocity;
     private double Speed;
@@ -36,14 +36,14 @@ public class FlakeMin extends CANSparkMax {
         super(deviceID, type);
         getPID();
         if(left) {
-            yourPIDfunctionsucks(RobotMap.DRIVE_PID_LEFT[0], RobotMap.DRIVE_PID_LEFT[1], 
+            PIDSetup(RobotMap.DRIVE_PID_LEFT[0], RobotMap.DRIVE_PID_LEFT[1], 
                 RobotMap.DRIVE_PID_LEFT[2], RobotMap.DRIVE_PID_LEFT[3]);
         } else {
-            yourPIDfunctionsucks(RobotMap.DRIVE_PID_RIGHT[0], RobotMap.DRIVE_PID_RIGHT[1], 
+            PIDSetup(RobotMap.DRIVE_PID_RIGHT[0], RobotMap.DRIVE_PID_RIGHT[1], 
                 RobotMap.DRIVE_PID_RIGHT[2], RobotMap.DRIVE_PID_RIGHT[3]);
         }
         currentVelocity = 0.0;
-        Encoder = getEncoder();
+        encoder = getEncoder();
     }
 
     /**
@@ -76,7 +76,7 @@ public class FlakeMin extends CANSparkMax {
      * @param kI Integral term
      * @param kD Differential term
      */
-    public void yourPIDfunctionsucks(double kFF, double kP, double kI, double kD) {
+    public void PIDSetup(double kFF, double kP, double kI, double kD) {
         PID.setFF(kFF);
         PID.setP(kP);
         PID.setI(kI);
@@ -94,8 +94,8 @@ public class FlakeMin extends CANSparkMax {
      * Gets the speed of the motor, in RPM, using an encoder.
      * @return The speed in RPM.
      */
-    public double getSpeed() {
-        Speed = Encoder.getVelocity();
+    public double getEncoderVelocity() {
+        Speed = encoder.getVelocity();
         return Speed;
     }
 
@@ -103,8 +103,8 @@ public class FlakeMin extends CANSparkMax {
      * Gets the distance, in total revolutions, traveled by the motor using an encoder.
      * @return The distance in accumulated rotations.
      */
-    public double getPlace() {
-        Distance = Encoder.getPosition();
+    public double getEncoderPosition() {
+        Distance = encoder.getPosition();
         return Distance - temp;
     }
     
@@ -112,32 +112,32 @@ public class FlakeMin extends CANSparkMax {
      * Gets the distance traveled in inches.
      * @return The distance in inches.
      */
-    public double getPlaceInches() {
-        return getPlace() * RobotMap.DRIVE_DIAMETER * RobotMap.PI;
+    public double getEncoderPositionInches() {
+        return getEncoderPosition() * RobotMap.DRIVE_DIAMETER * RobotMap.PI;
     }
 
     /**
      * Gets the distance traveled in feet.
      * @return The distance in feet.
      */
-    public double getPlaceFeet() {
-        return getPlaceInches() / 12;
+    public double getEncoderPositionFeet() {
+        return getEncoderPositionInches() / 12;
     }
 
     /**
      * Gets the speed in feet.
      * @return The speed in feet.
      */
-    public double getSpeedFeet() {
-        return getSpeed() * RobotMap.DRIVE_DIAMETER * RobotMap.PI / 12;
+    public double getEncoderVelocityFeet() {
+        return getEncoderVelocity() * RobotMap.DRIVE_DIAMETER * RobotMap.PI / 12;
     }
 
     /**
      * Gets the speed in inches.
      * @return The speed in inches.
      */
-    public double getSpeedInches() {
-        return getSpeedFeet() / 12;
+    public double getEncoderVelocityInches() {
+        return getEncoderVelocityFeet() / 12;
     }
 
     /**
@@ -151,7 +151,7 @@ public class FlakeMin extends CANSparkMax {
      * Resets the total distance traveled.
      */
     public void resetPlace() {
-        temp = getPlace();
+        temp = getEncoderPosition();
     }
 
     /**
@@ -164,33 +164,33 @@ public class FlakeMin extends CANSparkMax {
     }
 
     public void printSpeed() {
-        SmartDashboard.putString(currentSpeed, getSpeed() + " rotations per minute.");
+        SmartDashboard.putString(currentSpeed, getEncoderVelocity() + " rotations per minute.");
     }
 
     public void printPlace() {
-        SmartDashboard.putString(currentDistance, getPlace() + " rotations.");
+        SmartDashboard.putString(currentDistance, getEncoderPosition() + " rotations.");
     }
 
     public void printPlaceInches() {
-        SmartDashboard.putString(currentDistance, getPlaceInches() + " inches.");
+        SmartDashboard.putString(currentDistance, getEncoderPositionInches() + " inches.");
     }
 
     public void printPlaceFeet() {
-        SmartDashboard.putString(currentDistance, getPlaceFeet() + " feet.");
+        SmartDashboard.putString(currentDistance, getEncoderPositionFeet() + " feet.");
     }
 
     public void printSpeedInches() {
-        SmartDashboard.putString(currentSpeed, getSpeedInches() + " inches per minute.");
+        SmartDashboard.putString(currentSpeed, getEncoderVelocityInches() + " inches per minute.");
     }
 
     public void printSpeedFeet() {
-        SmartDashboard.putString(currentSpeed, getSpeedFeet() + " feet per minute.");
+        SmartDashboard.putString(currentSpeed, getEncoderVelocityFeet() + " feet per minute.");
     }
 
     /**
      * Prints speed and distance info.
      */
-    public void printAll() {
+    public void outputValues() {
         printSpeed();
         printSpeedInches();
         printSpeedFeet();

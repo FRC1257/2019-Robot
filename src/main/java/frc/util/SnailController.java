@@ -10,10 +10,7 @@ public class SnailController extends XboxController {
 		super(port);
 	}
 
-	@Override
-	public double getY(Hand hand) {
-		return hand == Hand.kLeft ? -super.getY(hand) : super.getY(hand);
-	}
+	
 
 	/*
 	 * Controls: If they press A, use single stick arcade with the left joystick
@@ -31,11 +28,11 @@ public class SnailController extends XboxController {
 	 */
 	public double getForwardSpeed() {
 		if (getAButton())
-			return getY(Hand.kLeft);
+			return -getY(Hand.kLeft);
 		else if (getBumper(Hand.kLeft))
-			return getY(Hand.kLeft);
+			return -getY(Hand.kLeft);
 		else if (getBumper(Hand.kRight))
-			return getY(Hand.kRight);
+			return -getY(Hand.kRight);
 		else
 			return 0;
 	}
