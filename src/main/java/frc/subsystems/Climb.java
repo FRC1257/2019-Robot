@@ -32,49 +32,58 @@ public class Climb {
         
     }
 
-    public static Climb getInstance() { 
-        if (instance == null) {
-            instance = new Climb();
-        }
-        return instance;
-    }
-    public boolean getFront()
-    {
+    // gets value of frontOn
+    public boolean getFront() {
         return frontOn;
     }
-    public boolean getBack()
-    {
+
+    // gets value of backOn
+    public boolean getBack() {
         return backOn;    
     }
-    public void frontForward() {  //pushes forwards front solenoid
+
+    // pushes forwards front solenoid
+    public void frontForward() {
         front.set(DoubleSolenoid.Value.kForward);
-        this.frontOn=true;
+        this.frontOn = true;
     }
 
-    public void frontReverse() { //reverses front solenoid
+    // reverses front solenoid
+    public void frontReverse() {
         front.set(DoubleSolenoid.Value.kReverse);
-        this.frontOn=false; 
+        this.frontOn = false; 
     }
 
-    public void backForward() {  //pushes forward back solenoid
+    // pushes forward back solenoid
+    public void backForward() {
         back.set(DoubleSolenoid.Value.kForward);
         this.backOn = true;
     }
 
-    public void backReverse() { //reverses back solenoid
+    // reverses back solenoid
+    public void backReverse() {
         back.set(DoubleSolenoid.Value.kReverse);
         this.backOn = false;
     }
 
-    public void reset() { //resets solenoids
+    // resets solenoids
+    public void reset() {
         front.set(DoubleSolenoid.Value.kReverse);
         back.set(DoubleSolenoid.Value.kReverse);
         frontOn = false;
         backOn = false;
     }
 
-    public void climbDrive(double f) { //drives the robot front/back
+    // drives the robot front/back
+    public void climbDrive(double f) {
         motorF.set(f);
         motorB.set(f);
+    }
+
+    public static Climb getInstance() { 
+        if (instance == null) {
+            instance = new Climb();
+        }
+        return instance;
     }
 }

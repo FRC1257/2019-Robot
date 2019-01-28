@@ -48,36 +48,43 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-      if(Controller.getXButton() && !climb.getFront()) //pushes front up
-      {
+
+      // pushes front up
+      if(Controller.getXButton() && !climb.getFront()) {
         climb.frontForward();
       }
-      else if(Controller.getXButton() && climb.getFront()) //pushes front down
-      {
+
+      // pushes front down
+      else if(Controller.getXButton() && climb.getFront()) {
         climb.frontReverse();
       }
-      if(Controller.getYButton() && !climb.getBack()) //pushes back up
-      {
+
+      // pushes back up
+      if(Controller.getYButton() && !climb.getBack()) {
         climb.backForward();
       }
-      else if(Controller.getYButton() && climb.getBack()) //pushes back down
-      {
+
+      // pushes back down
+      else if(Controller.getYButton() && climb.getBack()) {
         climb.backReverse();
       }
-      if(Controller.getBButton()) //resets robot
-      {
+
+      // resets robot
+      if(Controller.getBButton()) {
         climb.reset();
       }
 
       double climbDriveSpeed = 0;
-      if(climb.getFront() || climb.getBack()) { //drives robot unless both of the solenoids are down
+
+      // drives robot unless both of the solenoids are down
+      if(climb.getFront() || climb.getBack()) {
         climbDriveSpeed = (-1 * Controller.getY(GenericHID.Hand.kLeft));
         climb.climbDrive(climbDriveSpeed);
       }
 
       SmartDashboard.putBoolean("FrontOn", climb.getFront());
       SmartDashboard.putBoolean("BackOn", climb.getBack());
-      SmartDashboard.putNumber("climb motor speed", climbDriveSpeed); //puts states of the solenoids and the motor speed on smartdashboard
+      SmartDashboard.putNumber("climb motor speed", climbDriveSpeed); // puts states of the solenoids and the motor speed on smartdashboard
     }
 
     /**
