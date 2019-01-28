@@ -48,43 +48,43 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-      
+
       // For testing purposes only
       // pushes front up
-      if(Controller.getXButton() && !climb.getFront()) {
+      if(Controller.getXButtonPressed() && !climb.getFront()) {
         climb.frontForward();
       }
 
       // pushes front down
-      else if(Controller.getXButton() && climb.getFront()) {
+      else if(Controller.getXButtonPressed() && climb.getFront()) {
         climb.frontReverse();
       }
 
       // pushes back up
-      if(Controller.getYButton() && !climb.getBack()) {
+      if(Controller.getYButtonPressed() && !climb.getBack()) {
         climb.backForward();
       }
 
       // pushes back down
-      else if(Controller.getYButton() && climb.getBack()) {
+      else if(Controller.getYButtonPressed() && climb.getBack()) {
         climb.backReverse();
       }
 
       // alternates between phases of the climb
-      if(Controller.getAButton() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
+      if(Controller.getAButtonPressed() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
       climb.phase1Climb();
       }
 
-      else if(Controller.getAButton() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
+      else if(Controller.getAButtonPressed() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
       climb.phase2Climb();
       }
 
-      else if(Controller.getAButton() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
+      else if(Controller.getAButtonPressed() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
       climb.phase3Climb();
       }
       
       // resets robot
-      if(Controller.getBButton()) {
+      if(Controller.getBButtonPressed()) {
         climb.reset();
       }
 
