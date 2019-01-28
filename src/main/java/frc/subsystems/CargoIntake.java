@@ -76,13 +76,13 @@ public class CargoIntake {
 
     // Retains the Cargo within Intake while robot is in transit via proportional feedback control 
     public void retainCargo() {
-        // if within target range for Cargo distance from Infrared
 
         // Feedback-control—derived percentage value
 	    double motorSpeed = getDistanceToCargo() * RobotMap.kP;
 	    // ((intake speed * current distance) / upper limit)
         
         double distance = getDistanceToCargo();
+        // if within target range for Cargo distance from Infrared
         if(distance <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD && distance >= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) {
            // set motor to proportional value
            intakeMotor.set(ControlMode.PercentOutput, motorSpeed);
