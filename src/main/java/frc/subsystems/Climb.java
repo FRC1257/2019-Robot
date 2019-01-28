@@ -18,6 +18,7 @@ public class Climb {
 
     private boolean frontOn;
     private boolean backOn;
+    private int climbState;
 
     public Climb() {
         front = new DoubleSolenoid(RobotMap.ClimbSolenoidFPort1, RobotMap.ClimbSolenoidFPort2);
@@ -28,10 +29,14 @@ public class Climb {
 
         frontOn = false;
         backOn = false;
-
+        climbState = 1;
+        
         
     }
-
+    // gets value of climbState
+    public int getState() {
+        return climbState;
+    } 
     // gets value of frontOn
     public boolean getFront() {
         return frontOn;
@@ -65,6 +70,25 @@ public class Climb {
         back.set(DoubleSolenoid.Value.kReverse);
         this.backOn = false;
     }
+    public void phase1Climb(){
+        front.set(DoubleSolenoid.Value.kForward);
+        back.set(DoubleSolenoid.Value.kForward);
+        this.backOn = true;
+        this.frontOn = true;
+        this.climbState = 2;
+    }
+    public void phase2Climb(){
+        front.set(DoubleSolenoid.Value.kReverse);
+        this.frontOn = false;
+        this.climbState = 3;
+    }
+    public void phase3Climb(){
+        back.set(DoubleSolenoid.Value.kReverse);
+        this.backOn = false;
+        this.climbState = 1;
+    } 
+    //phases of the climb
+
 
     // resets solenoids
     public void reset() {

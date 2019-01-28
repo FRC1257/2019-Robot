@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
       }
 
       // pushes front down
-      else if(Controller.getXButton() && climb.getFront()) {
+      else if(Controller.getXButton() && C()) {
         climb.frontReverse();
       }
 
@@ -68,7 +68,20 @@ public class Robot extends TimedRobot {
       else if(Controller.getYButton() && climb.getBack()) {
         climb.backReverse();
       }
-
+      //alternates between phases of the climb
+      if(Controller.getAButton() && climb.getState() == 1 && !climb.getBack() && !climb.getFront())
+      {
+      climb.phase1Climb();
+      }
+      else if(Controller.getAButton() && climb.getState() == 2 && climb.getBack() && climb.getFront())
+      {
+      climb.phase2Climb();
+      }
+      else if(Controller.getAButton() && climb.getState() == 3 && climb.getBack() && !climb.getFront())
+      {
+      climb.phase3Climb();
+      }
+      
       // resets robot
       if(Controller.getBButton()) {
         climb.reset();
