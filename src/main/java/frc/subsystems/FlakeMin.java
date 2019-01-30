@@ -135,7 +135,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The speed in inches.
      */
     public double getEncoderVelocityInches() {
-        return getEncoderVelocityFeet() * 12;
+        return getEncoderVelocityFeet() / 12;
     }
 
     /**
