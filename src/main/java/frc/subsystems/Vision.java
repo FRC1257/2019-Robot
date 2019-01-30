@@ -4,6 +4,7 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.drive.*;
 
 public class Vision{
 
@@ -60,4 +61,7 @@ public class Vision{
       }
   }
 
+  public static void shoot(NetworkTable table, DifferentialDrive DriveTrain){ //Sample code that the robot fired the projectile
+    DriveTrain.arcadeDrive(getInDistance(table), turnCorrect(table)); // getInDistance and angleCorrect return values to correct the robot.
+  }
 }

@@ -50,7 +50,10 @@ public class Robot extends TimedRobot {
         if(Controller.getTriggerAxis(GenericHID.Hand.kLeft) > 0.5){ //If left trigger pressed and a target on screen then turn to it
             // DriveTrain.arcadeDrive(0, Vision.turnCorrect(table)); //Add when actual drivetrain exists
         }
-    }
+        if(Controller.getTriggerAxis(GenericHID.Hand.kRight) > 0.5){
+            // Vision.shoot(table, DriveTrain);
+        }
+    }   
 
     /**
      * This function is called once each time when the robot enters test mode.

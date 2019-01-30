@@ -9,7 +9,7 @@ public class TestTracker{
     public boolean rightStickPressed;
 
     public TestTracker(){
-        DistanceToArea = new ArrayList();
+        DistanceToArea = new ArrayList<Double>();
         leftStickPressed = false;
         rightStickPressed = false;
     }
