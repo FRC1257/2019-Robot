@@ -52,17 +52,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-	    // Sends diagnostics to SmartDashboard
-    	cargoIntake.telemetry();
-	    // Assigns constants to values retrieved from SmartDashboard
-	    cargoIntake.getConstantTuning();
+    	cargoIntake.telemetry(); // Sends diagnostics to SmartDashboard
+	    cargoIntake.getConstantTuning(); // Assigns constants to values retrieved from SmartDashboard
 	
-	    // if A Button is depressed
+	    // if A Button is depressed, shoot
         if(operatorController.getAButton()) {
             cargoIntake.shoot();
-
         }
-	    // else if B Button is depressed AND Cargo is NOT within UPPER RANGE (Cargo is on field/not within intake mechanism)
+        
+	    // else if B Button is depressed AND Cargo is NOT within UPPER RANGE (Cargo is on field/not within intake mechanism), take in
         else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD)) {
             cargoIntake.intake();
         }
