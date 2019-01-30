@@ -4,7 +4,6 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -65,7 +64,6 @@ public class CargoIntake {
         RobotMap.CARGO_SENSOR_UPPER_THRESHOLD = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
-
     // MOTOR FUNCTIONS
     
     public void shoot() {
