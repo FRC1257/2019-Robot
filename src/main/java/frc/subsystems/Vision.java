@@ -25,6 +25,39 @@ public class Vision{
         steering_adjust = Kp * heading_error + min_command;
       }
 
-     return(-steering_adjust);
+     return(-steering_adjust); // return motor output
     }
+
+    public static double getInDistance(NetworkTable table){ 
+      // double KpDistance = RobotMap.DISTANCE_CORRECT_KP; // For p control
+      double currentDistance = tableDistanceFromObject(table); //cameraHeight and cameraAngle are constants
+      double distanceError = currentDistance - RobotMap.DESIRED_TARGET_DISTANCE;
+      double driving_adjust = 0;
+      if(distanceError > RobotMap.DISTANCE_CORRECT_ERROR){ // 3 inches of error space for PID
+          driving_adjust = RobotMap.DISTANCE_CORRECT_KP * distanceError;
+      }
+      return(driving_adjust); // return motor output
+    }
+
+    public static double tableDistanceFromObject(NetworkTable table){ // Returns the closest distance the robot is to the target that is estimated using target area
+      NetworkTableEntry taE = table.getEntry("ta");
+      NetworkTableEntry tvE = table.getEntry("tv");
+      double ta = taE.getDouble(0);
+      double tv = tvE.getDouble(0);
+      double minDifference = 10000; // Just so that it finds a smaller value
+      double minIndex = RobotMap.MEASUREMENT_AMOUNT - 1;
+      if(tv == 1.0){ // If the target is on screen
+          for(int i = 0; i < RobotMap.MEASUREMENT_AMOUNT - 1; i++){
+              if(RobotMap.DISTANCE_TO_PERCENT[i] - ta < minDifference && RobotMap.DISTANCE_TO_PERCENT[i] - ta > 0){
+                  minDifference = RobotMap.DISTANCE_TO_PERCENT[i] - ta;
+                  minIndex = i;
+              }
+          }
+          return(minIndex);
+      }
+      else{
+        return(0);
+      }
+  }
+
 }

@@ -6,7 +6,6 @@ import frc.util.TestTracker;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.networktables.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -15,8 +14,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Controller = new XboxController(0);
-        SmartDashboard.putNumber("kP", RobotMap.TURN_CORRECT_KP);
-        SmartDashboard.putNumber("min_command", RobotMap.TURN_CORRECT_MIN_COMMAND); 
     }
 
     /**
