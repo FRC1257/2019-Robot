@@ -14,6 +14,7 @@ public class CargoIntake {
     
     private AnalogInput cargoInfrared;
     private WPI_TalonSRX intakeMotor;
+    //Note to self(Work on Notifier Stuff Later)
     private Notifier voltNotif;
 
     private CargoIntake() {
@@ -34,13 +35,11 @@ public class CargoIntake {
     public void setConstantTuning() { // constants initialized in Shuffle Board during robotInit
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_MAX_INTAKE_SPEED);
 	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_MAX_OUTTAKE_SPEED);
-        SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
     public void getConstantTuning() { // updated constants to be continually read from ShuffleBoard during teleopPeriodic
         RobotMap.CARGO_MAX_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_MAX_INTAKE_SPEED);
 	    RobotMap.CARGO_MAX_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_MAX_OUTTAKE_SPEED);
-        RobotMap.CARGO_SENSOR_UPPER_THRESHOLD = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
     // MOTOR FUNCTIONS
