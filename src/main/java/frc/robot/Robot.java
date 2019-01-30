@@ -6,7 +6,7 @@ import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
     IntakeArm intakeArm;
-    XboxController controller;
+    OI oi; 
 
     /**
      * This function is run when the robot is first started up and should be
@@ -14,7 +14,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        controller = new XboxController(1);
+        intakeArm = IntakeArm.getInstance();
+        oi = OI.getInstance();
     }
 
     /**
@@ -46,10 +47,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        if (controller.getY(GenericHID.Hand.kRight) != 0) {
-            double value = controller.getY(GenericHID.Hand.kRight);
-            // intakeArm.set(value);
-        }
+        // intakeArm.setSpeed(oi.getY(GenericHID.Hand.kRight));
+        if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
     }
 
     /**
