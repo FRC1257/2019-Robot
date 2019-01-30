@@ -55,23 +55,11 @@ public class Robot extends TimedRobot {
     	cargoIntake.telemetry(); // Sends diagnostics to SmartDashboard
 	    cargoIntake.getConstantTuning(); // Assigns constants to values retrieved from SmartDashboard
 	
-	    // if A Button is depressed, shoot
         if(operatorController.getAButton()) {
             cargoIntake.shoot();
-        }
-        
-	    // else if B Button is depressed AND Cargo is NOT within UPPER RANGE (Cargo is on field/not within intake mechanism), take in
-        else if(operatorController.getBButton() && !(cargoIntake.getDistanceToCargo() <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD)) {
+        } else if(operatorController.getBButton()) {
             cargoIntake.intake();
         }
-
-        else {
-            cargoIntake.retainCargo();
-        }
-
-   
-
-
     }
 
     /**

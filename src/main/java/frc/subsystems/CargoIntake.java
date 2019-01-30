@@ -14,51 +14,30 @@ public class CargoIntake {
     
     private AnalogInput cargoInfrared;
     private WPI_TalonSRX intakeMotor;
-    // private Notifier notif;
     private Notifier voltNotif;
 
     private CargoIntake() {
         intakeMotor = new WPI_TalonSRX(RobotMap.CARGO_INTAKE_PORT);
         cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
-        // notif = new Notifier(this::slopeCurrentChange);
         voltNotif = new Notifier(this::getVoltage);
     }
-
-    /*
-    public double slopeCurrentChange()
-    {
-        double current = intakeMotor.getOutputCurrent();
-
-        return 0.0;
-    }
-    */
     
-    // Infrared analog voltage >> Distance in centimeters
-    
-    public double getVoltage() {
-        return cargoInfrared.getAverageVoltage();
-    }
-    
-    public double getDistanceToCargo() {
-        double volt = getVoltage();
-        return interpLinear(RobotMap.CARGO_KNOWN_VOLTAGE_PTS, RobotMap.CARGO_KNOWN_DISTANCE_PTS, volt);
-        //return volt*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
-    }
+   
     
     // SMART DASHBOARD
     
-    public void telemetry() { // Diagnostic Data to  continually pushed to Shuffle Board during teleopPeriodic
+    public void telemetry() { // diagnostic data to  continually pushed to ShuffleBoard during teleopPeriodic
         SmartDashboard.putNumber("Distance to Cargo", getDistanceToCargo());
         SmartDashboard.putNumber("Voltage Recieved from Analog Sensor", cargoInfrared.getAverageVoltage());
     }
     
-    public void setConstantTuning() { // Constants initialized in Shuffle Board during robotInit
+    public void setConstantTuning() { // constants initialized in Shuffle Board during robotInit
         SmartDashboard.putNumber("Intake Speed", RobotMap.CARGO_MAX_INTAKE_SPEED);
 	    SmartDashboard.putNumber("Outake Speed", RobotMap.CARGO_MAX_OUTTAKE_SPEED);
         SmartDashboard.putNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
     }
     
-    public void getConstantTuning() { // Updated Constants to be continually read from Shuffle Board during teleopPeriodic
+    public void getConstantTuning() { // updated constants to be continually read from ShuffleBoard during teleopPeriodic
         RobotMap.CARGO_MAX_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_MAX_INTAKE_SPEED);
 	    RobotMap.CARGO_MAX_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_MAX_OUTTAKE_SPEED);
         RobotMap.CARGO_SENSOR_UPPER_THRESHOLD = SmartDashboard.getNumber("Point Of No Return", RobotMap.CARGO_SENSOR_UPPER_THRESHOLD);
@@ -71,26 +50,32 @@ public class CargoIntake {
     }
     
     public void intake() {
-        intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_MAX_INTAKE_SPEED);
-        
-        double distance = getDistanceToCargo();
-        if (distance == RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) { // if cargo is in intake
-            intakeMotor.set(ControlMode.PercentOutput, 0.0); // stop the wheels from intaking
+        if (!cargoInside()) {
+            intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_MAX_INTAKE_SPEED);
+        } else {
+            intakeMotor.set(ControlMode.PercentOutput, 0.0);
         }
     }
 
-    // RETAINING CARGO WITH INFARED SENSOR - WE'RE NOT USING THIS ANYMORE?
-///*
-    // Retains the Cargo within Intake while robot is in transit via proportional feedback control 
-    public void retainCargo() {
-	    double motorSpeed = getDistanceToCargo() * RobotMap.kP; // Feedback-control—derived percentage value
+    public boolean cargoInside() {
         double distance = getDistanceToCargo();
-        // if within target range for Cargo distance from Infrared
-        if (distance <= RobotMap.CARGO_SENSOR_UPPER_THRESHOLD && distance >= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) {
-           intakeMotor.set(ControlMode.PercentOutput, motorSpeed);
+        if (distance <= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) { // if cargo is in intake
+            return true;
+        } else {
+            return false;
         }
     }
-//*/
+
+    public double getVoltage() {
+        return cargoInfrared.getAverageVoltage();
+    }
+    
+    public double getDistanceToCargo() {
+        double volt = getVoltage();
+        return interpLinear(RobotMap.CARGO_KNOWN_VOLTAGE_PTS, RobotMap.CARGO_KNOWN_DISTANCE_PTS, volt);
+        //return volt*RobotMap.CARGO_INFRARED_CONVERSION_FACTOR;
+    }
+    
     public static double interpLinear(double[] xVolt, double[] yDist, double newVolt) {
         if (newVolt <= xVolt[0]) {
             double slope = (yDist[1] - yDist[0]) / (xVolt[1] - xVolt[0]);
