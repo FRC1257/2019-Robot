@@ -46,16 +46,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        if (controller.getBumper(GenericHID.Hand.kRight)) {
-            intakeArm.setSpeed(1);
-            //double driveSpeed = controller.getY(GenericHID.Hand kLeft);
-            //double turnSpeed = controller.getX(GenericHID.Hand kRight);
+        if (controller.getY(GenericHID.Hand.kRight) != 0) {
+            double value = controller.getY(GenericHID.Hand.kRight);
+            // intakeArm.set(value);
         }
-        else if (controller.getBumper(GenericHID.Hand.kLeft)) {
-            intakeArm.setSpeed(-1);
-        }
-
-        intakeArm.restrictMotion();
     }
 
     /**
