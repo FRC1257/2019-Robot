@@ -91,8 +91,9 @@ public class CargoIntake {
             double yInt = yDist[xVolt.length-1] - xVolt[xVolt.length-1] * slope;
             return newVolt * slope + yInt;
         }
+
         
-        for(int i = 0; i < xVolt.length-1; i++) {
+        for(int i = 1; i < xVolt.length-1; i++) {
             double slope = (yDist[i+1] - yDist[i]) / (xVolt[i+1] - xVolt[i]);
             double yInt = yDist[i] - xVolt[i] * slope;
             return newVolt * slope + yInt;        }
