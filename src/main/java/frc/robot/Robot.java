@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.subsystems.*;
 import frc.robot.RobotMap;
+import frc.util.TestTracker;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.networktables.*;
@@ -57,9 +58,12 @@ public class Robot extends TimedRobot {
     /**
      * This function is called once each time when the robot enters test mode.
      */
+
+    TestTracker visionTracker; //Purely for test. Never used again
+
     @Override
     public void testInit() {
-        
+        visionTracker = new TestTracker();
     }
 
     /**
@@ -67,6 +71,21 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         
+        if(Controller.getStickButtonPressed(GenericHID.Hand.kRight) && visionTracker.rightStickPressed == false){
+            visionTracker.addDistancePercent(table);
+            visionTracker.rightStickPressed = true;
+        }
+        else if(Controller.getStickButtonReleased(GenericHID.Hand.kRight) && visionTracker.rightStickPressed == true){
+            visionTracker.rightStickPressed = false;
+        }
+        if(Controller.getStickButtonPressed(GenericHID.Hand.kLeft) && visionTracker.leftStickPressed == false){
+            visionTracker.printDistancePercent();
+            visionTracker.leftStickPressed = true;
+        }
+        else if(Controller.getStickButtonReleased(GenericHID.Hand.kLeft) && visionTracker.leftStickPressed == true){
+            visionTracker.leftStickPressed = false;
+        }
     }
 }
