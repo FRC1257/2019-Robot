@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
 	
         if(operatorController.getAButton()) {
             cargoIntake.shoot();
-        } else if(operatorController.getBButton()) {
+        } else {
             cargoIntake.intake();
         }
     }
