@@ -7,6 +7,7 @@ import frc.subsystems.*;
 public class Robot extends TimedRobot {
     Climb climb;
     XboxController Controller;
+    OI oi;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -14,9 +15,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-    climb = new Climb();
-    climb.reset();
-    Controller = new XboxController(1);
+      climb = new Climb();
+      climb.reset();
+      oi = OI.getInstance();
     }
 
     /**
@@ -50,55 +51,43 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
 
       // For testing purposes only
-      // pushes front up
-      if(Controller.getXButtonPressed() && !climb.getFront()) {
+      if(oi.getFrontChanger() && !climb.getFront()) {// pushes front up
         climb.frontForward();
       }
-
-      // pushes front down
-      else if(Controller.getXButtonPressed() && climb.getFront()) {
+      else if(oi.getFrontChanger() && climb.getFront()) {// pushes front down
         climb.frontReverse();
       }
-
-      // pushes back up
-      if(Controller.getYButtonPressed() && !climb.getBack()) {
+      if(oi.getBackChanger() && !climb.getBack()) {// pushes back up
         climb.backForward();
       }
-
-      // pushes back down
-      else if(Controller.getYButtonPressed() && climb.getBack()) {
+      else if(oi.getBackChanger() && climb.getBack()) {// pushes back down
         climb.backReverse();
       }
-
       // alternates between phases of the climb
-      if(Controller.getAButtonPressed() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
+      if(oi.getClimbPhaser() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
       climb.phase1Climb();
       }
-
-      else if(Controller.getAButtonPressed() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
+      else if(oi.getClimbPhaser() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
       climb.phase2Climb();
       }
-
-      else if(Controller.getAButtonPressed() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
+      else if(oi.getClimbPhaser() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
       climb.phase3Climb();
-      }
-      
-      // resets robot
-      if(Controller.getBButtonPressed()) {
+      }    
+      if(Controller.getBButtonPressed()) {// resets robot
         climb.reset();
       }
 
-      double climbDriveSpeed = 0;
+      double CLIMB_DRIVE_SPEED = 0;
 
       // drives robot unless both of the solenoids are down
       if(climb.getFront() || climb.getBack()) {
-        climbDriveSpeed = (-1 * Controller.getY(GenericHID.Hand.kLeft));
-        climb.climbDrive(climbDriveSpeed);
+        CLIMB_DRIVE_SPEED = (-1 * oi.getClimbMotorSpeed());
+        climb.climbDrive(CLIMB_DRIVE_SPEED);
       }
 
-      SmartDashboard.putBoolean("FrontOn", climb.getFront());
-      SmartDashboard.putBoolean("BackOn", climb.getBack());
-      SmartDashboard.putNumber("climb motor speed", climbDriveSpeed); // puts states of the solenoids and the motor speed on smartdashboard
+      SmartDashboard.putBoolean(RobotMap.FRONT_CLIMB_ON, climb.getFront());
+      SmartDashboard.putBoolean(RobotMap.BACK_CLIMB_ON, climb.getBack());
+      SmartDashboard.putNumber(RobotMap.CLIMB_MOTOR_VELOCITY, CLIMB_DRIVE_SPEED); // puts states of the solenoids and the motor speed on smartdashboard
     }
 
     /**

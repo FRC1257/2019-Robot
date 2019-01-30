@@ -3,6 +3,7 @@ package frc.subsystems;
 import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -10,28 +11,22 @@ public class Climb {
     
     private static Climb instance = null;
 
-    DoubleSolenoid front;
-    DoubleSolenoid back;
+    private DoubleSolenoid frontSolenoid;
+    private DoubleSolenoid backSolenoid;
 
-    WPI_VictorSPX motorF;
-    WPI_VictorSPX motorB;
+    private WPI_VictorSPX climbMotorF;
+    private WPI_VictorSPX climbMotorB;
 
-    private boolean frontOn;
-    private boolean backOn;
     private int climbState;
 
     public Climb() {
-        front = new DoubleSolenoid(RobotMap.ClimbSolenoidFPort1, RobotMap.ClimbSolenoidFPort2);
-        back = new DoubleSolenoid(RobotMap.ClimbSolenoidBPort1, RobotMap.ClimbSolenoidBPort2);
+        frontSolenoid = new DoubleSolenoid(RobotMap.CLIMB_SOLENOID_F_PORT_1, RobotMap.CLIMB_SOLENOID_F_PORT_2);
+        backSolenoid = new DoubleSolenoid(RobotMap.CLIMB_SOLENOID_B_PORT_1, RobotMap.CLIMB_SOLENOID_B_PORT_2);
 
-        motorF = new WPI_VictorSPX(RobotMap.ClimbMotorsF);
-        motorB = new WPI_VictorSPX(RobotMap.ClimbMotorsB);
+        climbMotorF = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_F);
+        climbMotorB = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_B);
 
-        frontOn = false;
-        backOn = false;
         climbState = 1;
-        
-        
     }
 
     // gets value of climbState
@@ -41,73 +36,63 @@ public class Climb {
 
     // gets value of frontOn
     public boolean getFront() {
-        return frontOn;
+        if(frontSolenoid.get() == Value.kForward)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // gets value of backOn
     public boolean getBack() {
-        return backOn;    
+        if(backSolenoid.get() == Value.kForward)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }  
     }
-
-    // pushes forwards front solenoid
-    public void frontForward() {
-        front.set(DoubleSolenoid.Value.kForward);
-        this.frontOn = true;
+    public void frontForward() {// pushes forwards frontSolenoid solenoid
+        frontSolenoid.set(DoubleSolenoid.Value.kForward);
     }
-
-    // reverses front solenoid
-    public void frontReverse() {
-        front.set(DoubleSolenoid.Value.kReverse);
-        this.frontOn = false; 
+    public void frontReverse() {// reverses frontSolenoid solenoid
+        frontSolenoid.set(DoubleSolenoid.Value.kReverse); 
     }
-
-    // pushes forward back solenoid
-    public void backForward() {
-        back.set(DoubleSolenoid.Value.kForward);
-        this.backOn = true;
+    public void backForward() {// pushes forward backSolenoid solenoid
+        backSolenoid.set(DoubleSolenoid.Value.kForward);
     }
-
-    // reverses back solenoid
-    public void backReverse() {
-        back.set(DoubleSolenoid.Value.kReverse);
-        this.backOn = false;
+    public void backReverse() { // reverses backSolenoid solenoid
+        backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-
     // phases of the climb
     public void phase1Climb(){
-        front.set(DoubleSolenoid.Value.kForward);
-        back.set(DoubleSolenoid.Value.kForward);
-        this.backOn = true;
-        this.frontOn = true;
+        frontSolenoid.set(DoubleSolenoid.Value.kForward);
+        backSolenoid.set(DoubleSolenoid.Value.kForward);
         this.climbState = 2;
     }
-
     public void phase2Climb(){
-        front.set(DoubleSolenoid.Value.kReverse);
-        this.frontOn = false;
+        frontSolenoid.set(DoubleSolenoid.Value.kReverse);
         this.climbState = 3;
     }
-
     public void phase3Climb(){
-        back.set(DoubleSolenoid.Value.kReverse);
-        this.backOn = false;
+        backSolenoid.set(DoubleSolenoid.Value.kReverse);
         this.climbState = 1;
     }
-
     // resets solenoids
     public void reset() {
-        front.set(DoubleSolenoid.Value.kReverse);
-        back.set(DoubleSolenoid.Value.kReverse);
-        frontOn = false;
-        backOn = false;
+        frontSolenoid.set(DoubleSolenoid.Value.kReverse);
+        backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-
-    // drives the robot front/back
+    // drives the robot frontSolenoid/backSolenoid
     public void climbDrive(double f) {
-        motorF.set(f);
-        motorB.set(f);
+        climbMotorF.set(f);
+        climbMotorB.set(f);
     }
-
     public static Climb getInstance() { 
         if (instance == null) {
             instance = new Climb();
