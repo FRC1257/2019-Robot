@@ -30,10 +30,10 @@ public class DriveTrain {
      */
     public DriveTrain() {
 
-        flDrive = new FlakeMin(RobotMap.DRIVE_MOTORS[0], MotorType.kBrushless, true);
-        frDrive = new FlakeMin(RobotMap.DRIVE_MOTORS[1], MotorType.kBrushless, false);
-        blDrive = new CANSparkMax(RobotMap.DRIVE_MOTORS[2], MotorType.kBrushless);
-        brDrive = new CANSparkMax(RobotMap.DRIVE_MOTORS[3], MotorType.kBrushless);
+        flDrive = new FlakeMin(RobotMap.DRIVE_FL, MotorType.kBrushless, true);
+        frDrive = new FlakeMin(RobotMap.DRIVE_FR, MotorType.kBrushless, false);
+        blDrive = new CANSparkMax(RobotMap.DRIVE_BL, MotorType.kBrushless);
+        brDrive = new CANSparkMax(RobotMap.DRIVE_BR, MotorType.kBrushless);
 
         configSpeedControllers();
 
@@ -43,14 +43,12 @@ public class DriveTrain {
         driveTrain = new DifferentialDrive(flDrive, frDrive);
     }
 
-    
-
     /**
      * Sets voltage and RPM limits on motor controllers.
      */
     public void configSpeedControllers() {
-        flDrive.setSmartCurrentLimit(RobotMap.DRIVE_NEO_CONSTS[0], RobotMap.DRIVE_NEO_CONSTS[1], RobotMap.DRIVE_NEO_CONSTS[3]);
-        frDrive.setSmartCurrentLimit(RobotMap.DRIVE_NEO_CONSTS[0], RobotMap.DRIVE_NEO_CONSTS[1], RobotMap.DRIVE_NEO_CONSTS[3]);
+        flDrive.setSmartCurrentLimit(RobotMap.NEO_STALL_LIMIT, RobotMap.NEO_RUN_CURRENT, RobotMap.NEO_MIN_RPM);
+        frDrive.setSmartCurrentLimit(RobotMap.NEO_STALL_LIMIT, RobotMap.NEO_RUN_CURRENT, RobotMap.NEO_MIN_RPM);
     }
 
     /**
@@ -66,16 +64,19 @@ public class DriveTrain {
         }
     }
 
-    public void getLeftEncoderPosition(){
+    public void getLeftEncoderPosition() {
         flDrive.getEncoderPosition();
     }
-    public void getRightEncoderPosition(){
+
+    public void getRightEncoderPosition() {
         frDrive.getEncoderPosition();
     }
-    public void getRightEncoderVelocity(){
+
+    public void getRightEncoderVelocity() {
         frDrive.getEncoderVelocity();
     }
-    public void getLeftEncoderVelocity(){
+
+    public void getLeftEncoderVelocity() {
         flDrive.getEncoderVelocity();
     }
 

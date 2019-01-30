@@ -8,7 +8,7 @@ import frc.subsystems.DriveTrain;
 public class Robot extends TimedRobot {
   SnailController controller;
   DriveTrain drive;
-  boolean ReverseDriveOn = false;
+  OI oi;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -17,7 +17,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     controller = new SnailController(RobotMap.DRIVE_CONTROLLER_PORT);
-    drive = new DriveTrain();
+    drive = DriveTrain.getInstance();
+    oi = OI.getInstance();
     
   }
 
@@ -74,6 +75,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
-        
+    
     }
 }
