@@ -186,6 +186,30 @@ public class FlakeMin extends CANSparkMax {
     public void printSpeedFeet() {
         SmartDashboard.putNumber(RobotMap.CURRENT_SPEED_FEET, getEncoderVelocityFeet());
     }
+    public void printPIDConstantsLeft(){
+        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_P, RobotMap.DRIVE_PID_LEFT_P);
+        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_I, RobotMap.DRIVE_PID_LEFT_I);
+        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
+        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_F, RobotMap.DRIVE_PID_LEFT_F);
+        RobotMap.DRIVE_PID_LEFT_P = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_P, RobotMap.DRIVE_PID_LEFT_P);
+        RobotMap.DRIVE_PID_LEFT_I = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_I, RobotMap.DRIVE_PID_LEFT_I);
+        RobotMap.DRIVE_PID_LEFT_D = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
+        RobotMap.DRIVE_PID_LEFT_F = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_F, RobotMap.DRIVE_PID_LEFT_F);
+    }
+    public void printPIDConstantsRight(){
+        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_P);
+        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_I, RobotMap.DRIVE_PID_RIGHT_I);
+        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
+        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_F, RobotMap.DRIVE_PID_RIGHT_F);
+        RobotMap.DRIVE_PID_RIGHT_P = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_P);
+        RobotMap.DRIVE_PID_RIGHT_I = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_I, RobotMap.DRIVE_PID_RIGHT_I);
+        RobotMap.DRIVE_PID_RIGHT_D = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
+        RobotMap.DRIVE_PID_RIGHT_F = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_F, RobotMap.DRIVE_PID_RIGHT_F);
+    }
+    public void printWashout(){
+        SmartDashboard.putNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
+        RobotMap.DRIVE_P_WASHOUT = SmartDashboard.getNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
+    }
 
     /**
      * Prints speed and distance info.
@@ -197,5 +221,8 @@ public class FlakeMin extends CANSparkMax {
         printPlace();
         printPlaceInches();
         printPlaceFeet();
+        printPIDConstantsLeft();
+        printPIDConstantsRight();
+        printWashout();
     }
 }

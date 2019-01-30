@@ -3,15 +3,15 @@ package frc.robot;
 public class RobotMap {
 
     // PID for motors, both of them.
-    public static final double DRIVE_PID_LEFT_P = 1.0;
-    public static final double DRIVE_PID_LEFT_I = 0.0;
-    public static final double DRIVE_PID_LEFT_D = 0.0;
-    public static final double DRIVE_PID_LEFT_F = 0.0;
-    public static final double DRIVE_PID_RIGHT_P = 1.0;
-    public static final double DRIVE_PID_RIGHT_I = 0.0;
-    public static final double DRIVE_PID_RIGHT_D = 0.0;
-    public static final double DRIVE_PID_RIGHT_F = 0.0;
-    public static final double DRIVE_P_WASHOUT = 1.0; 
+    public static double DRIVE_PID_LEFT_P = 1.0;
+    public static double DRIVE_PID_LEFT_I = 0.0;
+    public static double DRIVE_PID_LEFT_D = 0.0;
+    public static double DRIVE_PID_LEFT_F = 0.0;
+    public static double DRIVE_PID_RIGHT_P = 1.0;
+    public static double DRIVE_PID_RIGHT_I = 0.0;
+    public static double DRIVE_PID_RIGHT_D = 0.0;
+    public static double DRIVE_PID_RIGHT_F = 0.0;
+    public static double DRIVE_P_WASHOUT = 1.0; 
 
     // Information about NEO motors.
     public static final int NEO_STALL_LIMIT = 60;
@@ -39,4 +39,13 @@ public class RobotMap {
     public static final String CURRENT_SPEED = "Current speed (RPM): ";
     public static final String CURRENT_SPEED_INCHES = "Current speed (inches per minutes): ";
     public static final String CURRENT_SPEED_FEET = "Current speed (feet per minute): ";
+    public static final String DRIVE_LEFT_P = "Left Proportional: ";
+    public static final String DRIVE_LEFT_I = "Left Integral: ";
+    public static final String DRIVE_LEFT_D = "Left Derivative: ";
+    public static final String DRIVE_LEFT_F = "Left Feed-Forward: ";
+    public static final String DRIVE_RIGHT_P = "Right Proportional: ";
+    public static final String DRIVE_RIGHT_I = "Right Integral: ";
+    public static final String DRIVE_RIGHT_D = "Right Derivative: ";
+    public static final String DRIVE_RIGHT_F = "RIGHT Feed-Forward: ";
+    public static final String DRIVE_WASHOUT = "Washout:";
 }
