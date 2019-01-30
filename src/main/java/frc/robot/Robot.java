@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -85,9 +84,7 @@ public class Robot extends TimedRobot {
         climb.climbDrive(CLIMB_DRIVE_SPEED);
       }
 
-      SmartDashboard.putBoolean(RobotMap.FRONT_CLIMB_ON, climb.getFront());
-      SmartDashboard.putBoolean(RobotMap.BACK_CLIMB_ON, climb.getBack());
-      SmartDashboard.putNumber(RobotMap.CLIMB_MOTOR_VELOCITY, CLIMB_DRIVE_SPEED); // puts states of the solenoids and the motor speed on smartdashboard
+      climb.smartDashboardClimb();
     }
 
     /**

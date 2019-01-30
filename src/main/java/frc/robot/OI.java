@@ -15,12 +15,6 @@ private OI() {
     driveController = new SnailController(RobotMap.CONTROLLER_DRIVE_PORT);
     operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
 }
-public static OI getInstance() {
-    if (instance == null) {
-        instance = new OI();
-    }
-    return instance;
-}
 public boolean getClimbPhaser()//Button for phase changer
 {
     return operatorController.getAButtonPressed();
@@ -37,6 +31,11 @@ public double getClimbMotorSpeed()//measures motor speed
 {
     return operatorController.getY(Hand.kLeft);
 }
-
+public static OI getInstance() {
+    if (instance == null) {
+        instance = new OI();
+    }
+    return instance;
+}
 
 }

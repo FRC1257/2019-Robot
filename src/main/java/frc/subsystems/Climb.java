@@ -4,6 +4,7 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -88,10 +89,16 @@ public class Climb {
         frontSolenoid.set(DoubleSolenoid.Value.kReverse);
         backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-    // drives the robot frontSolenoid/backSolenoid
+    // drives the robot
     public void climbDrive(double f) {
         climbMotorF.set(f);
         climbMotorB.set(f);
+    }
+    public void smartDashboardClimb()//SmartDashboarding
+    {
+    SmartDashboard.putBoolean(RobotMap.FRONT_CLIMB_ON, getFront());
+    SmartDashboard.putBoolean(RobotMap.BACK_CLIMB_ON, getBack());
+    SmartDashboard.putNumber(RobotMap.CLIMB_MOTOR_VELOCITY, climbMotorF.get());
     }
     public static Climb getInstance() { 
         if (instance == null) {
