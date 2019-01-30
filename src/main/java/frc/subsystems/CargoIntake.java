@@ -96,8 +96,10 @@ public class CargoIntake {
         for(int i = 1; i < xVolt.length-1; i++) {
             double slope = (yDist[i+1] - yDist[i]) / (xVolt[i+1] - xVolt[i]);
             double yInt = yDist[i] - xVolt[i] * slope;
-            return newVolt * slope + yInt;        }
+            return newVolt * slope + yInt;        
+        }
         return 0.0;
+        
     }
     
     public static CargoIntake getInstance() {
