@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Notifier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
@@ -167,6 +169,25 @@ public class HatchIntake {
 
     public boolean getPIDRunning() {
         return running;
+    }
+
+    // Initialize constants in Smart Dashboard
+    // Current state, PID active, etc., and use it for updating PID constants
+    public void setConstantTuning() {
+        SmartDashboard.putBoolean("Lowered", lowered);
+        SmartDashboard.putBoolean("PID active", running);
+        SmartDashboard.putNumber("P", RobotMap.HATCH_PID_CONSTANTS[0]);
+        SmartDashboard.putNumber("I", RobotMap.HATCH_PID_CONSTANTS[1]);
+        SmartDashboard.putNumber("D", RobotMap.HATCH_PID_CONSTANTS[2]);
+        SmartDashboard.putNumber("FF", RobotMap.HATCH_PID_CONSTANTS[3]);
+    }
+    
+    // Update constants from Smart Dashboard
+    public void getConstantTuning() {
+        RobotMap.HATCH_PID_CONSTANTS[0] = SmartDashboard.getNumber("P", RobotMap.HATCH_PID_CONSTANTS[0]);
+        RobotMap.HATCH_PID_CONSTANTS[1] = SmartDashboard.getNumber("I", RobotMap.HATCH_PID_CONSTANTS[1]);
+        RobotMap.HATCH_PID_CONSTANTS[2] = SmartDashboard.getNumber("D", RobotMap.HATCH_PID_CONSTANTS[2]);
+        RobotMap.HATCH_PID_CONSTANTS[3] = SmartDashboard.getNumber("FF", RobotMap.HATCH_PID_CONSTANTS[3]);
     }
 
     public static HatchIntake getInstance() {
