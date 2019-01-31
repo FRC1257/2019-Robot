@@ -3,7 +3,6 @@ package frc.subsystems;
 import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -29,13 +28,13 @@ public class Climb {
 
     // gets value of climbState
     public int getState() {
-        if(frontSolenoid.get() == Value.kReverse && backSolenoid.get() == Value.kReverse){
+        if(frontSolenoid.get() == DoubleSolenoid.Value.kReverse && backSolenoid.get() == DoubleSolenoid.Value.kReverse){
          return 1;
         }
-        else if(frontSolenoid.get() == Value.kForward && backSolenoid.get() == Value.kForward){
+        else if(frontSolenoid.get() == DoubleSolenoid.Value.kForward && backSolenoid.get() == DoubleSolenoid.Value.kForward){
          return 2;    
         }
-        else if(frontSolenoid.get() == Value.kReverse && backSolenoid.get() == Value.kForward){
+        else if(frontSolenoid.get() == DoubleSolenoid.Value.kReverse && backSolenoid.get() == DoubleSolenoid.Value.kForward){
          return 3;    
         }
         else{
@@ -45,7 +44,7 @@ public class Climb {
 
     // gets value of frontOn
     public boolean getFront() {
-        if(frontSolenoid.get() == Value.kForward)
+        if(frontSolenoid.get() == DoubleSolenoid.Value.kForward)
         {
             return true;
         }
@@ -57,7 +56,7 @@ public class Climb {
 
     // gets value of backOn
     public boolean getBack() {
-        if(backSolenoid.get() == Value.kForward)
+        if(backSolenoid.get() == DoubleSolenoid.Value.kForward)
         {
             return true;
         }
