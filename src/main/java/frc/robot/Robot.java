@@ -17,6 +17,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.CONTROLLER_OPERATOR_PORT);
+        oi = OI.getInstance();
 
         cargoIntake.setConstantTuning();
     }
