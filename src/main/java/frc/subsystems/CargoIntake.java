@@ -6,25 +6,24 @@ import edu.wpi.first.wpilibj.*;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CargoIntake {
     
     private static CargoIntake instance = null;
     
-    private AnalogInput cargoInfrared;
+    // private AnalogInput cargoInfrared;
     private WPI_TalonSRX intakeMotor;
-    //Note to self(Work on Notifier Stuff Later)
-    private Notifier voltNotif;
+    // Note to self(Work on Notifier Stuff Later)
+    // private Notifier voltNotif;
 
     private CargoIntake() {
         intakeMotor = new WPI_TalonSRX(RobotMap.CARGO_INTAKE_PORT);
-        cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
-        voltNotif = new Notifier(this::getVoltage);
+        // cargoInfrared = new AnalogInput(RobotMap.CARGO_INFARED_PORT);
+        // voltNotif = new Notifier(this::getVoltage);
     }
     
-   
-    
+/*
     // SMART DASHBOARD
     
     public void telemetry() { // diagnostic data to  continually pushed to ShuffleBoard during teleopPeriodic
@@ -41,7 +40,7 @@ public class CargoIntake {
         RobotMap.CARGO_MAX_INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", RobotMap.CARGO_MAX_INTAKE_SPEED);
 	    RobotMap.CARGO_MAX_OUTTAKE_SPEED = SmartDashboard.getNumber("Outake Speed", RobotMap.CARGO_MAX_OUTTAKE_SPEED);
     }
-    
+*/
     // MOTOR FUNCTIONS
     
     public void shoot() {
@@ -49,13 +48,16 @@ public class CargoIntake {
     }
     
     public void intake() {
+        intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_MAX_INTAKE_SPEED);
+        /*
         if (!cargoInside()) {
             intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_MAX_INTAKE_SPEED);
         } else {
             intakeMotor.set(ControlMode.PercentOutput, 0.0);
         }
+        */
     }
-
+/*
     public boolean cargoInside() {
         double distance = getDistanceToCargo();
         if (distance <= RobotMap.CARGO_SENSOR_LOWER_THRESHOLD) { // if cargo is in intake
@@ -96,7 +98,7 @@ public class CargoIntake {
 
         return 0.0;
     }
-
+*/
     public static CargoIntake getInstance() {
         if (instance == null) {
             instance = new CargoIntake();

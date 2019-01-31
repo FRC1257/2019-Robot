@@ -17,10 +17,11 @@ public class Robot extends TimedRobot {
 	    // Instantiates relevant objects
         cargoIntake = CargoIntake.getInstance();
         operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
-        
+        /*
         // Creates SmartDashboard Tabs 
         cargoIntake.telemetry();
         cargoIntake.setConstantTuning();
+        */
     }
 
     /**
@@ -52,9 +53,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        /*
     	cargoIntake.telemetry(); // Sends diagnostics to SmartDashboard
 	    cargoIntake.getConstantTuning(); // Assigns constants to values retrieved from SmartDashboard
-	
+        */
+        
         if(operatorController.getAButton()) {
             cargoIntake.shoot();
         } else {
