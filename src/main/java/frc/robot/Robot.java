@@ -63,6 +63,8 @@ public class Robot extends TimedRobot {
     }
 
     drive.drive(xSpeed, zRotation);
+    drive.flDrive.outputValues();
+    drive.frDrive.outputValues();
 
     if(controller.getAButton() && controller.getForwardSpeed() > 0) {
       if(controller.getTurnSpeed() > 0) {
