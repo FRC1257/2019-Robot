@@ -26,10 +26,10 @@ public class IntakeArm {
     // dictates the arm to move up or down when a specific button on the user's controller is pressed
     public void setSpeed(double speed) {
         double adjustedSpeed = speed;
-        if(speed > 0 && getEncoderValue() >= 5) {
+        if(speed > 0 && getEncoderValue() >= RobotMap.TOP_TARGET_POSITION) {
             adjustedSpeed = 0;
         }
-        if(speed < 0 && getEncoderValue() <= 0) {
+        if(speed < 0 && getEncoderValue() <= RobotMap.BOTTOM_TARGET_POSITION) {
             adjustedSpeed = 0;
         }
         intakeArmMotor.set(adjustedSpeed);
