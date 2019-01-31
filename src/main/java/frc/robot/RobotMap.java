@@ -17,5 +17,6 @@ public class RobotMap {
 	// Miscellaneous
 
 	// Xbox Controller Port
-	public static final int OPERATOR_CONTROLLER = 1;
+	public static final int CONTROLLER_OPERATOR_PORT = 1;
+	public static final int CONTROLLER_DRIVE_PORT = 2;
 }

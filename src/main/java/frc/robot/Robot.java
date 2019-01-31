@@ -7,6 +7,7 @@ public class Robot extends TimedRobot {
     
     CargoIntake cargoIntake;
     XboxController operatorController;
+    OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -15,7 +16,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         cargoIntake = CargoIntake.getInstance();
-        operatorController = new XboxController(RobotMap.OPERATOR_CONTROLLER);
+        operatorController = new XboxController(RobotMap.CONTROLLER_OPERATOR_PORT);
 
         cargoIntake.setConstantTuning();
     }
@@ -53,7 +54,7 @@ public class Robot extends TimedRobot {
 	    cargoIntake.getConstantTuning();
         
         // Constantly intake unless shooting
-        if(operatorController.getAButton()) {
+        if(oi.getShootButton()) {
             cargoIntake.shoot();
         }
         else {
