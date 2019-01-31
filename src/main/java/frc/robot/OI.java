@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.SnailController;
 
-
 public class OI {
 /**
 * Contains all of the mappings for controls for our robot
@@ -27,7 +26,7 @@ public boolean getBackChanger()//changes the back
 {
     return operatorController.getYButtonPressed();
 }
-public double getClimbMotorSpeed()//measures motor speed
+public double getClimbMotorSpeed()//gets motor speed
 {
     return operatorController.getY(Hand.kLeft);
 }
@@ -37,5 +36,4 @@ public static OI getInstance() {
     }
     return instance;
 }
-
 }

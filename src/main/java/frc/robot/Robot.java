@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-
       // For testing purposes only
       if(oi.getFrontChanger() && !climb.getFront()) {// pushes front up
         climb.frontForward();
@@ -64,27 +63,23 @@ public class Robot extends TimedRobot {
       }
       // alternates between phases of the climb
       if(oi.getClimbPhaser() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
-      climb.phase1Climb();
+        climb.phase1Climb();
       }
       else if(oi.getClimbPhaser() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
-      climb.phase2Climb();
+        climb.phase2Climb();
       }
       else if(oi.getClimbPhaser() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
-      climb.phase3Climb();
+        climb.phase3Climb();
       }    
       if(Controller.getBButtonPressed()) {// resets robot
         climb.reset();
       }
-
       double CLIMB_DRIVE_SPEED = 0;
-
-      // drives robot unless both of the solenoids are down
-      if(climb.getFront() || climb.getBack()) {
+      if(climb.getFront() || climb.getBack()) {// drives robot unless both of the solenoids are down
         CLIMB_DRIVE_SPEED = (-1 * oi.getClimbMotorSpeed());
         climb.climbDrive(CLIMB_DRIVE_SPEED);
       }
-
-      climb.smartDashboardClimb();
+      climb.smartDashboardClimb();//smartdashboards
     }
 
     /**

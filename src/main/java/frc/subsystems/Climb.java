@@ -84,21 +84,19 @@ public class Climb {
         backSolenoid.set(DoubleSolenoid.Value.kReverse);
         this.climbState = 1;
     }
-    // resets solenoids
-    public void reset() {
+    public void reset() {// resets solenoids
         frontSolenoid.set(DoubleSolenoid.Value.kReverse);
         backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-    // drives the robot
-    public void climbDrive(double f) {
-        climbMotorF.set(f);
-        climbMotorB.set(f);
+    public void climbDrive(double s) {// drives the robot
+        climbMotorF.set(s);
+        climbMotorB.set(s);
     }
     public void smartDashboardClimb()//SmartDashboarding
     {
-    SmartDashboard.putBoolean(RobotMap.FRONT_CLIMB_ON, getFront());
-    SmartDashboard.putBoolean(RobotMap.BACK_CLIMB_ON, getBack());
-    SmartDashboard.putNumber(RobotMap.CLIMB_MOTOR_VELOCITY, climbMotorF.get());
+        SmartDashboard.putBoolean(RobotMap.FRONT_CLIMB_ON, getFront());
+        SmartDashboard.putBoolean(RobotMap.BACK_CLIMB_ON, getBack());
+        SmartDashboard.putNumber(RobotMap.CLIMB_MOTOR_VELOCITY, climbMotorF.get());
     }
     public static Climb getInstance() { 
         if (instance == null) {
