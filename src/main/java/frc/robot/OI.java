@@ -26,6 +26,10 @@ public boolean getBackChanger()//changes the back
 {
     return operatorController.getYButtonPressed();
 }
+public boolean getReset()//gets motor speed
+{
+    return operatorController.getBButtonPressed();
+}
 public double getClimbMotorSpeed()//gets motor speed
 {
     return operatorController.getY(Hand.kLeft);

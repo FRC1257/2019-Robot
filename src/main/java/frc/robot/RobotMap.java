@@ -9,7 +9,7 @@ public class RobotMap {
      */
     public static final int CONTROLLER_DRIVE_PORT = 0;
     public static final int CONTROLLER_OPERATOR_PORT = 0;
-    // climb
+    //climb
     //SmartDashboard
     public static final String  FRONT_CLIMB_ON = "State of Front Solenoid";
     public static final String  BACK_CLIMB_ON = "State of Back Solenoid";

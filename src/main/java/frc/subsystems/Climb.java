@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Climb {
-    
     private static Climb instance = null;
 
     private DoubleSolenoid frontSolenoid;

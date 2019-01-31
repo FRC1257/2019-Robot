@@ -5,7 +5,6 @@ import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
     Climb climb;
-    XboxController Controller;
     OI oi;
     /**
      * This function is run when the robot is first started up and should be
@@ -70,12 +69,11 @@ public class Robot extends TimedRobot {
       else if(oi.getClimbPhaser() && climb.getState() == 3) {
         climb.phase3Climb();
       }    
-      if(Controller.getBButtonPressed()) {// resets solenoids
+      if(oi.getReset()) {// resets solenoids
         climb.reset();
       }
-      double CLIMB_DRIVE_SPEED = 0;
       if(climb.getFront() || climb.getBack()) {// drives robot unless both of the solenoids are down
-        CLIMB_DRIVE_SPEED = (-1 * oi.getClimbMotorSpeed());
+        double CLIMB_DRIVE_SPEED = (-1 * oi.getClimbMotorSpeed());
         climb.climbDrive(CLIMB_DRIVE_SPEED);
       }
       climb.smartDashboardClimb();//smartdashboards
