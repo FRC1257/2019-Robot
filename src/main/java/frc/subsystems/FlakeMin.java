@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * <h1>FlakeMin</h1>
  * This allows us to perform closed-loop drivetrain as well as other fun things.
- * @author Allen Du, Arthur Chen, Om Desai, and Nicole Giron
+ * @author Allen Du
  * @since 2019-01-21
  */
 public class FlakeMin extends CANSparkMax {
@@ -186,7 +186,8 @@ public class FlakeMin extends CANSparkMax {
     public void printSpeedFeet() {
         SmartDashboard.putNumber(RobotMap.CURRENT_SPEED_FEET, getEncoderVelocityFeet());
     }
-    public void printPIDConstantsLeft(){
+
+    public void printPIDConstantsLeft() {
         SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_P, RobotMap.DRIVE_PID_LEFT_P);
         SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_I, RobotMap.DRIVE_PID_LEFT_I);
         SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
@@ -196,7 +197,7 @@ public class FlakeMin extends CANSparkMax {
         RobotMap.DRIVE_PID_LEFT_D = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
         RobotMap.DRIVE_PID_LEFT_F = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_F, RobotMap.DRIVE_PID_LEFT_F);
     }
-    public void printPIDConstantsRight(){
+    public void printPIDConstantsRight() {
         SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_P);
         SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_I, RobotMap.DRIVE_PID_RIGHT_I);
         SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
@@ -206,7 +207,8 @@ public class FlakeMin extends CANSparkMax {
         RobotMap.DRIVE_PID_RIGHT_D = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
         RobotMap.DRIVE_PID_RIGHT_F = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_F, RobotMap.DRIVE_PID_RIGHT_F);
     }
-    public void printWashout(){
+
+    public void printWashout() {
         SmartDashboard.putNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
         RobotMap.DRIVE_P_WASHOUT = SmartDashboard.getNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
     }

@@ -50,15 +50,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    double xSpeed = 0.0;
+    double zRotation = 0.0;
+
     if(controller.getBButtonPressed()) {
       if(!drive.reverse){
         drive.reverse = true;
       }
-      else{
+      else {
         drive.reverse = false;
       }
     }
-    drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
+
+    drive.drive(xSpeed, zRotation);
+
     if(controller.getAButton() && controller.getForwardSpeed() > 0) {
       if(controller.getTurnSpeed() > 0) {
         drive.flDrive.set(0.6);
