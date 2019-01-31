@@ -7,7 +7,6 @@ public class Robot extends TimedRobot {
     Climb climb;
     XboxController Controller;
     OI oi;
-    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -62,16 +61,16 @@ public class Robot extends TimedRobot {
         climb.backReverse();
       }
       // alternates between phases of the climb
-      if(oi.getClimbPhaser() && climb.getState() == 1 && !climb.getBack() && !climb.getFront()) {
+      if(oi.getClimbPhaser() && climb.getState() == 1) {
         climb.phase1Climb();
       }
-      else if(oi.getClimbPhaser() && climb.getState() == 2 && climb.getBack() && climb.getFront()) {
+      else if(oi.getClimbPhaser() && climb.getState() == 2) {
         climb.phase2Climb();
       }
-      else if(oi.getClimbPhaser() && climb.getState() == 3 && climb.getBack() && !climb.getFront()) {
+      else if(oi.getClimbPhaser() && climb.getState() == 3) {
         climb.phase3Climb();
       }    
-      if(Controller.getBButtonPressed()) {// resets robot
+      if(Controller.getBButtonPressed()) {// resets solenoids
         climb.reset();
       }
       double CLIMB_DRIVE_SPEED = 0;

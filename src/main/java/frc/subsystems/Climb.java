@@ -18,21 +18,29 @@ public class Climb {
     private WPI_VictorSPX climbMotorF;
     private WPI_VictorSPX climbMotorB;
 
-    private int climbState;
-
     public Climb() {
         frontSolenoid = new DoubleSolenoid(RobotMap.CLIMB_SOLENOID_F_PORT_1, RobotMap.CLIMB_SOLENOID_F_PORT_2);
         backSolenoid = new DoubleSolenoid(RobotMap.CLIMB_SOLENOID_B_PORT_1, RobotMap.CLIMB_SOLENOID_B_PORT_2);
 
         climbMotorF = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_F);
         climbMotorB = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_B);
-
-        climbState = 1;
     }
+
 
     // gets value of climbState
     public int getState() {
-        return climbState;
+        if(frontSolenoid.get() == Value.kReverse && backSolenoid.get() == Value.kReverse){
+         return 1;
+        }
+        else if(frontSolenoid.get() == Value.kForward && backSolenoid.get() == Value.kForward){
+         return 2;    
+        }
+        else if(frontSolenoid.get() == Value.kReverse && backSolenoid.get() == Value.kForward){
+         return 3;    
+        }
+        else{
+            return 0;
+        }
     }
 
     // gets value of frontOn
@@ -74,15 +82,12 @@ public class Climb {
     public void phase1Climb(){
         frontSolenoid.set(DoubleSolenoid.Value.kForward);
         backSolenoid.set(DoubleSolenoid.Value.kForward);
-        this.climbState = 2;
     }
     public void phase2Climb(){
         frontSolenoid.set(DoubleSolenoid.Value.kReverse);
-        this.climbState = 3;
     }
     public void phase3Climb(){
         backSolenoid.set(DoubleSolenoid.Value.kReverse);
-        this.climbState = 1;
     }
     public void reset() {// resets solenoids
         frontSolenoid.set(DoubleSolenoid.Value.kReverse);
