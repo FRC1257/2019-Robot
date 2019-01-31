@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        intakeArm.setSpeed(oi.operatorControllerY());
+        intakeArm.setSpeed(oi.getArmSpeed());
         if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
     }
 

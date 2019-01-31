@@ -19,7 +19,7 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
-    public double operatorControllerY(){
+    public double getArmSpeed() {
         return operatorController.getY(Hand.kRight);
     }
 
