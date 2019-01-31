@@ -24,8 +24,6 @@ public class Climb {
         climbMotorF = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_F);
         climbMotorB = new WPI_VictorSPX(RobotMap.CLIMB_MOTOR_B);
     }
-
-
     // gets value of climbState
     public int getState() {
         if(frontSolenoid.get() == DoubleSolenoid.Value.kReverse && backSolenoid.get() == DoubleSolenoid.Value.kReverse){
@@ -41,9 +39,7 @@ public class Climb {
             return 0;
         }
     }
-
-    // gets value of frontOn
-    public boolean getFront() {
+    public boolean getFront() {// gets value of frontOn
         if(frontSolenoid.get() == DoubleSolenoid.Value.kForward)
         {
             return true;
@@ -53,9 +49,7 @@ public class Climb {
             return false;
         }
     }
-
-    // gets value of backOn
-    public boolean getBack() {
+    public boolean getBack() { // gets value of backOn
         if(backSolenoid.get() == DoubleSolenoid.Value.kForward)
         {
             return true;
