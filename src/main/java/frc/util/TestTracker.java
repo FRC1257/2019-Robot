@@ -24,7 +24,8 @@ public class TestTracker{
         for(int i = 0; i < this.DistanceToArea.size() - 1; i++){
             System.out.print(this.DistanceToArea.get(i) + ", ");
         }
-        System.out.println(this.DistanceToArea.get(this.DistanceToArea.size() - 1));
+        if(DistanceToArea.size() > 0){
+            System.out.println(this.DistanceToArea.get(this.DistanceToArea.size() - 1));
+        }
     }
-
 }
