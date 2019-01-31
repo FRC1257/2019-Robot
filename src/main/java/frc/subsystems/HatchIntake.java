@@ -41,10 +41,10 @@ public class HatchIntake {
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
-        hatchPivotPID.setP(RobotMap.HATCH_PID_CONSTANTS.get("P"));
-        hatchPivotPID.setI(RobotMap.HATCH_PID_CONSTANTS.get("I"));
-        hatchPivotPID.setD(RobotMap.HATCH_PID_CONSTANTS.get("D"));
-        hatchPivotPID.setFF(RobotMap.HATCH_PID_CONSTANTS.get("F"));
+        hatchPivotPID.setP(RobotMap.HATCH_PID_CONSTANTS[0]);
+        hatchPivotPID.setI(RobotMap.HATCH_PID_CONSTANTS[1]);
+        hatchPivotPID.setD(RobotMap.HATCH_PID_CONSTANTS[2]);
+        hatchPivotPID.setFF(RobotMap.HATCH_PID_CONSTANTS[3]);
 
         limitSwitchPivot = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_PIVOT_ID);
         limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
@@ -102,32 +102,32 @@ public class HatchIntake {
 
     public void raisePivot() {
         lowered = false;
-        setPIDPosition(RobotMap.HATCH_PID_CONSTANTS.get("RAISED"));
+        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
     }
 
     public void lowerPivot() {
         lowered = true;
-        setPIDPosition(RobotMap.HATCH_PID_CONSTANTS.get("LOWER"));
+        setPIDPosition(RobotMap.HATCH_PID_RAISED);
     }
     
     public void setPIDPosition(double value) {
         hatchPivotPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
-        notifier.startPeriodic(RobotMap.HATCH_PID_CONSTANTS.get("UPDATE_PERIOD"));
+        notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
 
         // Check if the pivot's position is within the tolerance
-        if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_CONSTANTS.get("TOLERANCE")) {
+        if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
             // If this is the first time it has been detected, then update the timestamp
             if(pidTime == -1) {
                 pidTime = Timer.getFPGATimestamp();
             }
 
             // Check if the pivot's position has been inside the tolerance for long enough
-            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_CONSTANTS.get("TIME")) {
+            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
                 notifier.stop();
                 running = false;
             }
