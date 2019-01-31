@@ -14,5 +14,12 @@ public class RobotMap {
 
     // Intake Arm
     public static final int INTAKE_ARM_MOTOR_PORT = 0;
-    public static final double BOTTOM_LIMIT_SWITCH_ID = 0;
+    public static final double LIMIT_SWITCH_ID = 0;
+
+    /*
+    public static final double INTAKE_ARM_PID_P = 1;
+    public static final double INTAKE_ARM_PID_I = 0;
+    public static final double INTAKE_ARM_PID_D = 0;
+    public static final double INTAKE_ARM_PID_FF = 980;
+    */
 }

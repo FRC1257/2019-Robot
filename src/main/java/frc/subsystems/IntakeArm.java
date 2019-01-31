@@ -49,7 +49,7 @@ public class IntakeArm {
     }
 
     public static IntakeArm getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new IntakeArm();
         }
         return instance;
