@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
+import com.revrobotics.ControlType;
                                                 
 public class IntakeArm { 
     private static IntakeArm instance = null;
@@ -19,8 +20,8 @@ public class IntakeArm {
 
     private CANPIDController intakeArmPID;
     
-    private Notifier notifier;                // looper for updating PID loop for pivot
-    private double currentPIDSetpoint;        // current target position of pivot
+    private Notifier notifier;                // looper for updating PID loop for arm
+    private double currentPIDSetpoint;        // current target position of arm
     private double pidTime;                   // the timestamp for when the PID enters the tolerance range
     private boolean running;                  // whether or not the PID loop is currently running
 
@@ -36,22 +37,31 @@ public class IntakeArm {
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PID_CONSTANTS[3]);
 
         notifier = new Notifier(this::updatePID);
+
+        reset();
+    }
+
+    public void reset() {
+        currentPIDSetpoint = 0;
+        pidTime = -1;
+        running = false;
+        resetEncoder(); // TODO
     }
 
     // dictates the arm to move up or down when a specific button on the user's controller is pressed
     public void setSpeed(double speed) {
         double adjustedSpeed = speed;
-        if(speed > 0.0 && getEncoderValue() >= RobotMap.TOP_TARGET_POSITION) {
+        if(speed > 0.0 && getEncoderPosition() >= RobotMap.TOP_TARGET_POSITION) {
             adjustedSpeed = 0.0;
         }
-        if(speed < 0.0 && getEncoderValue() <= RobotMap.BOTTOM_TARGET_POSITION) {
+        if(speed < 0.0 && getEncoderPosition() <= RobotMap.BOTTOM_TARGET_POSITION) {
             adjustedSpeed = 0.0;
         }
         intakeArmMotor.set(adjustedSpeed);
     }
 
     // returns the change in distance since the last reset as scaled by the value from setDistancePerPulse()
-    public double getEncoderValue() {
+    public double getEncoderPosition() {
         return intakeArmEncoder.getPosition();
     }
 
@@ -64,6 +74,12 @@ public class IntakeArm {
     }
 
     // PID CONTROLLER
+
+    public void setPIDPosition(double value) {
+        intakeArmPID.setReference(value, ControlType.kPosition);
+        currentPIDSetpoint = value;
+        notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
+    }
 
     private void updatePID() {
         running = true;
@@ -84,17 +100,6 @@ public class IntakeArm {
         else {
             pidTime = -1;
         }
-    }
-
-    public double getEncoderPosition() {
-        return intakeArmEncoder.getPosition();
-    }
-
-    public void reset() {
-        currentPIDSetpoint = 0;
-        pidTime = -1;
-        running = false;
-        resetEncoder(); // TODO
     }
 
     public static IntakeArm getInstance() {

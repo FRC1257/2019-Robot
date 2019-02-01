@@ -20,6 +20,7 @@ public class RobotMap {
 
     public static final double[] INTAKE_ARM_PID_CONSTANTS = {1.0, 2.0, 3.0, 4.0}; // test values
 
+    public static final double HATCH_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in seconds
     public static final double HATCH_PID_TOLERANCE = 5;         // How close the PID can be
     public static final double HATCH_PID_TIME = 0.01;           // How long the PID has to be within the tolerance in seconds
 }
