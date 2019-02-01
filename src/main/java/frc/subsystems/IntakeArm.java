@@ -78,21 +78,21 @@ public class IntakeArm {
     public void setPIDPosition(double value) {
         intakeArmPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
-        notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
+        notifier.startPeriodic(RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
 
         // Check if the pivot's position is within the tolerance
-        if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
+        if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
             // If this is the first time it has been detected, then update the timestamp
             if(pidTime == -1) {
                 pidTime = Timer.getFPGATimestamp();
             }
 
             // Check if the pivot's position has been inside the tolerance for long enough
-            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
+            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
                 notifier.stop();
                 running = false;
             }
