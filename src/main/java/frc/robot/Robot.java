@@ -17,6 +17,8 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         hatchIntake = HatchIntake.getInstance();
         oi = OI.getInstance();
+
+        hatchIntake.setConstantTuning();
     }
 
     /**
@@ -69,6 +71,8 @@ public class Robot extends TimedRobot {
         }
 
         hatchIntake.updatePositionState();
+        hatchIntake.outputValues();
+        hatchIntake.getConstantTuning();
     }
 
     /**
