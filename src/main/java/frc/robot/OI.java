@@ -19,8 +19,17 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
+    // Intake Arm
     public double getArmSpeed() {
         return operatorController.getY(Hand.kRight);
+    }
+
+    public boolean getArmRaise() {
+        return operatorController.getAButtonPressed();
+    }
+
+    public boolean getArmLower() {
+        return operatorController.getBButtonPressed();
     }
 
     public static OI getInstance() {

@@ -15,10 +15,11 @@ public class IntakeArm {
 
     private CANSparkMax intakeArmMotor;
     private CANEncoder intakeArmEncoder; 
+    private CANPIDController intakeArmPID;
 
     private DigitalInput limitSwitch;
 
-    private CANPIDController intakeArmPID;
+    private int currentPositionState;         // 0 - ground, 1 - rocket, 2 - cargo ship
     
     private Notifier notifier;                // looper for updating PID loop for arm
     private double currentPIDSetpoint;        // current target position of arm
@@ -26,15 +27,15 @@ public class IntakeArm {
     private boolean running;                  // whether or not the PID loop is currently running
 
     public IntakeArm() {
-        intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_PORT, MotorType.kBrushless);
+        intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
         intakeArmEncoder = intakeArmMotor.getEncoder();
         limitSwitch = new DigitalInput(1);
 
         intakeArmPID = intakeArmMotor.getPIDController();
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PID_CONSTANTS[0]);
-        intakeArmPID.setI(RobotMap.INTAKE_ARM_PID_CONSTANTS[1]);
-        intakeArmPID.setD(RobotMap.INTAKE_ARM_PID_CONSTANTS[2]);
-        intakeArmPID.setFF(RobotMap.INTAKE_ARM_PID_CONSTANTS[3]);
+        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
+        intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
+        intakeArmPID.setD(RobotMap.INTAKE_ARM_PIDF[2]);
+        intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
 
         notifier = new Notifier(this::updatePID);
 
@@ -42,38 +43,50 @@ public class IntakeArm {
     }
 
     public void reset() {
+        intakeArmMotor.set(0);
+
+        currentPositionState = 0;
         currentPIDSetpoint = 0;
         pidTime = -1;
         running = false;
-        resetEncoder(); // TODO
+        resetEncoder();
     }
 
-    // dictates the arm to move up or down when a specific button on the user's controller is pressed
+    // Moves the arm at a set speed and restricts the motion of the arm
     public void setSpeed(double speed) {
         double adjustedSpeed = speed;
-        if(speed > 0.0 && getEncoderPosition() >= RobotMap.TOP_TARGET_POSITION) {
+        // Arm is moving up and is past the upper threshold
+        if(speed > 0.0 && getEncoderPosition() >= RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
             adjustedSpeed = 0.0;
         }
-        if(speed < 0.0 && getEncoderPosition() <= RobotMap.BOTTOM_TARGET_POSITION) {
+        // Arm is moving down and is past the lower threshold
+        if(speed < 0.0 && getEncoderPosition() <= RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
             adjustedSpeed = 0.0;
         }
         intakeArmMotor.set(adjustedSpeed);
     }
 
-    // returns the change in distance since the last reset as scaled by the value from setDistancePerPulse()
-    public double getEncoderPosition() {
-        return intakeArmEncoder.getPosition();
+    public void raiseArm() {
+        if(currentPositionState == 0) moveRocket();
+        else if(currentPositionState == 1) moveCargo();
     }
 
-    public void resetEncoder() { // resets when arm hits limit switch
-        // Reset Encoder (TODO when Spark MAX API is updated)
+    public void lowerArm() {
+        if(currentPositionState == 2) moveRocket();
+        else if(currentPositionState == 1) moveGround();
     }
 
-    public boolean getLimitSwitch() {
-        return limitSwitch.get();
+    public void moveGround() {
+        setPIDPosition(RobotMap.INTAKE_ARM_PID_GROUND);
     }
 
-    // PID CONTROLLER
+    public void moveRocket() {
+        setPIDPosition(RobotMap.INTAKE_ARM_PID_ROCKET);
+    }
+
+    public void moveCargo() {
+        setPIDPosition(RobotMap.INTAKE_ARM_PID_CARGO);
+    }
 
     public void setPIDPosition(double value) {
         intakeArmPID.setReference(value, ControlType.kPosition);
@@ -100,6 +113,49 @@ public class IntakeArm {
         else {
             pidTime = -1;
         }
+    }
+
+    public void resetEncoder() {
+        // Reset Encoder (TODO when Spark MAX API is updated)
+    }
+
+    public double getEncoderPosition() {
+        return intakeArmEncoder.getPosition();
+    }
+
+    public double getEncoderVelocity() {
+        return intakeArmEncoder.getVelocity();
+    }
+
+    /* Sets the current position state dependent on the encoder position
+     * 0 - ground, 1 - rocket, 2 - cargo
+     */
+    public void updatePositionState() {
+        if(getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
+            currentPositionState = 0;
+        }
+        else if(getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
+            currentPositionState = 1;
+        }
+        else {
+            currentPositionState = 2;
+        }
+    }
+
+    /* Returns the current position state dependent on the encoder position
+     * 0 - ground, 1 - rocket, 2 - cargo
+     */
+    public int getPositionState() {
+        return currentPositionState;
+    }
+
+    // Whether or not the bottom limit switch is pressed
+    public boolean getLimitSwitch() {
+        return limitSwitch.get();
+    }
+
+    public boolean getPIDRunning() {
+        return running;
     }
 
     public static IntakeArm getInstance() {

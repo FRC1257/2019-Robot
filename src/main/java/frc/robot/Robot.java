@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.*;
 import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
+    
     IntakeArm intakeArm;
     OI oi; 
 
@@ -47,8 +48,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        intakeArm.setSpeed(oi.getArmSpeed());
-        if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
+        if(oi.getArmRaise()) intakeArm.raiseArm();
+        if(oi.getArmLower()) intakeArm.lowerArm();
+
+        if(!intakeArm.getPIDRunning()) {
+            intakeArm.setSpeed(oi.getArmSpeed());
+            if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
+        }
+
+        intakeArm.updatePositionState();
     }
 
     /**

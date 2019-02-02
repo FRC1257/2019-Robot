@@ -13,14 +13,18 @@ public class RobotMap {
     public static final int CONTROLLER_OPERATOR_PORT = 2;
 
     // Intake Arm
-    public static final int INTAKE_ARM_MOTOR_PORT = 0;
-    public static final double TOP_TARGET_POSITION = 0;
-    public static final double BOTTOM_TARGET_POSITION = 10;
-    public static final double LIMIT_SWITCH_ID = 0;
+    public static final int INTAKE_ARM_MOTOR_ID = 0;
+    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 0;
 
-    public static final double[] INTAKE_ARM_PID_CONSTANTS = {1.0, 2.0, 3.0, 4.0}; // test values
+    // Intake Arm: 0 is at bottom, positive means higher
+    public static final double INTAKE_ARM_LOWER_THRESHOLD = 0.0;         // Lower limit of the arm's motion
+    public static final double INTAKE_ARM_UPPER_THRESHOLD = 10.0;        // Upper limit of the arm's motion
+    public static final double INTAKE_ARM_PID_GROUND = 1.0;              // Target position for ground pickup
+    public static final double INTAKE_ARM_PID_ROCKET = 1.0;              // Target position for rocket
+    public static final double INTAKE_ARM_PID_CARGO = 9.0;               // Target position for cargo ship
 
-    public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in seconds
-    public static final double INTAKE_ARM_PID_TOLERANCE = 5;         // How close the PID can be
-    public static final double INTAKE_ARM_PID_TIME = 0.01;           // How long the PID has to be within the tolerance in seconds
+    public static final double[] INTAKE_ARM_PIDF = {1.0, 2.0, 3.0, 4.0}; 
+    public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020;     // How often the PID will be checked in sec
+    public static final double INTAKE_ARM_PID_TOLERANCE = 5;             // How close the PID can be
+    public static final double INTAKE_ARM_PID_TIME = 0.01;               // How long the PID has to be on target in sec
 }
