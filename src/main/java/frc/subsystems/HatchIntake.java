@@ -43,10 +43,10 @@ public class HatchIntake {
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
-        hatchPivotPID.setP(RobotMap.HATCH_PID_CONSTANTS[0]);
-        hatchPivotPID.setI(RobotMap.HATCH_PID_CONSTANTS[1]);
-        hatchPivotPID.setD(RobotMap.HATCH_PID_CONSTANTS[2]);
-        hatchPivotPID.setFF(RobotMap.HATCH_PID_CONSTANTS[3]);
+        hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
+        hatchPivotPID.setI(RobotMap.HATCH_PIDF[1]);
+        hatchPivotPID.setD(RobotMap.HATCH_PIDF[2]);
+        hatchPivotPID.setFF(RobotMap.HATCH_PIDF[3]);
 
         limitSwitchPivot = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_PIVOT_ID);
         limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
@@ -103,12 +103,10 @@ public class HatchIntake {
     }
 
     public void raisePivot() {
-        lowered = false;
         setPIDPosition(RobotMap.HATCH_PID_LOWERED);
     }
 
     public void lowerPivot() {
-        lowered = true;
         setPIDPosition(RobotMap.HATCH_PID_RAISED);
     }
     
@@ -151,6 +149,15 @@ public class HatchIntake {
         return hatchPivotEncoder.getVelocity();
     }
 
+    // Updates the position state for whether or not the intake is lowered
+    public void updatePositionState() {
+        lowered = getEncoderPosition() >= (RobotMap.HATCH_PID_LOWERED + RobotMap.HATCH_PID_RAISED) / 2.0;
+    }
+
+    public boolean isLowered() {
+        return lowered;
+    }
+
     public boolean getPickupExtended() {
         return pickupSolenoid.get();
     }
@@ -172,22 +179,21 @@ public class HatchIntake {
     }
 
     // Initialize constants in Smart Dashboard
-    // Current state, PID active, etc., and use it for updating PID constants
     public void setConstantTuning() {
         SmartDashboard.putBoolean("Lowered", lowered);
         SmartDashboard.putBoolean("PID active", running);
-        SmartDashboard.putNumber("P", RobotMap.HATCH_PID_CONSTANTS[0]);
-        SmartDashboard.putNumber("I", RobotMap.HATCH_PID_CONSTANTS[1]);
-        SmartDashboard.putNumber("D", RobotMap.HATCH_PID_CONSTANTS[2]);
-        SmartDashboard.putNumber("FF", RobotMap.HATCH_PID_CONSTANTS[3]);
+        SmartDashboard.putNumber("P", RobotMap.HATCH_PIDF[0]);
+        SmartDashboard.putNumber("I", RobotMap.HATCH_PIDF[1]);
+        SmartDashboard.putNumber("D", RobotMap.HATCH_PIDF[2]);
+        SmartDashboard.putNumber("FF", RobotMap.HATCH_PIDF[3]);
     }
     
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
-        RobotMap.HATCH_PID_CONSTANTS[0] = SmartDashboard.getNumber("P", RobotMap.HATCH_PID_CONSTANTS[0]);
-        RobotMap.HATCH_PID_CONSTANTS[1] = SmartDashboard.getNumber("I", RobotMap.HATCH_PID_CONSTANTS[1]);
-        RobotMap.HATCH_PID_CONSTANTS[2] = SmartDashboard.getNumber("D", RobotMap.HATCH_PID_CONSTANTS[2]);
-        RobotMap.HATCH_PID_CONSTANTS[3] = SmartDashboard.getNumber("FF", RobotMap.HATCH_PID_CONSTANTS[3]);
+        RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("P", RobotMap.HATCH_PIDF[0]);
+        RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("I", RobotMap.HATCH_PIDF[1]);
+        RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("D", RobotMap.HATCH_PIDF[2]);
+        RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("FF", RobotMap.HATCH_PIDF[3]);
     }
 
     public static HatchIntake getInstance() {

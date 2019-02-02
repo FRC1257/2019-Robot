@@ -53,21 +53,22 @@ public class Robot extends TimedRobot {
 
         if(!hatchIntake.getPIDRunning()) {
             hatchIntake.setPickup(oi.getHatchPickup());
+            hatchIntake.setPivot(oi.getHatchPivot());
 
-            // Only allow the hatch to eject if the hatch is not lowered
-            if(!hatchIntake.getLimitSwitchHatch()) {
+            // Only allow the hatch to eject if the hatch is not lowered and there is a hatch detected
+            if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
                 hatchIntake.setEject(oi.getHatchEject());
             }
             else {
                 hatchIntake.ejectRetract();
             }
 
-            hatchIntake.setPivot(oi.getHatchPivot());
-
             if(hatchIntake.getLimitSwitchPivot()) {
                 hatchIntake.resetEncoder();
             }
         }
+
+        hatchIntake.updatePositionState();
     }
 
     /**
