@@ -6,6 +6,7 @@ import com.revrobotics.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * <h1>Drivetrain</h1>
@@ -14,26 +15,27 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * @since 2019-01-21
  */
 public class DriveTrain {
+
     private static DriveTrain instance = null;
 
-    public FlakeMin flDrive;
-    public FlakeMin frDrive;
-    public CANSparkMax blDrive;
-    public CANSparkMax brDrive;
+    private FlakeMin flDrive;
+    private FlakeMin frDrive;
+    private CANSparkMax blDrive;
+    private CANSparkMax brDrive;
 
     private DifferentialDrive driveTrain;
 
-    public boolean reverse = false;
+    private boolean reverse;
 
     /**
      * Constructs a new {@code DriveTrain} object.
      */
     public DriveTrain() {
 
-        flDrive = new FlakeMin(RobotMap.DRIVE_FL, MotorType.kBrushless, true);
-        frDrive = new FlakeMin(RobotMap.DRIVE_FR, MotorType.kBrushless, false);
-        blDrive = new CANSparkMax(RobotMap.DRIVE_BL, MotorType.kBrushless);
-        brDrive = new CANSparkMax(RobotMap.DRIVE_BR, MotorType.kBrushless);
+        flDrive = new FlakeMin(RobotMap.DRIVE_FL_MOTOR_ID, MotorType.kBrushless, true);
+        frDrive = new FlakeMin(RobotMap.DRIVE_FR_MOTOR_ID, MotorType.kBrushless, false);
+        blDrive = new CANSparkMax(RobotMap.DRIVE_BL_MOTOR_ID, MotorType.kBrushless);
+        brDrive = new CANSparkMax(RobotMap.DRIVE_BR_MOTOR_ID, MotorType.kBrushless);
 
         configSpeedControllers();
 
@@ -41,6 +43,8 @@ public class DriveTrain {
         brDrive.follow(frDrive);
 
         driveTrain = new DifferentialDrive(flDrive, frDrive);
+
+        reverse = false;
     }
 
     /**
@@ -58,10 +62,24 @@ public class DriveTrain {
      * @param z Rate of rotation, from -1 to 1.
      */
     public void drive(double x, double z) {
-        driveTrain.arcadeDrive(x, z);
-        if(reverse) {
-            driveTrain.arcadeDrive(-x, z);
-        }
+        if(!reverse) driveTrain.arcadeDrive(x, z);
+        else driveTrain.arcadeDrive(-x, z);
+    }
+
+    public void toggleReverse() {
+        reverse = !reverse;
+    }
+
+    public boolean isReversed() {
+        return reverse;
+    }
+
+    public FlakeMin getFRDrive() {
+        return frDrive;
+    }
+
+    public FlakeMin getFLDrive() {
+        return flDrive;
     }
 
     public void getLeftEncoderPosition() {
@@ -78,6 +96,43 @@ public class DriveTrain {
 
     public void getLeftEncoderVelocity() {
         flDrive.getEncoderVelocity();
+    }
+
+    public void outputValues() {
+        flDrive.outputValues();
+        frDrive.outputValues();
+
+        SmartDashboard.putBoolean("Drive Reversed", reverse);
+    }
+
+    public void setConstantTuning() {
+        SmartDashboard.putNumber("Drive Left P", RobotMap.DRIVE_PIDF_LEFT[0]);
+        SmartDashboard.putNumber("Drive Left I", RobotMap.DRIVE_PIDF_LEFT[1]);
+        SmartDashboard.putNumber("Drive Left D", RobotMap.DRIVE_PIDF_LEFT[2]);
+        SmartDashboard.putNumber("Drive Left F", RobotMap.DRIVE_PIDF_LEFT[3]);
+
+        SmartDashboard.putNumber("Drive Right P", RobotMap.DRIVE_PIDF_RIGHT[0]);
+        SmartDashboard.putNumber("Drive Right I", RobotMap.DRIVE_PIDF_RIGHT[1]);
+        SmartDashboard.putNumber("Drive Right D", RobotMap.DRIVE_PIDF_RIGHT[2]);
+        SmartDashboard.putNumber("Drive Right F", RobotMap.DRIVE_PIDF_RIGHT[3]);
+
+        SmartDashboard.putNumber("Drive Washout", RobotMap.DRIVE_P_WASHOUT);
+    }
+
+    public void updateConstantTuning() {
+        RobotMap.DRIVE_PIDF_LEFT[0] = SmartDashboard.getNumber("Drive Left P", RobotMap.DRIVE_PIDF_LEFT[0]);
+        RobotMap.DRIVE_PIDF_LEFT[1] = SmartDashboard.getNumber("Drive Left I", RobotMap.DRIVE_PIDF_LEFT[1]);
+        RobotMap.DRIVE_PIDF_LEFT[2] = SmartDashboard.getNumber("Drive Left D", RobotMap.DRIVE_PIDF_LEFT[2]);
+        RobotMap.DRIVE_PIDF_LEFT[3] = SmartDashboard.getNumber("Drive Left F", RobotMap.DRIVE_PIDF_LEFT[3]);
+        flDrive.updatePID(true);
+
+        RobotMap.DRIVE_PIDF_RIGHT[0] = SmartDashboard.getNumber("Drive Right P", RobotMap.DRIVE_PIDF_RIGHT[0]);
+        RobotMap.DRIVE_PIDF_RIGHT[1] = SmartDashboard.getNumber("Drive Right I", RobotMap.DRIVE_PIDF_RIGHT[1]);
+        RobotMap.DRIVE_PIDF_RIGHT[2] = SmartDashboard.getNumber("Drive Right D", RobotMap.DRIVE_PIDF_RIGHT[2]);
+        RobotMap.DRIVE_PIDF_RIGHT[3] = SmartDashboard.getNumber("Drive Right F", RobotMap.DRIVE_PIDF_RIGHT[3]);
+        frDrive.updatePID(false);
+
+        RobotMap.DRIVE_P_WASHOUT = SmartDashboard.getNumber("Drive Washout", RobotMap.DRIVE_P_WASHOUT);
     }
 
     /**

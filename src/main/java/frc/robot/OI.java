@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.SnailController;
 
 public class OI {
@@ -19,21 +18,25 @@ public class OI {
         operatorController = new SnailController(RobotMap.OPERATOR_CONTROLLER_PORT);
     }
 
-    // Hatch Intake
-    public boolean getTogglePivot() {
-        return operatorController.getXButtonPressed();
+    // Drivetrain
+    public double getDriveForwardSpeed() {
+        return driveController.getForwardSpeed();
     }
-    
-    public boolean getHatchPickup() {
-        return operatorController.getAButton();
+
+    public double getDriveTurnSpeed() {
+        return driveController.getTurnSpeed();
     }
-    
-    public boolean getHatchEject() {
-        return operatorController.getBButton();
+
+    public boolean getDriveToggleReverse() {
+        return driveController.getBButtonPressed();
     }
-    
-    public double getHatchPivot() {
-        return operatorController.getY(Hand.kLeft);
+
+    public boolean getDriveTestFL() {
+        return driveController.getXButton();
+    }
+
+    public boolean getDriveTestFR() {
+        return driveController.getYButton();
     }
 
     public static OI getInstance() {

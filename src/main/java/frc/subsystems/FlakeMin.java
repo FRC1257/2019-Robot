@@ -14,13 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class FlakeMin extends CANSparkMax {
 
-    private CANPIDController PID;
+    private CANPIDController pid;
     private CANEncoder encoder;
 
     private double currentVelocity;
-    private double Speed;
+    private double speed;
     private double distance;
     private double temp;
+    private boolean left;
 
     /**
      * Constructs a new {@code FlakeMin} object.
@@ -30,17 +31,23 @@ public class FlakeMin extends CANSparkMax {
      */
     public FlakeMin(int deviceID, CANSparkMaxLowLevel.MotorType type, boolean left) {
         super(deviceID, type);
-        getPID();
-        if(left) {
-            PIDSetup(RobotMap.DRIVE_PID_LEFT_P, RobotMap.DRIVE_PID_LEFT_I, 
-                RobotMap.DRIVE_PID_LEFT_D, RobotMap.DRIVE_PID_LEFT_F);
-        } else {
-            PIDSetup(RobotMap.DRIVE_PID_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_I, 
-                RobotMap.DRIVE_PID_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_F);
-        }
+        updatePID(left);
+
+        pid = getPIDController();
+        encoder = getEncoder();
         
         currentVelocity = 0.0;
-        encoder = getEncoder();
+        this.left = left;
+    }
+
+    /**
+     * Runs PID to set the motor at a constant speed; closed-loop velocity.
+     * @param speed The desired speed.
+     */
+    @Override
+    public void set(double speed) {
+        currentVelocity = updateInput(currentVelocity, speed); // Apply the washout filter
+        pid.setReference(RobotMap.NEO_MAX_RPM * currentVelocity, ControlType.kVelocity);
     }
 
     /**
@@ -55,37 +62,26 @@ public class FlakeMin extends CANSparkMax {
         return currentInput;
     }
 
-    @Override
     /**
-     * Runs PID to set the motor at a constant speed; closed-loop velocity.
-     * @param speed The desired speed.
+     * Updates the PID constants from RobotMap
+     * @param left If it's on the left side or not
      */
-    public void set(double speed) {
-        PID.setReference(RobotMap.NEO_MAX_RPM * updateInput(currentVelocity, speed), ControlType.kVelocity);
-        currentVelocity = updateInput(currentVelocity, speed);
+    public void updatePID(boolean left) {
+        if(left) pidSetup(RobotMap.DRIVE_PIDF_LEFT);
+        else pidSetup(RobotMap.DRIVE_PIDF_RIGHT);
     }
 
     /**
-     * Sets the controller's PID more efficiently than the default functions.
-     * @param kFF Feedfoward term
-     * @param kP Proportional term
-     * @param kI Integral term
-     * @param kD Differential term
+     * Sets the controller's PID more efficiently than the default functions. Also sets up the maximum output
+     * @param pidf Array of doubles with the proportional, integral, derivative, and feedforward terms
      */
-    public void PIDSetup(double kP, double kI, double kD, double kFF) {
-        PID.setP(kP);
-        PID.setI(kI);
-        PID.setD(kD);
-        PID.setFF(kFF);
+    public void pidSetup(double[] pidf) {
+        pid.setP(pidf[0]);
+        pid.setI(pidf[1]);
+        pid.setD(pidf[2]);
+        pid.setFF(pidf[3]);
 
-        PID.setOutputRange(0, RobotMap.NEO_MAX_RPM);
-    }
-
-    /**
-     * Creates the PID object.
-     */
-    public void getPID() {
-        PID = getPIDController();
+        pid.setOutputRange(-1.0, 1.0);
     }
 
     /**
@@ -93,8 +89,8 @@ public class FlakeMin extends CANSparkMax {
      * @return The speed in RPM.
      */
     public double getEncoderVelocity() {
-        Speed = encoder.getVelocity();
-        return Speed;
+        speed = encoder.getVelocity();
+        return speed;
     }
 
     /**
@@ -111,7 +107,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The distance in inches.
      */
     public double getEncoderPositionInches() {
-        return getEncoderPosition() * RobotMap.DRIVE_DIAMETER * RobotMap.PI;
+        return getEncoderPosition() * RobotMap.DRIVE_WHEEL_DIAMETER * RobotMap.PI;
     }
 
     /**
@@ -119,15 +115,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The distance in feet.
      */
     public double getEncoderPositionFeet() {
-        return getEncoderPositionInches() / 12;
-    }
-
-    /**
-     * Gets the speed in feet.
-     * @return The speed in feet.
-     */
-    public double getEncoderVelocityFeet() {
-        return getEncoderVelocity() * RobotMap.DRIVE_DIAMETER * RobotMap.PI / 12;
+        return getEncoderPositionInches() / 12.0;
     }
 
     /**
@@ -135,96 +123,47 @@ public class FlakeMin extends CANSparkMax {
      * @return The speed in inches.
      */
     public double getEncoderVelocityInches() {
-        return getEncoderVelocityFeet() / 12;
+        return getEncoderVelocity() * RobotMap.DRIVE_WHEEL_DIAMETER * RobotMap.PI;
+    }
+
+    /**
+     * Gets the speed in feet.
+     * @return The speed in feet.
+     */
+    public double getEncoderVelocityFeet() {
+        return getEncoderVelocityInches() / 12.0;
     }
 
     /**
      * Resets the speed.
      */
     public void resetVelocity() {
-        Speed = 0.0;
-        SmartDashboard.putString(RobotMap.RESET_STATUS, "Encoder speed reset.");
+        speed = 0.0;
     }
-
+    
     /**
      * Resets the total distance traveled.
      */
     public void resetEncoderPosition() {
         temp = getEncoderPosition();
-        SmartDashboard.putString(RobotMap.RESET_STATUS, "Encoder position reset.");
     }
-
+    
     /**
      * Resets the speed and distance.
      */
     public void resetAll() {
         resetVelocity();
         resetEncoderPosition();
-        SmartDashboard.putString(RobotMap.RESET_STATUS, "Speed and distance reset.");
     }
-
-    public void printSpeed() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_SPEED, getEncoderVelocity());
-    }
-
-    public void printPlace() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_DISTANCE, getEncoderPosition());
-    }
-
-    public void printPlaceInches() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_DISTANCE_INCHES, getEncoderPositionInches());
-    }
-
-    public void printPlaceFeet() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_DISTANCE_FEET, getEncoderPositionFeet());
-    }
-
-    public void printSpeedInches() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_SPEED_INCHES, getEncoderVelocityInches());
-    }
-
-    public void printSpeedFeet() {
-        SmartDashboard.putNumber(RobotMap.CURRENT_SPEED_FEET, getEncoderVelocityFeet());
-    }
-
-    public void printPIDConstantsLeft() {
-        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_P, RobotMap.DRIVE_PID_LEFT_P);
-        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_I, RobotMap.DRIVE_PID_LEFT_I);
-        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
-        SmartDashboard.putNumber(RobotMap.DRIVE_LEFT_F, RobotMap.DRIVE_PID_LEFT_F);
-        RobotMap.DRIVE_PID_LEFT_P = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_P, RobotMap.DRIVE_PID_LEFT_P);
-        RobotMap.DRIVE_PID_LEFT_I = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_I, RobotMap.DRIVE_PID_LEFT_I);
-        RobotMap.DRIVE_PID_LEFT_D = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_D, RobotMap.DRIVE_PID_LEFT_D);
-        RobotMap.DRIVE_PID_LEFT_F = SmartDashboard.getNumber(RobotMap.DRIVE_LEFT_F, RobotMap.DRIVE_PID_LEFT_F);
-    }
-    public void printPIDConstantsRight() {
-        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_P);
-        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_I, RobotMap.DRIVE_PID_RIGHT_I);
-        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
-        SmartDashboard.putNumber(RobotMap.DRIVE_RIGHT_F, RobotMap.DRIVE_PID_RIGHT_F);
-        RobotMap.DRIVE_PID_RIGHT_P = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_P, RobotMap.DRIVE_PID_RIGHT_P);
-        RobotMap.DRIVE_PID_RIGHT_I = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_I, RobotMap.DRIVE_PID_RIGHT_I);
-        RobotMap.DRIVE_PID_RIGHT_D = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_D, RobotMap.DRIVE_PID_RIGHT_D);
-        RobotMap.DRIVE_PID_RIGHT_F = SmartDashboard.getNumber(RobotMap.DRIVE_RIGHT_F, RobotMap.DRIVE_PID_RIGHT_F);
-    }
-
-    public void printWashout() {
-        SmartDashboard.putNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
-        RobotMap.DRIVE_P_WASHOUT = SmartDashboard.getNumber(RobotMap.DRIVE_WASHOUT, RobotMap.DRIVE_P_WASHOUT);
-    }
-
+    
     /**
      * Prints speed and distance info.
      */
     public void outputValues() {
-        printSpeed();
-        printSpeedInches();
-        printSpeedFeet();
-        printPlace();
-        printPlaceInches();
-        printPlaceFeet();
-        printPIDConstantsLeft();
-        printPIDConstantsRight();
-        printWashout();
+        String prefix = left ? "Left " : "Right ";
+        SmartDashboard.putNumber(prefix + "Position", getEncoderPosition());
+        SmartDashboard.putNumber(prefix + "Position Inches", getEncoderPositionInches());
+        SmartDashboard.putNumber(prefix + "Velocity", getEncoderVelocity());
+        SmartDashboard.putNumber(prefix + "Velocity Inches", getEncoderVelocityInches());
     }
 }
