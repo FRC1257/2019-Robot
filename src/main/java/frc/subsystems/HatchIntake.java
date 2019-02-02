@@ -53,6 +53,8 @@ public class HatchIntake {
         limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
 
         notifier = new Notifier(this::updatePID);
+
+        setConstantTuning();
         
         reset();
     }
