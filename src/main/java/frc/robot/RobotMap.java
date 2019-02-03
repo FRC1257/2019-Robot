@@ -19,10 +19,4 @@ public class RobotMap {
     public static final int CLIMB_FRONT_SOLENOID_REVERSE = 1;
     public static final int CLIMB_BACK_SOLENOID_FORWARD = 2;
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
-    
-    // Climb Smart Dashboard
-    public static final String CLIMB_SD_FRONT_RAISED = "Climb Front Raised";
-    public static final String CLIMB_SD_BACK_RAISED = "Climb Back Raised";
-    public static final String CLIMB_SD_DRIVE_SPEED_FRONT = "Climb Front Drive Speed";
-    public static final String CLIMB_SD_DRIVE_SPEED_BACK = "Climb Back Drive Speed";
 }

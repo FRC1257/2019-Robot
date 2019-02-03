@@ -125,10 +125,10 @@ public class Climb {
     }
 
     public void outputValues() {
-        SmartDashboard.putBoolean(RobotMap.CLIMB_SD_FRONT_RAISED, getFront());
-        SmartDashboard.putBoolean(RobotMap.CLIMB_SD_BACK_RAISED, getBack());
-        SmartDashboard.putNumber(RobotMap.CLIMB_SD_DRIVE_SPEED_FRONT, frontMotor.get());
-        SmartDashboard.putNumber(RobotMap.CLIMB_SD_DRIVE_SPEED_FRONT, backMotor.get());
+        SmartDashboard.putBoolean("Climb Front Raised", getFront());
+        SmartDashboard.putBoolean("Climb Back Raised", getBack());
+        SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
+        SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
     }
     
     public static Climb getInstance() { 
