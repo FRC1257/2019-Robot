@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
 		climb.climbDrive(oi.getClimbDriveSpeed());
 		if(oi.getClimbAdvance()) climb.advanceClimb(false);
 		if(oi.getClimbReset()) climb.reset();
+		climb.outputValues();
 	}
 
 	/**
