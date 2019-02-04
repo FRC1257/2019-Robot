@@ -2,17 +2,18 @@ package frc.subsystems;
 
 import frc.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.revrobotics.*;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import com.ctre.phoenix.motorcontrol.can.*;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
     private static DriveTrain instance = null;
 
-    private WPI_TalonSRX flDrive;
-    private WPI_TalonSRX frDrive;
-    private WPI_TalonSRX blDrive;
-    private WPI_TalonSRX brDrive;
+    public CANSparkMax flDrive;
+    public CANSparkMax frDrive;
+    public CANSparkMax blDrive;
+    public CANSparkMax brDrive;
 
     private DifferentialDrive driveTrain;
 
@@ -20,10 +21,10 @@ public class DriveTrain {
 
     private DriveTrain() {
 
-        flDrive = new WPI_TalonSRX(RobotMap.MOTORS[0]);
-        frDrive = new WPI_TalonSRX(RobotMap.MOTORS[1]);
-        blDrive = new WPI_TalonSRX(RobotMap.MOTORS[2]);
-        brDrive = new WPI_TalonSRX(RobotMap.MOTORS[3]);
+        flDrive = new CANSparkMax(RobotMap.MOTORS[0], MotorType.kBrushless);
+        frDrive = new CANSparkMax(RobotMap.MOTORS[1], MotorType.kBrushless);
+        blDrive = new CANSparkMax(RobotMap.MOTORS[2], MotorType.kBrushless);
+        brDrive = new CANSparkMax(RobotMap.MOTORS[3], MotorType.kBrushless);
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);

@@ -7,12 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import com.ctre.phoenix.motorcontrol.can.*;
 
 import frc.subsystems.*;
 import frc.util.*;
@@ -26,13 +21,8 @@ import frc.util.*;
  */
 public class Robot extends TimedRobot {
 
-  WPI_TalonSRX flMotor;
-  WPI_TalonSRX frMotor;
-  WPI_TalonSRX blMotor;
-  WPI_TalonSRX brMotor;
-
   SnailController controller;
-  DriveTrain Drive;
+  DriveTrain drive;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -40,7 +30,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     controller = new SnailController(RobotMap.CONTROLLER);
-    Drive = DriveTrain.getInstance();
+    drive = DriveTrain.getInstance();
   }
 
   /**
@@ -71,7 +61,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
+    drive.drive(controller.getForwardSpeed(), controller.getTurnSpeed());
+    if(controller.getXButton()) {
+      drive.flDrive.set(0.6);
+    } else if(controller.getYButton()) {
+      drive.frDrive.set(0.6);
+    }
 }
 
   /**
