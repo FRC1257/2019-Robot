@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         // Hatch Intake
-        if(oi.getTogglePivot()) hatchIntake.togglePivot();
+        if(oi.getHatchPivotToggle()) hatchIntake.togglePivot();
 
         if(!hatchIntake.getPIDRunning()) {
             hatchIntake.setPickup(oi.getHatchPickup());

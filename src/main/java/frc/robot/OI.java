@@ -20,7 +20,7 @@ public class OI {
     }
 
     // Hatch Intake
-    public boolean getTogglePivot() {
+    public boolean getHatchPivotToggle() {
         return operatorController.getXButtonPressed();
     }
     
