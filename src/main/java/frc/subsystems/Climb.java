@@ -116,7 +116,7 @@ public class Climb {
 
     // Whether or not the front is currently raised
     public boolean getFront() {
-        return frontSolenoid.get() == DoubleSolenoid.Value.kReverse;
+        return frontSolenoid.get() == DoubleSolenoid.Value.kForward;
     }
 
     // Whether or not the front is currently raised
