@@ -4,6 +4,8 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
@@ -156,6 +158,41 @@ public class IntakeArm {
 
     public boolean getPIDRunning() {
         return running;
+    }
+
+    // Output values to Smart Dashboard
+    public void outputValues() {
+        SmartDashboard.putBoolean("Intake Arm PID Active", running);
+        SmartDashboard.putNumber("Intake Arm Position", getPositionState());
+        SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
+    }
+    
+    // Initialize constants in Smart Dashboard
+    public void setConstantTuning() {
+        SmartDashboard.putNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
+        SmartDashboard.putNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
+        SmartDashboard.putNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
+        SmartDashboard.putNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
+    }
+        
+    // Update constants from Smart Dashboards
+    public void getConstantTuning() {
+        if(RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
+            RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
+            RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
+            RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
+            RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
+        }
     }
 
     public static IntakeArm getInstance() {
