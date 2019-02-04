@@ -97,14 +97,14 @@ public class IntakeArm {
     private void updatePID() {
         running = true;
 
-        // Check if the pivot's position is within the tolerance
+        // Check if the encoder's position is within the tolerance
         if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
             // If this is the first time it has been detected, then update the timestamp
             if(pidTime == -1) {
                 pidTime = Timer.getFPGATimestamp();
             }
 
-            // Check if the pivot's position has been inside the tolerance for long enough
+            // Check if the encoder's position has been inside the tolerance for long enough
             if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
                 notifier.stop();
                 running = false;
