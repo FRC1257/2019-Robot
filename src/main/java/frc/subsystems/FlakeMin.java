@@ -19,8 +19,6 @@ public class FlakeMin extends CANSparkMax {
 
     private double currentVelocity;
     private double speed;
-    private double distance;
-    private double temp;
     private boolean left;
 
     /**
@@ -98,8 +96,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The distance in accumulated rotations.
      */
     public double getEncoderPosition() {
-        distance = encoder.getPosition();
-        return distance - temp;
+        return encoder.getPosition();
     }
     
     /**
@@ -145,7 +142,7 @@ public class FlakeMin extends CANSparkMax {
      * Resets the total distance traveled.
      */
     public void resetEncoderPosition() {
-        temp = getEncoderPosition();
+        encoder.setPosition(0.0);
     }
     
     /**
@@ -154,6 +151,10 @@ public class FlakeMin extends CANSparkMax {
     public void resetAll() {
         resetVelocity();
         resetEncoderPosition();
+    }
+
+    public double getVoltage() {
+        return getBusVoltage() * getAppliedOutput(); 
     }
     
     /**
@@ -165,5 +166,6 @@ public class FlakeMin extends CANSparkMax {
         SmartDashboard.putNumber(prefix + "Position Inches", getEncoderPositionInches());
         SmartDashboard.putNumber(prefix + "Velocity", getEncoderVelocity());
         SmartDashboard.putNumber(prefix + "Velocity Inches", getEncoderVelocityInches());
+        SmartDashboard.putNumber(prefix + "Voltage", getVoltage());
     }
 }
