@@ -141,7 +141,7 @@ public class HatchIntake {
     }
     
     public void resetEncoder() {
-        // Reset Encoder (TODO when Spark MAX API is updated)
+        hatchPivotEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
