@@ -119,6 +119,7 @@ public class IntakeArm {
 
     public void resetEncoder() {
         // Reset Encoder (TODO when Spark MAX API is updated)
+        intakeArmEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
