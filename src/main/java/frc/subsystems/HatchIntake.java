@@ -201,22 +201,14 @@ public class HatchIntake {
     
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
-        if(RobotMap.HATCH_PIDF[0] != SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0])) {
-            RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
-            hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
-        }
-        if(RobotMap.HATCH_PIDF[1] != SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1])) {
-            RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
-            hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
-        }
-        if(RobotMap.HATCH_PIDF[2] != SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2])) {
-            RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
-            hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
-        }
-        if(RobotMap.HATCH_PIDF[3] != SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3])) {
-            RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
-            hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
-        }
+        RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
+        hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
+        RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
+        hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
+        RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
+        hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
+        RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
+        hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
     }
 
     public static HatchIntake getInstance() {
