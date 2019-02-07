@@ -8,14 +8,16 @@ public class Robot extends TimedRobot {
     IntakeArm intakeArm;
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
+    Climb climb;
     
     OI oi;
-
+    
     @Override
     public void robotInit() {
         intakeArm = IntakeArm.getInstance();
         cargoIntake = CargoIntake.getInstance();
         hatchIntake = HatchIntake.getInstance();
+        climb = Climb.getInstance();
         oi = OI.getInstance();
 
         intakeArm.setConstantTuning();
@@ -84,6 +86,15 @@ public class Robot extends TimedRobot {
         hatchIntake.updatePositionState();
         hatchIntake.outputValues();
         hatchIntake.getConstantTuning();
+
+        
+        // Climb
+		if(oi.getClimbBackToggle()) climb.toggleBack();
+		if(oi.getClimbFrontToggle()) climb.toggleFront();
+		if(oi.getClimbAdvance()) climb.advanceClimb(false);
+		if(oi.getClimbReset()) climb.reset();
+		climb.climbDrive(oi.getClimbDriveSpeed());
+		climb.outputValues();
     }
 
     @Override

@@ -5,7 +5,7 @@ import frc.util.SnailController;
 
 public class OI {
 
-    /**
+    /*
      * Contains all of the mappings for controls for our robot
      */
     
@@ -23,11 +23,9 @@ public class OI {
     public double getArmSpeed() {
         return operatorController.getY(Hand.kRight);
     }
-
     public boolean getArmRaise() {
         return operatorController.getAButtonPressed();
     }
-
     public boolean getArmLower() {
         return operatorController.getBButtonPressed();
     }
@@ -43,17 +41,32 @@ public class OI {
     public boolean getHatchPivotToggle() {
         return operatorController.getXButtonPressed();
     }
-    
     public boolean getHatchPickup() {
         return operatorController.getAButton();
     }
-    
     public boolean getHatchEject() {
         return operatorController.getBButton();
     }
-    
     public double getHatchPivot() {
         return operatorController.getY(Hand.kLeft);
+    }
+
+    
+    // Climb
+    public boolean getClimbAdvance() {
+        return operatorController.getAButtonPressed();
+    }
+    public boolean getClimbFrontToggle() {
+        return operatorController.getXButtonPressed();
+    }
+    public boolean getClimbBackToggle() {
+        return operatorController.getYButtonPressed();
+    }
+    public boolean getClimbReset() {
+        return operatorController.getBButtonPressed();
+    }
+    public double getClimbDriveSpeed() {
+        return driveController.getY(Hand.kLeft);
     }
     
     
