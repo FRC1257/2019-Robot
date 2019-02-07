@@ -53,9 +53,9 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_TIME = 0.01;               // How long the PID has to be on target in sec
 
 
-	// Cargo Intake
-	public static final int CARGO_INTAKE_MOTOR_ID = 1;
-	public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
+    // Cargo Intake
+    public static final int CARGO_INTAKE_MOTOR_ID = 1;
+    public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
     public static double CARGO_INTAKE_SPEED = 1.0; // percentage
     
     
