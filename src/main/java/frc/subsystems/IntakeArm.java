@@ -175,24 +175,19 @@ public class IntakeArm {
         SmartDashboard.putNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
     }
         
-    // Update constants from Smart Dashboards
+    // Update constants from Smart Dashboard
     public void getConstantTuning() {
-        if(RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
-            RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
-            RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
-            RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
-            RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
-        }
+        RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
+        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
+        
+        RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
+        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
+        
+        RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
+        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
+        
+        RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
+        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
     }
 
     public static IntakeArm getInstance() {

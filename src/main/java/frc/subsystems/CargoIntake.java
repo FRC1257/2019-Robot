@@ -19,7 +19,6 @@ public class CargoIntake {
     }
 
     // Motor Functions
-    
     public void shoot() {
         intakeMotor.set(ControlMode.PercentOutput, RobotMap.CARGO_OUTTAKE_SPEED);
     }
@@ -29,7 +28,6 @@ public class CargoIntake {
     }
     
     // Smart Dashboard
-    
     // Initialize constants in Smart Dashboard
     public void setConstantTuning() {
         SmartDashboard.putNumber("Cargo Intake Speed", RobotMap.CARGO_INTAKE_SPEED);

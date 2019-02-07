@@ -31,11 +31,31 @@ public class OI {
     public boolean getArmLower() {
         return operatorController.getBButtonPressed();
     }
+    
 
     // Cargo Intake
-    public boolean getShootButton() {
+    public boolean getCargoShootButton() {
         return operatorController.getAButton();
     }
+
+    
+    // Hatch Intake
+    public boolean getHatchPivotToggle() {
+        return operatorController.getXButtonPressed();
+    }
+    
+    public boolean getHatchPickup() {
+        return operatorController.getAButton();
+    }
+    
+    public boolean getHatchEject() {
+        return operatorController.getBButton();
+    }
+    
+    public double getHatchPivot() {
+        return operatorController.getY(Hand.kLeft);
+    }
+    
     
     public static OI getInstance() {
         if (instance == null) {
