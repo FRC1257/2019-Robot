@@ -20,6 +20,7 @@ public class FlakeMin extends CANSparkMax {
     private double currentVelocity;
     private double speed;
     private boolean left;
+    private double temp;
 
     /**
      * Constructs a new {@code FlakeMin} object.
@@ -96,7 +97,7 @@ public class FlakeMin extends CANSparkMax {
      * @return The distance in accumulated rotations.
      */
     public double getEncoderPosition() {
-        return encoder.getPosition();
+        return encoder.getPosition() - temp;
     }
     
     /**
@@ -142,7 +143,7 @@ public class FlakeMin extends CANSparkMax {
      * Resets the total distance traveled.
      */
     public void resetEncoderPosition() {
-        encoder.setPosition(0.0);
+        temp = encoder.getPosition();
     }
     
     /**
