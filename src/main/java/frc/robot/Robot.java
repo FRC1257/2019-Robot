@@ -5,6 +5,7 @@ import frc.subsystems.*;
 
 public class Robot extends TimedRobot {
     
+    IntakeArm intakeArm;
     CargoIntake cargoIntake;
     OI oi;
 
@@ -14,9 +15,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        intakeArm = IntakeArm.getInstance();
         cargoIntake = CargoIntake.getInstance();
         oi = OI.getInstance();
 
+        intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
     }
 
@@ -49,6 +52,19 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        // Intake Arm
+        if(oi.getArmRaise()) intakeArm.raiseArm();
+        if(oi.getArmLower()) intakeArm.lowerArm();
+
+        if(!intakeArm.getPIDRunning()) {
+            intakeArm.setSpeed(oi.getArmSpeed());
+            if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
+        }
+
+        intakeArm.updatePositionState();
+        intakeArm.outputValues();
+        intakeArm.getConstantTuning();
+        
         // Cargo Intake
         cargoIntake.getConstantTuning();
         

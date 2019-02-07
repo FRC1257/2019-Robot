@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.SnailController;
 
 public class OI {
@@ -16,6 +17,19 @@ public class OI {
     private OI() {
         driveController = new SnailController(RobotMap.CONTROLLER_DRIVE_PORT);
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
+    }
+
+    // Intake Arm
+    public double getArmSpeed() {
+        return operatorController.getY(Hand.kRight);
+    }
+
+    public boolean getArmRaise() {
+        return operatorController.getAButtonPressed();
+    }
+
+    public boolean getArmLower() {
+        return operatorController.getBButtonPressed();
     }
 
     // Cargo Intake

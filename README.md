@@ -1,8 +1,8 @@
 # CargoIntake
 
-[![Build Status](https://travis-ci.com/FRC1257/2019-Robot.svg?branch=CargoIntake)](https://travis-ci.com/FRC1257/2019-Robot)
+[![Build Status](https://travis-ci.com/FRC1257/2019-Robot.svg?branch=master)](https://travis-ci.com/FRC1257/2019-Robot)
 
-Code focusing on our Cargo Intake.
+Code for our 2019 Robot (Name Pending)
 
 ## WPILib VendorLib Notes
 
