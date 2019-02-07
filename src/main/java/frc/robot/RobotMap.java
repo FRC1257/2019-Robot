@@ -45,7 +45,7 @@ public class RobotMap {
     public static final double INTAKE_ARM_UPPER_THRESHOLD = 10.0;        // Upper limit of the arm's motion
     public static final double INTAKE_ARM_PID_GROUND = 0.0;              // Target position for ground pickup
     public static final double INTAKE_ARM_PID_ROCKET = 5.0;              // Target position for rocket
-    public static final double INTAKE_ARM_PID_CARGO = 10.0;               // Target position for cargo ship
+    public static final double INTAKE_ARM_PID_CARGO = 10.0;              // Target position for cargo ship
 
     public static final double[] INTAKE_ARM_PIDF = {1.0, 2.0, 3.0, 4.0}; 
     public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020;     // How often the PID will be checked in sec
@@ -53,9 +53,9 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_TIME = 0.01;               // How long the PID has to be on target in sec
 
 
-	// Cargo Intake
-	public static final int CARGO_INTAKE_MOTOR_ID = 1;
-	public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
+    // Cargo Intake
+    public static final int CARGO_INTAKE_MOTOR_ID = 1;
+    public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
     public static double CARGO_INTAKE_SPEED = 1.0; // percentage
     
     
