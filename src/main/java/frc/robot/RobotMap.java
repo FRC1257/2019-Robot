@@ -2,11 +2,11 @@ package frc.robot;
 
 public class RobotMap {
 
-    /**
-     * Contains constants for use without the entire robot
-     * All constants should be ordered by subsystem/use
-     * The units of each measurement should be specified in a comment
-     */
+	/**
+	 * Contains constants for use without the entire robot
+	 * All constants should be ordered by subsystem/use
+	 * The units of each measurement should be specified in a comment
+	 */
 
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 1;
@@ -27,4 +27,10 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020;     // How often the PID will be checked in sec
     public static final double INTAKE_ARM_PID_TOLERANCE = 5;             // How close the PID can be
     public static final double INTAKE_ARM_PID_TIME = 0.01;               // How long the PID has to be on target in sec
+
+	// Cargo Intake
+	
+	public static final int CARGO_INTAKE_MOTOR_ID = 1;
+	public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
+	public static double CARGO_INTAKE_SPEED = 1.0; // percentage
 }

@@ -32,6 +32,11 @@ public class OI {
         return operatorController.getBButtonPressed();
     }
 
+    // Cargo Intake
+    public boolean getShootButton() {
+        return operatorController.getAButton();
+    }
+    
     public static OI getInstance() {
         if (instance == null) {
             instance = new OI();

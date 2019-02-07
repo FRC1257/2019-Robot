@@ -1,8 +1,8 @@
-# 2019-Robot
+# CargoIntake
 
-[![Build Status](https://travis-ci.com/FRC1257/2019-Robot.svg?branch=IntakeArm)](https://travis-ci.com/FRC1257/2019-Robot)
+[![Build Status](https://travis-ci.com/FRC1257/2019-Robot.svg?branch=master)](https://travis-ci.com/FRC1257/2019-Robot)
 
-Code for the arm of the intake
+Code for our 2019 Robot (Name Pending)
 
 ## WPILib VendorLib Notes
 
@@ -15,3 +15,5 @@ The vendors that write third party software for FRC such as CTRE, REV Robotics, 
 [Kauai Labs NavX JSON](https://www.kauailabs.com/dist/frc/2019/navx_frc.json)
 
 [REV Robotics Vendorlib JSON](http://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json)
+
+[REV Robotics Vendorlib JSON Beta](https://www.revrobotics.com/content/sw/max/sdk/REVRobotics-Beta.json)

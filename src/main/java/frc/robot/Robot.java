@@ -1,5 +1,4 @@
 package frc.robot;
-
 import edu.wpi.first.wpilibj.*;
 
 import frc.subsystems.*;
@@ -7,7 +6,8 @@ import frc.subsystems.*;
 public class Robot extends TimedRobot {
     
     IntakeArm intakeArm;
-    OI oi; 
+    CargoIntake cargoIntake;
+    OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -16,9 +16,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         intakeArm = IntakeArm.getInstance();
+        cargoIntake = CargoIntake.getInstance();
         oi = OI.getInstance();
 
         intakeArm.setConstantTuning();
+        cargoIntake.setConstantTuning();
     }
 
     /**
@@ -50,6 +52,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        // Intake Arm
         if(oi.getArmRaise()) intakeArm.raiseArm();
         if(oi.getArmLower()) intakeArm.lowerArm();
 
@@ -61,6 +64,17 @@ public class Robot extends TimedRobot {
         intakeArm.updatePositionState();
         intakeArm.outputValues();
         intakeArm.getConstantTuning();
+        
+        // Cargo Intake
+        cargoIntake.getConstantTuning();
+        
+        // Constantly intake unless shooting
+        if(oi.getShootButton()) {
+            cargoIntake.shoot();
+        }
+        else {
+            cargoIntake.intake();
+        }
     }
 
     /**
@@ -76,6 +90,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+        
         
     }
 }
