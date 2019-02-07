@@ -4,7 +4,7 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import com.ctre.phoenix.motorcontrol.*;
 
@@ -12,10 +12,10 @@ public class CargoIntake {
     
     private static CargoIntake instance = null;
     
-    private VictorSPX intakeMotor;
+    private WPI_VictorSPX intakeMotor;
 
     private CargoIntake() {
-        intakeMotor = new VictorSPX(RobotMap.CARGO_INTAKE_MOTOR_ID);
+        intakeMotor = new WPI_VictorSPX(RobotMap.CARGO_INTAKE_MOTOR_ID);
     }
 
     // Motor Functions
