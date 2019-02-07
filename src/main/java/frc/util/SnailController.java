@@ -12,7 +12,7 @@ public class SnailController extends XboxController {
 
 	@Override
 	public double getY(Hand hand) {
-		return hand == Hand.kLeft ? -super.getY(hand) : super.getY(hand);
+		return -super.getY(hand);
 	}
 
 	/*

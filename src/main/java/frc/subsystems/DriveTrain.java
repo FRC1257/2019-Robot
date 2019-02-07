@@ -21,10 +21,10 @@ public class DriveTrain {
 
     private DriveTrain() {
 
-        flDrive = new CANSparkMax(RobotMap.MOTORS[0], MotorType.kBrushless);
-        frDrive = new CANSparkMax(RobotMap.MOTORS[1], MotorType.kBrushless);
-        blDrive = new CANSparkMax(RobotMap.MOTORS[2], MotorType.kBrushless);
-        brDrive = new CANSparkMax(RobotMap.MOTORS[3], MotorType.kBrushless);
+        flDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
+        frDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless);
+        blDrive = new CANSparkMax(RobotMap.DRIVE_BACK_LEFT, MotorType.kBrushless);
+        brDrive = new CANSparkMax(RobotMap.DRIVE_BACK_RIGHT, MotorType.kBrushless);
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
