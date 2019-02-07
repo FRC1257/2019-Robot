@@ -6,7 +6,6 @@ import frc.subsystems.*;
 public class Robot extends TimedRobot {
     
     CargoIntake cargoIntake;
-    XboxController operatorController;
     OI oi;
 
     /**
@@ -16,7 +15,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         cargoIntake = CargoIntake.getInstance();
-        operatorController = new XboxController(RobotMap.CONTROLLER_OPERATOR_PORT);
         oi = OI.getInstance();
 
         cargoIntake.setConstantTuning();
@@ -51,8 +49,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        // Assign constants to values retrieved from Smart Dashboard
-	    cargoIntake.getConstantTuning();
+        // Cargo Intake
+        cargoIntake.getConstantTuning();
         
         // Constantly intake unless shooting
         if(oi.getShootButton()) {

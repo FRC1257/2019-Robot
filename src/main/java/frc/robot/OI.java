@@ -18,7 +18,7 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
-    // Hatch Intake
+    // Cargo Intake
     public boolean getShootButton() {
         return operatorController.getAButton();
     }
