@@ -203,10 +203,13 @@ public class HatchIntake {
     public void getConstantTuning() {
         RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
+
         RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
+
         RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
+        
         RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
     }

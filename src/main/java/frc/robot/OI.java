@@ -19,6 +19,26 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
+    // Intake Arm
+    public double getArmSpeed() {
+        return operatorController.getY(Hand.kRight);
+    }
+
+    public boolean getArmRaise() {
+        return operatorController.getAButtonPressed();
+    }
+
+    public boolean getArmLower() {
+        return operatorController.getBButtonPressed();
+    }
+    
+
+    // Cargo Intake
+    public boolean getCargoShootButton() {
+        return operatorController.getAButton();
+    }
+
+    
     // Hatch Intake
     public boolean getHatchPivotToggle() {
         return operatorController.getXButtonPressed();
@@ -35,7 +55,8 @@ public class OI {
     public double getHatchPivot() {
         return operatorController.getY(Hand.kLeft);
     }
-
+    
+    
     public static OI getInstance() {
         if (instance == null) {
             instance = new OI();
