@@ -28,6 +28,7 @@ public class RobotMap {
     public static final int NEO_RUN_CURRENT = 1;
     public static final int NEO_MIN_RPM = 10;
     public static final int NEO_MAX_RPM = 5500;
+    public static final double NEO_DEADBAND = 0.08;
 
     // Drivetrain wheel
     public static final double DRIVE_WHEEL_DIAMETER = 6.0; // inches
