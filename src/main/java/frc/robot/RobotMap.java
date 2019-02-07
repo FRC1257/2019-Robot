@@ -8,17 +8,17 @@ public class RobotMap {
 	 */
 
     // Controllers
-    public static final int CONTROLLER_DRIVE_PORT = 1;
-    public static final int CONTROLLER_OPERATOR_PORT = 2;
+    public static final int CONTROLLER_DRIVE_PORT = 0;
+    public static final int CONTROLLER_OPERATOR_PORT = 1;
 
     // Drive
     public static final int DRIVE_FRONT_LEFT = 4;
-    public static final int DRIVE_FRONT_RIGHT =3;
+    public static final int DRIVE_FRONT_RIGHT = 3;
     public static final int DRIVE_BACK_LEFT = 2;
     public static final int DRIVE_BACK_RIGHT = 1;
     
     // Hatch Intake
-    public static final int HATCH_PIVOT_MOTOR_ID = 1;
+    public static final int HATCH_PIVOT_MOTOR_ID = 5;
     public static final int HATCH_PICKUP_SOLENOID_ID = 1;
     public static final int HATCH_EJECT_SOLENOID_ID = 2;
     public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 1;
@@ -37,7 +37,7 @@ public class RobotMap {
 
 
     // Intake Arm
-    public static final int INTAKE_ARM_MOTOR_ID = 0;
+    public static final int INTAKE_ARM_MOTOR_ID = 6;
     public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 0;
 
     // Intake Arm: 0 is at bottom, positive means higher
@@ -54,14 +54,14 @@ public class RobotMap {
 
 
     // Cargo Intake
-    public static final int CARGO_INTAKE_MOTOR_ID = 1;
+    public static final int CARGO_INTAKE_MOTOR_ID = 7;
     public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
     public static double CARGO_INTAKE_SPEED = 1.0; // percentage
     
     
     // Climb
-    public static final int CLIMB_FRONT_MOTOR = 0;
-    public static final int CLIMB_BACK_MOTOR = 1;
+    public static final int CLIMB_FRONT_MOTOR = 9;
+    public static final int CLIMB_BACK_MOTOR = 8;
 
     public static final int CLIMB_FRONT_SOLENOID_FORWARD = 0;
     public static final int CLIMB_FRONT_SOLENOID_REVERSE = 1;
