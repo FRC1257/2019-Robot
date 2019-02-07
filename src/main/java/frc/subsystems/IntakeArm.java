@@ -118,7 +118,7 @@ public class IntakeArm {
     }
 
     public void resetEncoder() {
-        intakeArmEncoder.setPosition(0.0);
+        // intakeArmEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {

@@ -141,7 +141,7 @@ public class HatchIntake {
     }
     
     public void resetEncoder() {
-        hatchPivotEncoder.setPosition(0.0);
+        // hatchPivotEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
