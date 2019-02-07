@@ -19,6 +19,15 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
+
+    // Drive
+    public double getDriveForwardSpeed() {
+        return driveController.getForwardSpeed();
+    }
+    public double getDriveTurnSpeed() {
+        return driveController.getTurnSpeed();
+    }
+
     // Intake Arm
     public double getArmSpeed() {
         return operatorController.getY(Hand.kRight);

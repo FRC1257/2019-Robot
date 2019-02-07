@@ -1,23 +1,32 @@
 package frc.robot;
 
+
 import frc.subsystems.*;
+import frc.util.*;
 import edu.wpi.first.wpilibj.*;
 
 public class Robot extends TimedRobot {
-    
+
+    DriveTrain drive;
     IntakeArm intakeArm;
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
     Climb climb;
     
+    Gyro gyro;
+    
     OI oi;
     
     @Override
     public void robotInit() {
+        drive = DriveTrain.getInstance();
         intakeArm = IntakeArm.getInstance();
         cargoIntake = CargoIntake.getInstance();
         hatchIntake = HatchIntake.getInstance();
         climb = Climb.getInstance();
+
+        gyro = Gyro.getInstance();
+
         oi = OI.getInstance();
 
         intakeArm.setConstantTuning();
@@ -42,6 +51,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        // Drive
+        drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
+    
+        
         // Intake Arm
         if(oi.getArmRaise()) intakeArm.raiseArm();
         if(oi.getArmLower()) intakeArm.lowerArm();
@@ -94,7 +107,9 @@ public class Robot extends TimedRobot {
 		if(oi.getClimbAdvance()) climb.advanceClimb(false);
 		if(oi.getClimbReset()) climb.reset();
 		climb.climbDrive(oi.getClimbDriveSpeed());
-		climb.outputValues();
+        climb.outputValues();
+        
+        gyro.displayAngle();
     }
 
     @Override

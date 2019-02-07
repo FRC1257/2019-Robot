@@ -1,7 +1,6 @@
 package frc.robot;
 
 public class RobotMap {
-
 	/**
 	 * Contains constants for use without the entire robot
 	 * All constants should be ordered by subsystem/use
@@ -11,7 +10,12 @@ public class RobotMap {
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 1;
     public static final int CONTROLLER_OPERATOR_PORT = 2;
-    
+
+    // Drive
+    public static final int DRIVE_FRONT_LEFT = 4;
+    public static final int DRIVE_FRONT_RIGHT =3;
+    public static final int DRIVE_BACK_LEFT = 2;
+    public static final int DRIVE_BACK_RIGHT = 1;
     
     // Hatch Intake
     public static final int HATCH_PIVOT_MOTOR_ID = 1;
