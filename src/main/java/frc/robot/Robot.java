@@ -1,8 +1,13 @@
 package frc.robot;
-
 import edu.wpi.first.wpilibj.*;
 
+import frc.subsystems.*;
+
 public class Robot extends TimedRobot {
+    
+    CargoIntake cargoIntake;
+    XboxController operatorController;
+    OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -10,7 +15,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        cargoIntake = CargoIntake.getInstance();
+        operatorController = new XboxController(RobotMap.CONTROLLER_OPERATOR_PORT);
+        oi = OI.getInstance();
 
+        cargoIntake.setConstantTuning();
     }
 
     /**
@@ -42,7 +51,16 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-
+        // Assign constants to values retrieved from Smart Dashboard
+	    cargoIntake.getConstantTuning();
+        
+        // Constantly intake unless shooting
+        if(oi.getShootButton()) {
+            cargoIntake.shoot();
+        }
+        else {
+            cargoIntake.intake();
+        }
     }
 
     /**
@@ -58,6 +76,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
+        
         
     }
 }
