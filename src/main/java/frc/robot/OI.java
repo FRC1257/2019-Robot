@@ -22,21 +22,23 @@ public class OI {
 
     // Drive
     public double getDriveForwardSpeed() {
-        return driveController.getForwardSpeed();
+        return Math.abs(driveController.getForwardSpeed()) < 0.08 ? 0 : driveController.getForwardSpeed();
     }
     public double getDriveTurnSpeed() {
-        return driveController.getTurnSpeed();
+        return Math.abs(driveController.getTurnSpeed()) < 0.08 ? 0 : driveController.getTurnSpeed();
     }
 
     // Intake Arm
     public double getArmSpeed() {
-        return operatorController.getY(Hand.kRight);
+        return Math.abs(operatorController.getY(Hand.kRight)) < 0.08 ? 0 : operatorController.getY(Hand.kRight);
     }
     public boolean getArmRaise() {
-        return operatorController.getAButtonPressed();
+        return false;
+        // return operatorController.getAButtonPressed();
     }
     public boolean getArmLower() {
-        return operatorController.getBButtonPressed();
+        return false;
+        // return operatorController.getBButtonPressed();
     }
     
 
@@ -48,34 +50,37 @@ public class OI {
     
     // Hatch Intake
     public boolean getHatchPivotToggle() {
-        return operatorController.getXButtonPressed();
+        return false;
+        // return operatorController.getXButtonPressed();
     }
     public boolean getHatchPickup() {
-        return operatorController.getAButton();
+        return operatorController.getXButton();
     }
     public boolean getHatchEject() {
-        return operatorController.getBButton();
+        return operatorController.getYButton();
     }
     public double getHatchPivot() {
-        return operatorController.getY(Hand.kLeft);
+        return Math.abs(operatorController.getY(Hand.kLeft)) < 0.08 ? 0 : operatorController.getY(Hand.kLeft);
     }
 
     
     // Climb
     public boolean getClimbAdvance() {
-        return operatorController.getAButtonPressed();
+        return false;
+        // return operatorController.getAButtonPressed();
     }
     public boolean getClimbFrontToggle() {
-        return operatorController.getXButtonPressed();
+        return operatorController.getBumperPressed(Hand.kRight);
     }
     public boolean getClimbBackToggle() {
-        return operatorController.getYButtonPressed();
+        return operatorController.getBumperPressed(Hand.kLeft);
     }
     public boolean getClimbReset() {
-        return operatorController.getBButtonPressed();
+        return false;
+        // return operatorController.getBButtonPressed();
     }
     public double getClimbDriveSpeed() {
-        return driveController.getY(Hand.kLeft);
+        return Math.abs(driveController.getY(Hand.kLeft)) < 0.08 ? 0 : driveController.getY(Hand.kLeft);
     }
     
     

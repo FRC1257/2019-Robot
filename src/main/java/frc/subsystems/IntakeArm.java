@@ -31,7 +31,7 @@ public class IntakeArm {
     public IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
         intakeArmEncoder = intakeArmMotor.getEncoder();
-        limitSwitch = new DigitalInput(1);
+        limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
 
         intakeArmPID = intakeArmMotor.getPIDController();
         intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
@@ -57,15 +57,15 @@ public class IntakeArm {
     // Moves the arm at a set speed and restricts the motion of the arm
     public void setSpeed(double speed) {
         double adjustedSpeed = speed;
-        // Arm is moving up and is past the upper threshold
-        if(speed > 0.0 && getEncoderPosition() >= RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
-            adjustedSpeed = 0.0;
-        }
-        // Arm is moving down and is past the lower threshold
-        if(speed < 0.0 && getEncoderPosition() <= RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
-            adjustedSpeed = 0.0;
-        }
-        intakeArmMotor.set(adjustedSpeed);
+        // // Arm is moving up and is past the upper threshold
+        // if(speed > 0.0 && getEncoderPosition() >= RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
+        //     adjustedSpeed = 0.0;
+        // }
+        // // Arm is moving down and is past the lower threshold
+        // if(speed < 0.0 && getEncoderPosition() <= RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
+        //     adjustedSpeed = 0.0;
+        // }
+        intakeArmMotor.set(Math.abs(adjustedSpeed) * adjustedSpeed);
     }
 
     public void raiseArm() {

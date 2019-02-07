@@ -19,10 +19,10 @@ public class RobotMap {
     
     // Hatch Intake
     public static final int HATCH_PIVOT_MOTOR_ID = 5;
-    public static final int HATCH_PICKUP_SOLENOID_ID = 1;
-    public static final int HATCH_EJECT_SOLENOID_ID = 2;
-    public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 1;
-    public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 2;
+    public static final int HATCH_PICKUP_SOLENOID_ID = 4;
+    public static final int HATCH_EJECT_SOLENOID_ID = 5;
+    public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 0;
+    public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 1;
 
     // Hatch Intake: 0 is at top, positive means lower
     public static final double HATCH_PID_LOWERED = 10.0;            // Position of the hatch intake when lowered
@@ -38,7 +38,7 @@ public class RobotMap {
 
     // Intake Arm
     public static final int INTAKE_ARM_MOTOR_ID = 6;
-    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 0;
+    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 2;
 
     // Intake Arm: 0 is at bottom, positive means higher
     public static final double INTAKE_ARM_LOWER_THRESHOLD = 0.0;         // Lower limit of the arm's motion
@@ -56,7 +56,7 @@ public class RobotMap {
     // Cargo Intake
     public static final int CARGO_INTAKE_MOTOR_ID = 7;
     public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
-    public static double CARGO_INTAKE_SPEED = 1.0; // percentage
+    public static double CARGO_INTAKE_SPEED = 0.5; // percentage
     
     
     // Climb

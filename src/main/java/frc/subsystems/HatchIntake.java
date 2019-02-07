@@ -97,7 +97,7 @@ public class HatchIntake {
     }
 
     public void setPivot(double value) {
-        hatchPivotMotor.set(value);
+        hatchPivotMotor.set(Math.abs(value) * value);
     }
 
     public void togglePivot() {

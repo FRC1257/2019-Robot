@@ -24,38 +24,40 @@ public class Climb {
 
         frontMotor = new WPI_VictorSPX(RobotMap.CLIMB_FRONT_MOTOR);
         backMotor = new WPI_VictorSPX(RobotMap.CLIMB_BACK_MOTOR);
+
+        reset();
     }
     
     // Raise both front and back
     public void reset() {
-        lowerFront();
-        lowerBack();
+        raiseFront();
+        raiseBack();
     }
 
     public void toggleFront() {
-        if(getFront()) raiseFront();
-        else lowerFront();
+        if(getFront()) lowerFront(); // REverse dis CLIMBEWD
+        else raiseFront();
     }
 
     public void raiseFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kForward);
+        frontSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void lowerFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kReverse); 
+        frontSolenoid.set(DoubleSolenoid.Value.kForward); 
     }
 
     public void toggleBack() {
-        if(getBack()) raiseBack();
-        else lowerBack();
+        if(getBack()) lowerBack();
+        else raiseBack();
     }
 
     public void raiseBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kForward);
+        backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void lowerBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kReverse);
+        backSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     /* Go to the next state of the climb
@@ -116,12 +118,12 @@ public class Climb {
 
     // Whether or not the front is currently raised
     public boolean getFront() {
-        return frontSolenoid.get() == DoubleSolenoid.Value.kForward;
+        return frontSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
     // Whether or not the front is currently raised
     public boolean getBack() {
-        return backSolenoid.get() == DoubleSolenoid.Value.kForward;
+        return backSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
     public void outputValues() {
