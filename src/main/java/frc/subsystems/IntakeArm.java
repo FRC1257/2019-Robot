@@ -56,7 +56,7 @@ public class IntakeArm {
 
     // Moves the arm at a set speed and restricts the motion of the arm
     public void setSpeed(double speed) {
-        double adjustedSpeed = speed;
+        double adjustedSpeed = speed * RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED;
         // // Arm is moving up and is past the upper threshold
         // if(speed > 0.0 && getEncoderPosition() >= RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
         //     adjustedSpeed = 0.0;
@@ -65,7 +65,7 @@ public class IntakeArm {
         // if(speed < 0.0 && getEncoderPosition() <= RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
         //     adjustedSpeed = 0.0;
         // }
-        intakeArmMotor.set(Math.abs(adjustedSpeed) * adjustedSpeed);
+        intakeArmMotor.set(adjustedSpeed);
     }
 
     public void raiseArm() {
@@ -162,13 +162,17 @@ public class IntakeArm {
 
     // Output values to Smart Dashboard
     public void outputValues() {
+        SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
         SmartDashboard.putBoolean("Intake Arm PID Active", running);
+        SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getPositionState());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
     }
     
     // Initialize constants in Smart Dashboard
     public void setConstantTuning() {
+        SmartDashboard.putNumber("Intake Arm Max Speed", RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
+
         SmartDashboard.putNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
         SmartDashboard.putNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
         SmartDashboard.putNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
@@ -177,6 +181,8 @@ public class IntakeArm {
         
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
+        RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Intake Arm Max Speed", RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
+
         RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
         intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
         

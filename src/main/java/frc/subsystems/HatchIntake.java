@@ -97,7 +97,7 @@ public class HatchIntake {
     }
 
     public void setPivot(double value) {
-        hatchPivotMotor.set(Math.abs(value) * value);
+        hatchPivotMotor.set(value * RobotMap.HATCH_MOTOR_MAX_SPEED);
     }
 
     public void togglePivot() {
@@ -183,16 +183,20 @@ public class HatchIntake {
 
     // Output values to Smart Dashboard
     public void outputValues() {
-        SmartDashboard.putBoolean("Hatch Lowered", lowered);
-        SmartDashboard.putBoolean("Hatch PID Active", running);
+        SmartDashboard.putBoolean("Hatch Lowered", isLowered());
+        SmartDashboard.putBoolean("Hatch PID Active", getPIDRunning());
         SmartDashboard.putBoolean("Hatch Pickup Extended", getPickupExtended());
         SmartDashboard.putBoolean("Hatch Eject Extended", getEjectExtended());
+        SmartDashboard.putBoolean("Hatch Pivot Limit Switch", getLimitSwitchPivot());
+        SmartDashboard.putBoolean("Hatch Hatch Limit Switch", getLimitSwitchHatch());
         SmartDashboard.putNumber("Hatch Position", getEncoderPosition());
         SmartDashboard.putNumber("Hatch Velocity", getEncoderVelocity());
     }
 
     // Initialize constants in Smart Dashboard
     public void setConstantTuning() {
+        SmartDashboard.putNumber("Hatch Max Speed", RobotMap.HATCH_MOTOR_MAX_SPEED);
+
         SmartDashboard.putNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
         SmartDashboard.putNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
         SmartDashboard.putNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
@@ -201,6 +205,8 @@ public class HatchIntake {
     
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
+        RobotMap.HATCH_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Hatch Max Speed", RobotMap.HATCH_MOTOR_MAX_SPEED);
+
         RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
 

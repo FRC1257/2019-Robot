@@ -26,6 +26,11 @@ public class OI {
         return number;
     }
 
+    public double squareInput(double number) {
+        // Use abs to prevent the sign from being cancelled out
+        return Math.abs(number) * number;
+    }
+
     // Drive
     public double getDriveForwardSpeed() {
         return applyDeadband(driveController.getForwardSpeed());
@@ -36,7 +41,7 @@ public class OI {
 
     // Intake Arm
     public double getArmSpeed() {
-        return applyDeadband(operatorController.getY(Hand.kRight));
+        return squareInput(applyDeadband(operatorController.getY(Hand.kRight)));
     }
     public boolean getArmRaise() {
         return false;
@@ -66,7 +71,7 @@ public class OI {
         return operatorController.getYButton();
     }
     public double getHatchPivot() {
-        return applyDeadband(operatorController.getY(Hand.kLeft));
+        return squareInput(applyDeadband(operatorController.getY(Hand.kLeft)));
     }
 
     
@@ -86,7 +91,7 @@ public class OI {
         // return operatorController.getBButtonPressed();
     }
     public double getClimbDriveSpeed() {
-        return applyDeadband(driveController.getY(Hand.kLeft));
+        return squareInput(applyDeadband(driveController.getY(Hand.kLeft)));
     }
     
     
