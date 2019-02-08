@@ -19,18 +19,24 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
+    public double applyDeadband(double number) {
+        if(Math.abs(number) < RobotMap.CONTROLLER_DEADBAND) {
+            return 0;
+        }
+        return number;
+    }
 
     // Drive
     public double getDriveForwardSpeed() {
-        return Math.abs(driveController.getForwardSpeed()) < 0.08 ? 0 : driveController.getForwardSpeed();
+        return applyDeadband(driveController.getForwardSpeed());
     }
     public double getDriveTurnSpeed() {
-        return Math.abs(driveController.getTurnSpeed()) < 0.08 ? 0 : driveController.getTurnSpeed();
+        return applyDeadband(driveController.getTurnSpeed());
     }
 
     // Intake Arm
     public double getArmSpeed() {
-        return Math.abs(operatorController.getY(Hand.kRight)) < 0.08 ? 0 : operatorController.getY(Hand.kRight);
+        return applyDeadband(operatorController.getY(Hand.kRight));
     }
     public boolean getArmRaise() {
         return false;
@@ -60,7 +66,7 @@ public class OI {
         return operatorController.getYButton();
     }
     public double getHatchPivot() {
-        return Math.abs(operatorController.getY(Hand.kLeft)) < 0.08 ? 0 : operatorController.getY(Hand.kLeft);
+        return applyDeadband(operatorController.getY(Hand.kLeft));
     }
 
     
@@ -80,7 +86,7 @@ public class OI {
         // return operatorController.getBButtonPressed();
     }
     public double getClimbDriveSpeed() {
-        return Math.abs(driveController.getY(Hand.kLeft)) < 0.08 ? 0 : driveController.getY(Hand.kLeft);
+        return applyDeadband(driveController.getY(Hand.kLeft));
     }
     
     
