@@ -60,7 +60,10 @@ public class Robot extends TimedRobot {
         if(oi.getArmLower()) intakeArm.lowerArm();
         if(!intakeArm.getPIDRunning()) {
             intakeArm.setSpeed(oi.getArmSpeed());
-            if(intakeArm.getLimitSwitch()) intakeArm.resetEncoder();
+            
+            if(intakeArm.getLimitSwitch()) {
+                intakeArm.resetEncoder();
+            }
         }
         intakeArm.updatePositionState();
         intakeArm.outputValues();
@@ -104,7 +107,7 @@ public class Robot extends TimedRobot {
         // Climb
 		if(oi.getClimbBackToggle()) climb.toggleBack();
 		if(oi.getClimbFrontToggle()) climb.toggleFront();
-		if(oi.getClimbAdvance()) climb.advanceClimb(false);
+		if(oi.getClimbAdvance()) climb.advanceClimb();
 		if(oi.getClimbReset()) climb.reset();
 		climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
