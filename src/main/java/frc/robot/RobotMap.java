@@ -1,11 +1,11 @@
 package frc.robot;
 
 public class RobotMap {
-	/**
-	 * Contains constants for use without the entire robot
-	 * All constants should be ordered by subsystem/use
-	 * The units of each measurement should be specified in a comment
-	 */
+    /**
+     * Contains constants for use without the entire robot
+     * All constants should be ordered by subsystem/use
+     * The units of each measurement should be specified in a comment
+     */
 
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 0;
@@ -17,7 +17,7 @@ public class RobotMap {
     public static final int DRIVE_FRONT_RIGHT = 3;
     public static final int DRIVE_BACK_LEFT = 2;
     public static final int DRIVE_BACK_RIGHT = 1;
-    
+
     // Hatch Intake
     public static final int HATCH_PIVOT_MOTOR_ID = 5;
     public static final int HATCH_PICKUP_SOLENOID_ID = 4;
@@ -58,8 +58,8 @@ public class RobotMap {
     public static final int CARGO_INTAKE_MOTOR_ID = 7;
     public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
     public static double CARGO_INTAKE_SPEED = 0.5; // percentage
-    
-    
+
+
     // Climb
     public static final int CLIMB_FRONT_MOTOR = 9;
     public static final int CLIMB_BACK_MOTOR = 8;

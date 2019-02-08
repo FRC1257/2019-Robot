@@ -105,11 +105,11 @@ public class Robot extends TimedRobot {
 
         
         // Climb
-		if(oi.getClimbBackToggle()) climb.toggleBack();
-		if(oi.getClimbFrontToggle()) climb.toggleFront();
-		if(oi.getClimbAdvance()) climb.advanceClimb();
-		if(oi.getClimbReset()) climb.reset();
-		climb.climbDrive(oi.getClimbDriveSpeed());
+        if(oi.getClimbBackToggle()) climb.toggleBack();
+        if(oi.getClimbFrontToggle()) climb.toggleFront();
+        if(oi.getClimbAdvance()) climb.advanceClimb();
+        if(oi.getClimbReset()) climb.reset();
+        climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
         
         gyro.displayAngle();
