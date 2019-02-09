@@ -33,4 +33,7 @@ public class RobotMap {
     // Drivetrain wheel
     public static final double DRIVE_WHEEL_DIAMETER = 6.0; // inches
     public static final double PI = 3.1415926535897932;
+
+    // For ConsolePrinter
+    public static final boolean PRINT_SD_DEBUG_DATA = true;
 }

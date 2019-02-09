@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.subsystems.DriveTrain;
-
+import frc.util.ConsolePrinter;
 
 public class Robot extends TimedRobot {
 	
@@ -17,6 +17,8 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		drive = DriveTrain.getInstance();
 		oi = OI.getInstance();
+		ConsolePrinter.getInstance();
+		ConsolePrinter.setRate(100);
 	}
 
 	/**
@@ -65,6 +67,12 @@ public class Robot extends TimedRobot {
 			drive.getFRDrive().set(0.6);
 			drive.getFRDrive().outputValues();
 		}
+
+		ConsolePrinter.putNumber("Right voltage", () -> {return drive.getFRDrive().getVoltage();}, true, true);
+		ConsolePrinter.putNumber("Right RPM", () -> {return drive.getFRDrive().getVoltage();}, true, true);
+		ConsolePrinter.putNumber("Left voltage", () -> {return drive.getFLDrive().getVoltage();}, true, true);
+		ConsolePrinter.putNumber("Left RPM", () -> {return drive.getFLDrive().getVoltage();}, true, true);
+		ConsolePrinter.startThread();
 	}
 
 	/**

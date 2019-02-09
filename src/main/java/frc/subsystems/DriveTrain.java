@@ -62,8 +62,6 @@ public class DriveTrain {
      * @param z Rate of rotation, from -1 to 1.
      */
     public void drive(double x, double z) {
-        x = applyDeadband(x);
-        z = applyDeadband(z);
         if(!reverse) driveTrain.arcadeDrive(x, z);
         else driveTrain.arcadeDrive(-x, z);
     }
@@ -135,13 +133,6 @@ public class DriveTrain {
         frDrive.updatePID(false);
 
         RobotMap.DRIVE_P_WASHOUT = SmartDashboard.getNumber("Drive Washout", RobotMap.DRIVE_P_WASHOUT);
-    }
-
-    private double applyDeadband(double in) {
-        if(Math.abs(in) < RobotMap.NEO_DEADBAND) {
-            return 0;
-        }
-        return in;
     }
 
     /**

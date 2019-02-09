@@ -20,11 +20,11 @@ public class OI {
 
     // Drivetrain
     public double getDriveForwardSpeed() {
-        return driveController.getForwardSpeed();
+        return applyDeadband(driveController.getForwardSpeed());
     }
 
     public double getDriveTurnSpeed() {
-        return driveController.getTurnSpeed();
+        return applyDeadband(driveController.getTurnSpeed());
     }
 
     public boolean getDriveToggleReverse() {
@@ -44,5 +44,12 @@ public class OI {
             instance = new OI();
         }
         return instance;
+    }
+
+    public double applyDeadband(double in) {
+        if(Math.abs(in) < RobotMap.NEO_DEADBAND) {
+            return 0;
+        }
+        return in;
     }
 }
