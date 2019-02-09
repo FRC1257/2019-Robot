@@ -96,8 +96,11 @@ public class Robot extends TimedRobot {
         if(oi.getCargoShootButton()) {
             cargoIntake.shoot();
         }
-        else {
+        else if(oi.getCargoIntakeButton()) {
             cargoIntake.intake();
+        }
+        else {
+            cargoIntake.stop();
         }
 
         
@@ -108,12 +111,12 @@ public class Robot extends TimedRobot {
             hatchIntake.setPivot(oi.getHatchPivot());
 
             // Only allow the hatch to eject if the hatch is not lowered and there is a hatch detected
-            if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
+            // if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
                 hatchIntake.setEject(oi.getHatchEject());
-            }
-            else {
-                hatchIntake.ejectRetract();
-            }
+            // }
+            // else {
+            //     hatchIntake.ejectRetract();
+            // }
 
             if(hatchIntake.getLimitSwitchPivot()) {
                 hatchIntake.resetEncoder();

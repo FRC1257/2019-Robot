@@ -22,7 +22,7 @@ public class RobotMap {
     public static final int HATCH_PIVOT_MOTOR_ID = 5;
     public static final int HATCH_PICKUP_SOLENOID_ID = 4;
     public static final int HATCH_EJECT_SOLENOID_ID = 5;
-    public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 0;
+    public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 2;
     public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 1;
 
     // Hatch Intake: 0 is at top, positive means lower
@@ -39,7 +39,7 @@ public class RobotMap {
 
     // Intake Arm
     public static final int INTAKE_ARM_MOTOR_ID = 6;
-    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 2;
+    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 0;
 
     // Intake Arm: 0 is at bottom, positive means higher
     public static final double INTAKE_ARM_LOWER_THRESHOLD = 0.0;         // Lower limit of the arm's motion

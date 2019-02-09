@@ -3,6 +3,7 @@ package frc.subsystems;
 import frc.robot.RobotMap;
 
 import com.revrobotics.*;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -25,6 +26,11 @@ public class DriveTrain {
         frDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless);
         blDrive = new CANSparkMax(RobotMap.DRIVE_BACK_LEFT, MotorType.kBrushless);
         brDrive = new CANSparkMax(RobotMap.DRIVE_BACK_RIGHT, MotorType.kBrushless);
+
+        flDrive.setIdleMode(IdleMode.kBrake);
+        frDrive.setIdleMode(IdleMode.kBrake);
+        blDrive.setIdleMode(IdleMode.kBrake);
+        brDrive.setIdleMode(IdleMode.kBrake);
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);

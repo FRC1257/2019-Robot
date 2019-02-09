@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
                                                 
 public class IntakeArm { 
     private static IntakeArm instance = null;
@@ -30,6 +31,7 @@ public class IntakeArm {
 
     public IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
+        intakeArmMotor.setIdleMode(IdleMode.kBrake);
         intakeArmEncoder = intakeArmMotor.getEncoder();
         limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
 

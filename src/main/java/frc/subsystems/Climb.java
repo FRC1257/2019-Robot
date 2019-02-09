@@ -6,6 +6,7 @@ import frc.util.SnailDoubleSolenoid;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Climb {
@@ -24,6 +25,8 @@ public class Climb {
 
         frontMotor = new WPI_VictorSPX(RobotMap.CLIMB_FRONT_MOTOR);
         backMotor = new WPI_VictorSPX(RobotMap.CLIMB_BACK_MOTOR);
+        frontMotor.setNeutralMode(NeutralMode.Brake);
+        backMotor.setNeutralMode(NeutralMode.Brake);
 
         reset();
     }
@@ -40,11 +43,11 @@ public class Climb {
     }
 
     public void retractFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kReverse);
+        frontSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void extendFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kForward); 
+        frontSolenoid.set(DoubleSolenoid.Value.kReverse); 
     }
 
     public void toggleBack() {
@@ -53,11 +56,11 @@ public class Climb {
     }
 
     public void retractBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kReverse);
+        backSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void extendBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kForward);
+        backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     /* Go to the next state of the climb
@@ -112,14 +115,14 @@ public class Climb {
         if(isBackExtended()) backMotor.set(adjustedSpeed);
     }
 
-    // Whether or not the front is currently raised
+    // Whether or not the front is currently extended
     public boolean isFrontExtended() {
-        return frontSolenoid.get() == DoubleSolenoid.Value.kForward;
+        return frontSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
-    // Whether or not the front is currently raised
+    // Whether or not the front is currently extended
     public boolean isBackExtended() {
-        return backSolenoid.get() == DoubleSolenoid.Value.kForward;
+        return backSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
     public void outputValues() {

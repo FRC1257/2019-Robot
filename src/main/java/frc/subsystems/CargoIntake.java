@@ -4,6 +4,7 @@ import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class CargoIntake {
@@ -14,6 +15,7 @@ public class CargoIntake {
 
     private CargoIntake() {
         intakeMotor = new WPI_VictorSPX(RobotMap.CARGO_INTAKE_MOTOR_ID);
+        intakeMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     // Motor Functions
@@ -23,6 +25,10 @@ public class CargoIntake {
     
     public void intake() {
         intakeMotor.set(RobotMap.CARGO_INTAKE_SPEED);
+    }
+
+    public void stop() {
+        intakeMotor.set(0);
     }
     
     // Smart Dashboard

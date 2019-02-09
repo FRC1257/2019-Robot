@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.SnailController;
+import static frc.util.SnailController.*;
 
 public class OI {
 
@@ -19,29 +20,17 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
-    public double applyDeadband(double number) {
-        if(Math.abs(number) < RobotMap.CONTROLLER_DEADBAND) {
-            return 0;
-        }
-        return number;
-    }
-
-    public double squareInput(double number) {
-        // Use abs to prevent the sign from being cancelled out
-        return Math.abs(number) * number;
-    }
-
     // Drive
     public double getDriveForwardSpeed() {
-        return applyDeadband(driveController.getForwardSpeed());
+        return driveController.getForwardSpeed();
     }
     public double getDriveTurnSpeed() {
-        return applyDeadband(driveController.getTurnSpeed());
+        return driveController.getTurnSpeed();
     }
 
     // Intake Arm
     public double getArmSpeed() {
-        return squareInput(applyDeadband(operatorController.getY(Hand.kRight)));
+        return squareInput(operatorController.getY(Hand.kRight));
     }
     public boolean getArmRaise() {
         return false;
@@ -57,6 +46,9 @@ public class OI {
     public boolean getCargoShootButton() {
         return operatorController.getAButton();
     }
+    public boolean getCargoIntakeButton() {
+        return operatorController.getBButton();
+    }
 
     
     // Hatch Intake
@@ -71,7 +63,7 @@ public class OI {
         return operatorController.getYButton();
     }
     public double getHatchPivot() {
-        return squareInput(applyDeadband(operatorController.getY(Hand.kLeft)));
+        return squareInput(operatorController.getY(Hand.kLeft));
     }
 
     
@@ -91,7 +83,7 @@ public class OI {
         // return operatorController.getBButtonPressed();
     }
     public double getClimbDriveSpeed() {
-        return squareInput(applyDeadband(driveController.getY(Hand.kLeft)));
+        return squareInput(driveController.getY(Hand.kLeft));
     }
     
     
