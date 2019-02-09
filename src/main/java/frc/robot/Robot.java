@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        
+        teleopFunctionality();
     }
 
     @Override
@@ -51,6 +51,28 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        teleopFunctionality();
+    }
+
+    @Override
+    public void testInit() {
+
+    }
+
+    @Override
+    public void testPeriodic() {
+        teleopFunctionality();
+
+        // Test Code
+        intakeArm.getConstantTuning();
+        cargoIntake.getConstantTuning();
+        hatchIntake.getConstantTuning();
+        
+        if(oi.getClimbBackToggle()) climb.toggleBack();
+        if(oi.getClimbFrontToggle()) climb.toggleFront();
+    }
+
+    public void teleopFunctionality() {
         // Drive
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
     
@@ -67,7 +89,6 @@ public class Robot extends TimedRobot {
         }
         intakeArm.updatePositionState();
         intakeArm.outputValues();
-        intakeArm.getConstantTuning();
         
         
         // Cargo Intake
@@ -78,7 +99,6 @@ public class Robot extends TimedRobot {
         else {
             cargoIntake.intake();
         }
-        cargoIntake.getConstantTuning();
 
         
         // Hatch Intake
@@ -101,28 +121,14 @@ public class Robot extends TimedRobot {
         }
         hatchIntake.updatePositionState();
         hatchIntake.outputValues();
-        hatchIntake.getConstantTuning();
 
         
         // Climb
-        if(oi.getClimbBackToggle()) climb.toggleBack();
-        if(oi.getClimbFrontToggle()) climb.toggleFront();
         if(oi.getClimbAdvance()) climb.advanceClimb();
         if(oi.getClimbReset()) climb.reset();
         climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
         
         gyro.displayAngle();
-    }
-
-    @Override
-    public void testInit() {
-
-    }
-
-    @Override
-    public void testPeriodic() {
-        
-        
     }
 }
