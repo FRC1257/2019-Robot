@@ -30,7 +30,6 @@ public class Vision{
     }
     
     public static double getInDistance(NetworkTable table){ 
-      // double KpDistance = RobotMap.DISTANCE_CORRECT_KP; // For p control
       double currentDistance = tableDistanceFromObject(table); //cameraHeight and cameraAngle are constants
       double distanceError = currentDistance - RobotMap.DESIRED_TARGET_DISTANCE;
       double driving_adjust = 0;
@@ -44,10 +43,12 @@ public class Vision{
       NetworkTableEntry taE = table.getEntry("ta");
       NetworkTableEntry tvE = table.getEntry("tv");
       double ta = taE.getDouble(0);
-      double tv = tvE.getDouble(0);
+      double tv0 = tvE.getDouble(0); // Looks back 3 frames to see if the target was on the screen just to make sure that the limelight glitched and did not see the target for a split second
+      double tv1 = tvE.getDouble(1);
+      double tv2 = tvE.getDouble(2);
       double minDifference = 10000; // Just so that it finds a smaller value
       double minIndex = RobotMap.MEASUREMENT_AMOUNT - 1;
-      if(tv == 1.0){ // If the target is on screen
+      if(tv0 == 1.0 || tv1 == 1.0 || tv2 == 1.0){ // If the target is on screen
           for(int i = 0; i < RobotMap.MEASUREMENT_AMOUNT - 1; i++){
               if(RobotMap.DISTANCE_TO_PERCENT[i] - ta < minDifference && RobotMap.DISTANCE_TO_PERCENT[i] - ta > 0){
                   minDifference = RobotMap.DISTANCE_TO_PERCENT[i] - ta;
