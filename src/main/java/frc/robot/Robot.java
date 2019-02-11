@@ -60,10 +60,12 @@ public class Robot extends TimedRobot {
 		drive.getFRDrive().outputValues();
 
 		if(oi.getDriveTestFL()) {
+			drive.getFRDrive().follow(drive.getFLDrive());
 			drive.getFLDrive().set(0.6);
 			drive.getFLDrive().outputValues();
 		}
 		else if(oi.getDriveTestFR()) {
+			drive.getFLDrive().follow(drive.getFLDrive());
 			drive.getFRDrive().set(0.6);
 			drive.getFRDrive().outputValues();
 		}

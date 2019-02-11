@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 
 /**
  * <h1>Gyro</h1>
- * The Gyro gets us our yaw angle, in degrees. Our "0" point is the yaw at the start of the match.
+ * The Gyro gets us our pitch angle, in degrees. Our "0" point is the pitch at the start of the match.
  * @author Allen Du
  * @since 2019-01-23
  */
 public class Gyro {
     public AHRS navx;
     private static Gyro instance = null;
-    private String angle = "Yaw angle: ";
+    private String angle = "Pitch angle: ";
 
     /**
      * Constructs a Gyro object.
@@ -35,18 +35,18 @@ public class Gyro {
     }
 
     /**
-     * Sets the current yaw angle to "0".
+     * Sets the current pitch angle to "0".
      */
     public void zeroAngle() {
-        navx.zeroYaw();
+        navx.reset();
     }
 
     /**
-     * Gets the current yaw angle.
+     * Gets the current pitch angle.
      * @return The angle in degrees.
      */
     public double getAngle() {
-        return navx.getYaw();
+        return navx.getPitch();
     }
 
     /**
@@ -57,9 +57,9 @@ public class Gyro {
     }
 
     /**
-     * Displays the yaw angle on {@code SmartDashboard}.
+     * Displays the pitch angle on {@code SmartDashboard}.
      */
     public void displayAngle() {
-        SmartDashboard.putNumber(angle, navx.getYaw());
+        SmartDashboard.putNumber(angle, navx.getPitch());
     }
 }

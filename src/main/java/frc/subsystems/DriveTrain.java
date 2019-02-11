@@ -66,38 +66,65 @@ public class DriveTrain {
         else driveTrain.arcadeDrive(-x, z);
     }
 
+    /**
+     * Toggles the reverse state (true/false).
+     */
     public void toggleReverse() {
         reverse = !reverse;
     }
 
+    /**
+     * @return True if the robot is in reverse.
+     */
     public boolean isReversed() {
         return reverse;
     }
 
+    /**
+     * @return The right motor controller.
+     */
     public FlakeMin getFRDrive() {
         return frDrive;
     }
 
+    /**
+     * @return The left motor controller.
+     */
     public FlakeMin getFLDrive() {
         return flDrive;
     }
 
+    /**
+     * Gets the distance of the left motor.
+     */
     public void getLeftEncoderPosition() {
         flDrive.getEncoderPosition();
     }
 
+    /**
+     * Gets the distance of the right motor.
+     */
     public void getRightEncoderPosition() {
         frDrive.getEncoderPosition();
     }
 
+    /**
+     * Gets the velocity of the right motor.
+     */
     public void getRightEncoderVelocity() {
         frDrive.getEncoderVelocity();
     }
 
+    /**
+     * Gets the velocity of the left motor.
+     */
     public void getLeftEncoderVelocity() {
         flDrive.getEncoderVelocity();
     }
 
+    /**
+     * Outputs velocity and displacement for motors. Also returns if we're driving in reverse.
+     */
     public void outputValues() {
         flDrive.outputValues();
         frDrive.outputValues();
@@ -105,6 +132,9 @@ public class DriveTrain {
         SmartDashboard.putBoolean("Drive Reversed", reverse);
     }
 
+    /**
+     * Reports our PID constants.
+     */
     public void setConstantTuning() {
         SmartDashboard.putNumber("Drive Left P", RobotMap.DRIVE_PIDF_LEFT[0]);
         SmartDashboard.putNumber("Drive Left I", RobotMap.DRIVE_PIDF_LEFT[1]);
@@ -119,6 +149,9 @@ public class DriveTrain {
         SmartDashboard.putNumber("Drive Washout", RobotMap.DRIVE_P_WASHOUT);
     }
 
+    /**
+     * Updates our PID constants based on the input from the SmartDashboard.
+     */
     public void updateConstantTuning() {
         RobotMap.DRIVE_PIDF_LEFT[0] = SmartDashboard.getNumber("Drive Left P", RobotMap.DRIVE_PIDF_LEFT[0]);
         RobotMap.DRIVE_PIDF_LEFT[1] = SmartDashboard.getNumber("Drive Left I", RobotMap.DRIVE_PIDF_LEFT[1]);
