@@ -28,7 +28,7 @@ public class Vision{
 
      return(-steering_adjust); // return motor output
     }
-
+    
     public static double getInDistance(NetworkTable table){ 
       // double KpDistance = RobotMap.DISTANCE_CORRECT_KP; // For p control
       double currentDistance = tableDistanceFromObject(table); //cameraHeight and cameraAngle are constants
@@ -64,4 +64,21 @@ public class Vision{
   public static void shoot(NetworkTable table, DifferentialDrive DriveTrain){ //Sample code that the robot fired the projectile
     DriveTrain.arcadeDrive(getInDistance(table), turnCorrect(table)); // getInDistance and angleCorrect return values to correct the robot.
   }
+
+  public static void changePipeline(NetworkTable table, double controllerInput, String hand){
+    if(hand == "right"){
+      if(controllerInput > 0){
+        table.getEntry("pipeline").setNumber(0);
+      }
+    }
+    else if(hand == "left"){
+      if(controllerInput > 0 && controllerInput < 0.9){
+        table.getEntry("pipeline").setNumber(1);
+      }
+      else if (controllerInput >= 0.9){
+        table.getEntry("pipeline").setNumber(0);
+      }
+    }
+  }
+  
 }

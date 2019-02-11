@@ -28,6 +28,32 @@ public class OI {
         return driveController.getTurnSpeed();
     }
 
+    // Vision
+    public double getTurnCorrect(){
+        return driveController.getTriggerAxis(Hand.kLeft);
+    }
+    public boolean getAutoCorrect(){
+        return driveController.getTriggerAxis(Hand.kRight) > 0;
+    }
+    public boolean getAddMeasurement(){
+        return operatorController.getStickButtonPressed(Hand.kRight);
+    }
+    public boolean getReleaseRightStick(){
+        return operatorController.getStickButtonReleased(Hand.kRight);
+    }
+    public boolean getPrintMeasurement(){
+        return operatorController.getStickButtonPressed(Hand.kLeft);
+    }
+    public boolean getReleaseLeftStick(){
+        return operatorController.getStickButtonReleased(Hand.kLeft);
+    }
+    public boolean getReleaseLeftTrigger(){
+        return (driveController.getTriggerAxis(Hand.kLeft) == 0);
+    }
+    public boolean getReleaseRightTrigger(){
+        return (driveController.getTriggerAxis(Hand.kRight) == 0);
+    }
+
     // Intake Arm
     public double getArmSpeed() {
         return squareInput(operatorController.getY(Hand.kRight));
