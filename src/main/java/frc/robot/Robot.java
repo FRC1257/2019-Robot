@@ -54,9 +54,11 @@ public class Robot extends TimedRobot {
         teleopFunctionality();
     }
 
+    TestTracker visionTracker;
+
     @Override
     public void testInit() {
-
+        visionTracker = new TestTracker();
     }
 
     @Override
