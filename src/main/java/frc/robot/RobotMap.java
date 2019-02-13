@@ -11,6 +11,7 @@ public class RobotMap {
     public static final int CONTROLLER_DRIVE_PORT = 0;
     public static final int CONTROLLER_OPERATOR_PORT = 1;
     public static final double CONTROLLER_DEADBAND = 0.08;
+    public static final int CONTROLLER_POV = 0;
 
     // Drive
     public static final int DRIVE_FRONT_LEFT = 4;

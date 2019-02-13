@@ -119,6 +119,12 @@ public class IntakeArm {
         }
     }
 
+    private void breakPID() {
+        notifier.stop();
+        running = false;
+        pidTime = -1;
+    }
+
     public void resetEncoder() {
         // intakeArmEncoder.setPosition(0.0);
     }

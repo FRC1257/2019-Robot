@@ -87,6 +87,7 @@ public class Robot extends TimedRobot {
                 intakeArm.resetEncoder();
             }
         }
+        if(oi.getArmBreak()) intakeArm.breakPID();
         intakeArm.updatePositionState();
         intakeArm.outputValues();
         
