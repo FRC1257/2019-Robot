@@ -64,4 +64,40 @@ public class SnailController extends XboxController {
         // Use abs to prevent the sign from being cancelled out
         return Math.abs(number) * number;
 	}
+
+	public boolean getDPadUp() {
+		if (getPOV(RobotMap.CONTROLLER_POV) == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean getDPadRight() {
+		if (getPOV(RobotMap.CONTROLLER_POV) == 90) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean getDPadDown() {
+		if (getPOV(RobotMap.CONTROLLER_POV) == 180) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean getDPadLeft() {
+		if (getPOV(RobotMap.CONTROLLER_POV) == 270) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

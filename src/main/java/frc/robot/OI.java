@@ -40,6 +40,9 @@ public class OI {
         return false;
         // return operatorController.getBButtonPressed();
     }
+    public boolean getArmBreak() {
+        return operatorController.getStickButton(Hand.kRight);
+    }
     
 
     // Cargo Intake
@@ -57,10 +60,10 @@ public class OI {
         // return operatorController.getXButtonPressed();
     }
     public boolean getHatchPickup() {
-        return operatorController.getXButton();
+        return operatorController.getYButton();
     }
     public boolean getHatchEject() {
-        return operatorController.getYButton();
+        return operatorController.getXButton();
     }
     public double getHatchPivot() {
         return squareInput(operatorController.getY(Hand.kLeft));
@@ -70,17 +73,16 @@ public class OI {
     // Climb
     public boolean getClimbAdvance() {
         return false;
-        // return operatorController.getAButtonPressed();
+        // return operatorController.getDPadDown();
     }
     public boolean getClimbFrontToggle() {
-        return operatorController.getBumperPressed(Hand.kRight);
+        return operatorController.getDPadLeft();
     }
     public boolean getClimbBackToggle() {
-        return operatorController.getBumperPressed(Hand.kLeft);
+        return operatorController.getDPadRight();
     }
     public boolean getClimbReset() {
-        return false;
-        // return operatorController.getBButtonPressed();
+        return operatorController.getDPadUp();
     }
     public double getClimbDriveSpeed() {
         return squareInput(driveController.getY(Hand.kLeft));
