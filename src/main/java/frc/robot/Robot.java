@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
 		ConsolePrinter.setRate(100);
 	}
 
+
 	/**
 	 * This function is run once each time the robot enters autonomous mode.
 	 */
