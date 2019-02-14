@@ -70,4 +70,8 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
+
+    // Turning in place
+    public static double[] TURN_PIDF = {1.0, 0.01, 0.0, 0.0};
+
 }

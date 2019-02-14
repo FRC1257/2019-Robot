@@ -12,6 +12,7 @@ public class Robot extends TimedRobot {
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
     Climb climb;
+    Turning turning;
     
     Gyro gyro;
     
@@ -24,6 +25,7 @@ public class Robot extends TimedRobot {
         cargoIntake = CargoIntake.getInstance();
         hatchIntake = HatchIntake.getInstance();
         climb = Climb.getInstance();
+        turning = Turning.getInstance();
 
         gyro = Gyro.getInstance();
 
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
         intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
         hatchIntake.setConstantTuning();
+        turning.setConstantTuning();
     }
 
     @Override
@@ -133,5 +136,16 @@ public class Robot extends TimedRobot {
         climb.outputValues();
         
         gyro.displayAngle();
+
+        // Turning in place
+        if(oi.getTurnLeft()) turning.TurnLeft();
+        if(oi.getTurnRight()) turning.TurnRight();
+
+        turning.displayValues();
+        turning.updateConstantTuning();
+        
+
+
+
     }
 }

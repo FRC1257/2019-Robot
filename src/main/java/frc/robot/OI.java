@@ -86,7 +86,17 @@ public class OI {
         return squareInput(driveController.getY(Hand.kLeft));
     }
     
-    
+    // Turning in place
+    public boolean getTurnLeft() {
+        return driveController.getXButton();
+    }
+
+    public boolean getTurnRight() {
+        return driveController.getYButton();
+    }
+
+
+
     public static OI getInstance() {
         if (instance == null) {
             instance = new OI();
