@@ -72,9 +72,9 @@ public class Robot extends TimedRobot {
 		}
 
 		ConsolePrinter.putNumber("Right voltage", () -> {return drive.getFRDrive().getVoltage();}, true, true);
-		ConsolePrinter.putNumber("Right RPM", () -> {return drive.getFRDrive().getVoltage();}, true, true);
+		ConsolePrinter.putNumber("Right RPM", () -> {return drive.getFRDrive().getEncoderVelocity() * 60.0;}, true, true);
 		ConsolePrinter.putNumber("Left voltage", () -> {return drive.getFLDrive().getVoltage();}, true, true);
-		ConsolePrinter.putNumber("Left RPM", () -> {return drive.getFLDrive().getVoltage();}, true, true);
+		ConsolePrinter.putNumber("Left RPM", () -> {return drive.getFLDrive().getEncoderVelocity() * 60.0;}, true, true);
 		ConsolePrinter.startThread();
 	}
 

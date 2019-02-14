@@ -21,7 +21,7 @@ public class RobotMap {
     // Drivetrain PID
     public static double[] DRIVE_PIDF_LEFT = {1.0, 0.0, 0.0, 0.0};
     public static double[] DRIVE_PIDF_RIGHT = {1.0, 0.0, 0.0, 0.0}; 
-    public static double DRIVE_P_WASHOUT = 0.0; 
+    public static double DRIVE_P_WASHOUT = 1.0; // 1.0 for no washout (Testing) 
 
     // Drivetrain NEO
     public static final int NEO_STALL_LIMIT = 60;
