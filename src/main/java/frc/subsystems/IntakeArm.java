@@ -40,7 +40,7 @@ public class IntakeArm {
         intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
         intakeArmPID.setD(RobotMap.INTAKE_ARM_PIDF[2]);
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
-        intakeArmPID.setOutputRange(-1.0, 1.0);
+        intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
 
         notifier = new Notifier(this::updatePID);
 
@@ -58,8 +58,8 @@ public class IntakeArm {
     }
 
     // Moves the arm at a set speed and restricts the motion of the arm
-    public void setSpeed(double speed) {
-        double adjustedSpeed = speed * RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED;
+    public void setSpeed(double value) {
+        double adjustedSpeed = value * RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED;
         // // Arm is moving up and is past the upper threshold
         // if(speed > 0.0 && getEncoderPosition() >= RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
         //     adjustedSpeed = 0.0;
@@ -94,7 +94,6 @@ public class IntakeArm {
     }
 
     public void setPIDPosition(double value) {
-        SmartDashboard.putNumber("Intake Arm Target", value);
         intakeArmPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
         intakeArmPID.setIAccum(0);
@@ -114,8 +113,7 @@ public class IntakeArm {
 
             // Check if the encoder's position has been inside the tolerance for long enough
             if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
-                notifier.stop();
-                running = false;
+                breakPID();
             }
         }
         else {

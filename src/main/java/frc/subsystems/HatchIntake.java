@@ -99,7 +99,16 @@ public class HatchIntake {
     }
 
     public void setPivot(double value) {
-        hatchPivotMotor.set(value * RobotMap.HATCH_MOTOR_MAX_SPEED);
+        double adjustedSpeed = value * RobotMap.HATCH_MOTOR_MAX_SPEED;
+        // // Pivot is moving up and is past the upper threshold
+        // if(adjustedSpeed < 0.0 && getEncoderPosition() <= RobotMap.HATCH_PID_RAISED) {
+        //     adjustedSpeed = 0.0;
+        // }
+        // // Pivot is moving down and is past the lower threshold
+        // if(adjustedSpeed > 0.0 && getEncoderPosition() >= RobotMap.HATCH_PID_LOWERED) {
+        //     adjustedSpeed = 0.0;
+        // }
+        hatchPivotMotor.set(adjustedSpeed);
     }
 
     public void togglePivot() {
@@ -118,11 +127,13 @@ public class HatchIntake {
     public void setPIDPosition(double value) {
         hatchPivotPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
+        hatchPivotPID.setIAccum(0);
         notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
+        hatchPivotPID.setReference(currentPIDSetpoint, ControlType.kPosition);
 
         // Check if the pivot's position is within the tolerance
         if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
@@ -133,17 +144,22 @@ public class HatchIntake {
 
             // Check if the pivot's position has been inside the tolerance for long enough
             if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
-                notifier.stop();
-                running = false;
+                breakPID();
             }
         }
         else {
             pidTime = -1;
         }
     }
+
+    public void breakPID() {
+        notifier.stop();
+        running = false;
+        pidTime = -1;
+    }
     
     public void resetEncoder() {
-        // hatchPivotEncoder.setPosition(0.0);
+        hatchPivotEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
