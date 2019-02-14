@@ -40,6 +40,7 @@ public class IntakeArm {
         intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
         intakeArmPID.setD(RobotMap.INTAKE_ARM_PIDF[2]);
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
+        intakeArmPID.setOutputRange(-1.0, 1.0);
 
         notifier = new Notifier(this::updatePID);
 
@@ -93,13 +94,16 @@ public class IntakeArm {
     }
 
     public void setPIDPosition(double value) {
+        SmartDashboard.putNumber("Intake Arm Target", value);
         intakeArmPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
+        intakeArmPID.setIAccum(0);
         notifier.startPeriodic(RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
+        intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
 
         // Check if the encoder's position is within the tolerance
         if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
@@ -119,14 +123,14 @@ public class IntakeArm {
         }
     }
 
-    private void breakPID() {
+    public void breakPID() {
         notifier.stop();
         running = false;
         pidTime = -1;
     }
 
     public void resetEncoder() {
-        // intakeArmEncoder.setPosition(0.0);
+        intakeArmEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
@@ -173,7 +177,7 @@ public class IntakeArm {
         SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
         SmartDashboard.putBoolean("Intake Arm PID Active", running);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
-        SmartDashboard.putNumber("Intake Arm Position", getPositionState());
+        SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
     }
     

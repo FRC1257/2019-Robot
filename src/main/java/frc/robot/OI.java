@@ -30,15 +30,15 @@ public class OI {
 
     // Intake Arm
     public double getArmSpeed() {
-        return squareInput(operatorController.getY(Hand.kRight));
+        return squareInput(-operatorController.getY(Hand.kRight));
     }
     public boolean getArmRaise() {
-        return false;
-        // return operatorController.getAButtonPressed();
+        // return false;
+        return operatorController.getBumperPressed(Hand.kLeft);
     }
     public boolean getArmLower() {
-        return false;
-        // return operatorController.getBButtonPressed();
+        // return false;
+        return operatorController.getBumperPressed(Hand.kRight);
     }
     public boolean getArmBreak() {
         return operatorController.getStickButton(Hand.kRight);
