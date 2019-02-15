@@ -72,8 +72,8 @@ public class OI {
     
     // Climb
     public boolean getClimbAdvance() {
-        return false;
-        // return operatorController.getDPadDown();
+        // return false;
+        return operatorController.getBumperPressed(Hand.kRight);
     }
     public boolean getClimbFrontToggle() {
         return operatorController.getDPadLeft();

@@ -78,8 +78,8 @@ public class Robot extends TimedRobot {
     
         
         // Intake Arm
-        if(oi.getArmRaise()) intakeArm.raiseArm();
-        if(oi.getArmLower()) intakeArm.lowerArm();
+        // if(oi.getArmRaise()) intakeArm.raiseArm();
+        // if(oi.getArmLower()) intakeArm.lowerArm();
         if(!intakeArm.getPIDRunning()) {
             intakeArm.setSpeed(oi.getArmSpeed());
             
@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
 
         
         // Hatch Intake
-        if(oi.getHatchPivotToggle()) hatchIntake.togglePivot();
+        // if(oi.getHatchPivotToggle()) hatchIntake.togglePivot();
         if(!hatchIntake.getPIDRunning()) {
             hatchIntake.setPickup(oi.getHatchPickup());
             hatchIntake.setPivot(oi.getHatchPivot());
