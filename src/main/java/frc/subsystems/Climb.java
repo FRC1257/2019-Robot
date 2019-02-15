@@ -109,7 +109,7 @@ public class Climb {
         else backMotor.set(0);
     }
 
-    // If the robot is tilted beyond a critical angle whiel rising, retract appropriate solenoid
+    // If the robot is tilted beyond a critical angle while rising, retract appropriate solenoid
     private void correctAngle() {
         if(state == 1) {
             double angle = Gyro.getInstance().getClimbTiltAngle();
@@ -134,7 +134,7 @@ public class Climb {
         return frontSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
-    // Whether or not the front is currently extended
+    // Whether or not the back is currently extended
     public boolean isBackExtended() {
         return backSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
