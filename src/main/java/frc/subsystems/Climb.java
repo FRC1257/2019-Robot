@@ -112,7 +112,9 @@ public class Climb {
     public void climbDrive(double speed) {
         double adjustedSpeed = speed * RobotMap.CLIMB_MOTOR_MAX_SPEED;
         if(isFrontExtended()) frontMotor.set(adjustedSpeed);
+        else frontMotor.set(0);
         if(isBackExtended()) backMotor.set(adjustedSpeed);
+        else backMotor.set(0);
     }
 
     // Whether or not the front is currently extended
