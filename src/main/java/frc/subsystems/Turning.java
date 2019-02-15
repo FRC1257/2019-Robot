@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
         
         private static Turning instance = null;
 
-        boolean pidActive;
-        double lastTime;
-        double motorSpeed;
+        private boolean pidActive;
+        private double lastTime;
+        private double motorSpeed;
 
         Gyro gyro;
         SynchronousPIDF pid;
@@ -56,9 +56,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
                 pidActive = true;
             }
             else {
-                // End the PID
-                    pidActive = false;
-                }
+            // End the PID
+                pidActive = false;
+            }
+         
             // Do the PID while the x button is first pressed
             motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
             lastTime = Timer.getFPGATimestamp();
@@ -82,6 +83,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
             // End the PID
                 pidActive = false;
             }
+  
            // Do the PID while the x button is first pressed
            motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
            lastTime = Timer.getFPGATimestamp();
