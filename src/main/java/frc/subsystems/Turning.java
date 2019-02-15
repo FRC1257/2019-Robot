@@ -1,19 +1,13 @@
 package frc.subsystems;
 
 import frc.robot.RobotMap;
-import frc.*;
+
 import frc.util.*;
 
 import edu.wpi.first.wpilibj.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
 
     public class Turning { 
         
@@ -61,6 +55,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
                 pidActive = true;
             }
+            else {
+                // End the PID
+                    pidActive = false;
+                }
             // Do the PID while the x button is first pressed
             motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
             lastTime = Timer.getFPGATimestamp();
@@ -80,6 +78,10 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
                pidActive = true;
            }
+           else {
+            // End the PID
+                pidActive = false;
+            }
            // Do the PID while the x button is first pressed
            motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
            lastTime = Timer.getFPGATimestamp();
