@@ -6,9 +6,11 @@ import frc.robot.RobotMap;
 // Xbox controller optimized for our drive team.
 
 public class SnailController extends XboxController {
+	private int prevDirection;
 
 	public SnailController(int port) {
 		super(port);
+		prevDirection = -1;
 	}
 
 	@Override
@@ -66,38 +68,38 @@ public class SnailController extends XboxController {
 	}
 
 	public boolean getDPadUp() {
-		if (getPOV(RobotMap.CONTROLLER_POV) == 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return getPOV(RobotMap.CONTROLLER_POV) == 0;
 	}
 
 	public boolean getDPadRight() {
-		if (getPOV(RobotMap.CONTROLLER_POV) == 90) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return getPOV(RobotMap.CONTROLLER_POV) == 90;
 	}
 
 	public boolean getDPadDown() {
-		if (getPOV(RobotMap.CONTROLLER_POV) == 180) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return getPOV(RobotMap.CONTROLLER_POV) == 180;
 	}
 
 	public boolean getDPadLeft() {
-		if (getPOV(RobotMap.CONTROLLER_POV) == 270) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return getPOV(RobotMap.CONTROLLER_POV) == 270;
+	}
+
+	public boolean getDPadUpPressed() {
+		return prevDirection != 0 && getDPadUp();
+	}
+
+	public boolean getDPadRightPressed() {
+		return prevDirection != 90 && getDPadRight();
+	}
+
+	public boolean getDPadDownPressed() {
+		return prevDirection != 180 && getDPadDown();
+	}
+
+	public boolean getDPadLeftPressed() {
+		return prevDirection != 270 && getDPadLeft();
+	}
+
+	public void updatePrevDPad() {
+		prevDirection = getPOV(RobotMap.CONTROLLER_POV);
 	}
 }

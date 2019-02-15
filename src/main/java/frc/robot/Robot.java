@@ -134,5 +134,7 @@ public class Robot extends TimedRobot {
         climb.outputValues();
         
         gyro.displayAngle();
+
+        oi.updateControllers();
     }
 }
