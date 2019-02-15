@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.util.SnailController;
+import static frc.util.SnailController.*;
 
 public class OI {
 
@@ -19,7 +20,6 @@ public class OI {
         operatorController = new SnailController(RobotMap.CONTROLLER_OPERATOR_PORT);
     }
 
-
     // Drive
     public double getDriveForwardSpeed() {
         return driveController.getForwardSpeed();
@@ -30,13 +30,15 @@ public class OI {
 
     // Intake Arm
     public double getArmSpeed() {
-        return operatorController.getY(Hand.kRight);
+        return squareInput(operatorController.getY(Hand.kRight));
     }
     public boolean getArmRaise() {
-        return operatorController.getAButtonPressed();
+        return false;
+        // return operatorController.getAButtonPressed();
     }
     public boolean getArmLower() {
-        return operatorController.getBButtonPressed();
+        return false;
+        // return operatorController.getBButtonPressed();
     }
     
 
@@ -44,38 +46,44 @@ public class OI {
     public boolean getCargoShootButton() {
         return operatorController.getAButton();
     }
+    public boolean getCargoIntakeButton() {
+        return operatorController.getBButton();
+    }
 
     
     // Hatch Intake
     public boolean getHatchPivotToggle() {
-        return operatorController.getXButtonPressed();
+        return false;
+        // return operatorController.getXButtonPressed();
     }
     public boolean getHatchPickup() {
-        return operatorController.getAButton();
+        return operatorController.getXButton();
     }
     public boolean getHatchEject() {
-        return operatorController.getBButton();
+        return operatorController.getYButton();
     }
     public double getHatchPivot() {
-        return operatorController.getY(Hand.kLeft);
+        return squareInput(operatorController.getY(Hand.kLeft));
     }
 
     
     // Climb
     public boolean getClimbAdvance() {
-        return operatorController.getAButtonPressed();
+        return false;
+        // return operatorController.getAButtonPressed();
     }
     public boolean getClimbFrontToggle() {
-        return operatorController.getXButtonPressed();
+        return operatorController.getBumperPressed(Hand.kRight);
     }
     public boolean getClimbBackToggle() {
-        return operatorController.getYButtonPressed();
+        return operatorController.getBumperPressed(Hand.kLeft);
     }
     public boolean getClimbReset() {
-        return operatorController.getBButtonPressed();
+        return false;
+        // return operatorController.getBButtonPressed();
     }
     public double getClimbDriveSpeed() {
-        return driveController.getY(Hand.kLeft);
+        return squareInput(driveController.getY(Hand.kLeft));
     }
     
     

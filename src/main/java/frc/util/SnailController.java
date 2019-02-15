@@ -1,6 +1,7 @@
 package frc.util;
 
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.RobotMap;
 
 // Xbox controller optimized for our drive team.
 
@@ -12,7 +13,12 @@ public class SnailController extends XboxController {
 
 	@Override
 	public double getY(Hand hand) {
-		return -super.getY(hand);
+		return applyDeadband(-super.getY(hand));
+	}
+
+	@Override
+	public double getX(Hand hand) {
+		return applyDeadband(super.getX(hand));
 	}
 
 	/*
@@ -45,5 +51,17 @@ public class SnailController extends XboxController {
 			return getX(Hand.kLeft);
 		else
 			return 0;
+	}
+
+	public double applyDeadband(double number) {
+        if(Math.abs(number) < RobotMap.CONTROLLER_DEADBAND) {
+            return 0;
+        }
+        return number;
+    }
+
+    public static double squareInput(double number) {
+        // Use abs to prevent the sign from being cancelled out
+        return Math.abs(number) * number;
 	}
 }

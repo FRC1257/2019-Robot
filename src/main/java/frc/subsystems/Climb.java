@@ -6,6 +6,7 @@ import frc.util.SnailDoubleSolenoid;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class Climb {
@@ -24,85 +25,84 @@ public class Climb {
 
         frontMotor = new WPI_VictorSPX(RobotMap.CLIMB_FRONT_MOTOR);
         backMotor = new WPI_VictorSPX(RobotMap.CLIMB_BACK_MOTOR);
+        frontMotor.setNeutralMode(NeutralMode.Brake);
+        backMotor.setNeutralMode(NeutralMode.Brake);
+
+        reset();
     }
     
     // Raise both front and back
     public void reset() {
-        lowerFront();
-        lowerBack();
+        retractFront();
+        retractBack();
     }
 
     public void toggleFront() {
-        if(getFront()) raiseFront();
-        else lowerFront();
+        if(isFrontExtended()) retractFront();
+        else extendFront();
     }
 
-    public void raiseFront() {
+    public void retractFront() {
         frontSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void lowerFront() {
+    public void extendFront() {
         frontSolenoid.set(DoubleSolenoid.Value.kReverse); 
     }
 
     public void toggleBack() {
-        if(getBack()) raiseBack();
-        else lowerBack();
+        if(isBackExtended()) retractBack();
+        else extendBack();
     }
 
-    public void raiseBack() {
+    public void retractBack() {
         backSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void lowerBack() {
+    public void extendBack() {
         backSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     /* Go to the next state of the climb
-     * 0 - Both front and back are not raised
-     * 1 - Both front and back are raised
-     * 2 - Front is not raised, back is raised
-     * 3 - Front is raised, back is not raised
+     * 0 - Both front and back are retracted
+     * 1 - Both front and back are extended
+     * 2 - Front is retracted, back is extended
+     * 3 - Front is extended, back is retracted
      */
-    public void advanceClimb(boolean reverseDrive) {
+    public void advanceClimb() {
         int state = getState();
         if(state == 0) {
-            raiseFront();
-            raiseBack();
+            extendFront();
+            extendBack();
         }
         else if(state == 1) {
-            if(reverseDrive) {
-                lowerFront();
-            }
-            else {
-                lowerBack();
-            }
+            retractFront();
         }
         else if(state == 2) {
-            lowerBack();
+            retractBack();
         }
-        else if(state == 3) {
-            lowerFront();
+        else if(state == 3) { // Shouldn't happen
+            retractFront();
         }
     }
 
     /* Returns the current state of the climb
-     * 0 - Both front and back are not raised
-     * 1 - Both front and back are raised
-     * 2 - Front is not raised, back is raised
-     * 3 - Front is raised, back is not raised
-     */ 
+     * 0 - Both front and back are retracted
+     * 1 - Both front and back are extended
+     * 2 - Front is retracted, back is extended
+     * 3 - Front is extended, back is retracted
+     */
     public int getState() {
-        if(!getFront() && !getBack()) {
+        if(!isFrontExtended() && !isBackExtended()) {
             return 0;
         }
-        else if(getFront() && getBack()) {
+        else if(isFrontExtended() && isBackExtended()) {
             return 1;
         }
-        else if(!getFront() && getBack()) {
+        else if(!isFrontExtended() && isBackExtended()) {
             return 2;
         }
-        else if(getFront() && !getBack()) {
+        else if(isFrontExtended() && !isBackExtended()) { // Shouldn't happen
             return 3;
         }
 
@@ -110,23 +110,24 @@ public class Climb {
     }
 
     public void climbDrive(double speed) {
-        if(getFront()) frontMotor.set(speed);
-        if(getBack()) backMotor.set(speed);
+        double adjustedSpeed = speed * RobotMap.CLIMB_MOTOR_MAX_SPEED;
+        if(isFrontExtended()) frontMotor.set(adjustedSpeed);
+        if(isBackExtended()) backMotor.set(adjustedSpeed);
     }
 
-    // Whether or not the front is currently raised
-    public boolean getFront() {
-        return frontSolenoid.get() == DoubleSolenoid.Value.kForward;
+    // Whether or not the front is currently extended
+    public boolean isFrontExtended() {
+        return frontSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
-    // Whether or not the front is currently raised
-    public boolean getBack() {
-        return backSolenoid.get() == DoubleSolenoid.Value.kForward;
+    // Whether or not the front is currently extended
+    public boolean isBackExtended() {
+        return backSolenoid.get() == DoubleSolenoid.Value.kReverse;
     }
 
     public void outputValues() {
-        SmartDashboard.putBoolean("Climb Front Raised", getFront());
-        SmartDashboard.putBoolean("Climb Back Raised", getBack());
+        SmartDashboard.putBoolean("Climb Front Extended", isFrontExtended());
+        SmartDashboard.putBoolean("Climb Back Extended", isBackExtended());
         SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
         SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
     }
