@@ -5,6 +5,7 @@ import frc.util.Gyro;
 import frc.util.SnailDoubleSolenoid;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -39,7 +40,7 @@ public class Climb {
         reset();
     }
     
-    // Raise both front and back
+    // Retract both front and back
     public void reset() {
         retractFront();
         retractBack();
@@ -51,11 +52,15 @@ public class Climb {
     }
 
     public void retractFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kForward);
+        frontSolenoid.set(Value.kForward);
     }
 
     public void extendFront() {
-        frontSolenoid.set(DoubleSolenoid.Value.kReverse); 
+        frontSolenoid.set(Value.kReverse); 
+    }
+
+    public void turnOffFront() {
+        frontSolenoid.set(Value.kOff);
     }
 
     public void toggleBack() {
@@ -64,11 +69,15 @@ public class Climb {
     }
 
     public void retractBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kForward);
+        backSolenoid.set(Value.kForward);
     }
 
     public void extendBack() {
-        backSolenoid.set(DoubleSolenoid.Value.kReverse);
+        backSolenoid.set(Value.kReverse);
+    }
+
+    public void turnOffBack() {
+        backSolenoid.set(Value.kOff);
     }
 
     /* Go to the next state of the climb
@@ -104,10 +113,14 @@ public class Climb {
     private void correctAngle() {
         if(state == 1) {
             double angle = Gyro.getInstance().getClimbTiltAngle();
-            // Robot is tilted backwards, so retract front
-            if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) retractFront();
-            // Robot is tilted forwards, so retract back
-            else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) retractBack();
+            // Robot is tilted backwards, so stop front
+            if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) {
+                turnOffFront();
+            }
+            // Robot is tilted forwards, so stop back
+            else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) {
+                turnOffBack();
+            }
             // Otherwise, just extend both
             else {
                 extendFront();

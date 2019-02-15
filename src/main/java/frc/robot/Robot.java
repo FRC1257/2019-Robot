@@ -93,7 +93,6 @@ public class Robot extends TimedRobot {
         
         
         // Cargo Intake
-        // Constantly intake unless shooting
         if(oi.getCargoShootButton()) {
             cargoIntake.shoot();
         }
