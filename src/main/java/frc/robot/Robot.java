@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import frc.subsystems.*;
 import frc.util.*;
 
@@ -14,11 +13,11 @@ public class Robot extends TimedRobot {
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
     Climb climb;
-    
+
     Gyro gyro;
-    
+
     OI oi;
-    
+
     @Override
     public void robotInit() {
         drive = DriveTrain.getInstance();
@@ -40,7 +39,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        
+
     }
 
     @Override
@@ -71,72 +70,76 @@ public class Robot extends TimedRobot {
         intakeArm.getConstantTuning();
         cargoIntake.getConstantTuning();
         hatchIntake.getConstantTuning();
-        
-        if(oi.getClimbBackToggle()) climb.toggleBack();
-        if(oi.getClimbFrontToggle()) climb.toggleFront();
+
+        if (oi.getClimbBackToggle())
+            climb.toggleBack();
+        if (oi.getClimbFrontToggle())
+            climb.toggleFront();
     }
 
     public void teleopFunctionality() {
         // Drive
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
-    
-        
+
         // Intake Arm
-        if(oi.getArmRaise()) intakeArm.raiseArm();
-        if(oi.getArmLower()) intakeArm.lowerArm();
-        if(!intakeArm.getPIDRunning()) {
+        if (oi.getArmRaise())
+            intakeArm.raiseArm();
+        if (oi.getArmLower())
+            intakeArm.lowerArm();
+        if (!intakeArm.getPIDRunning()) {
             intakeArm.setSpeed(oi.getArmSpeed());
-            
-            if(intakeArm.getLimitSwitch()) {
+
+            if (intakeArm.getLimitSwitch()) {
                 intakeArm.resetEncoder();
             }
         }
-        if(oi.getArmBreak()) intakeArm.breakPID();
+        if (oi.getArmBreak())
+            intakeArm.breakPID();
         intakeArm.updatePositionState();
         intakeArm.outputValues();
-        
-        
+
         // Cargo Intake
-        if(oi.getCargoShootButton()) {
+        if (oi.getCargoShootButton()) {
             cargoIntake.shoot();
-        }
-        else if(oi.getCargoIntakeButton()) {
+        } else if (oi.getCargoIntakeButton()) {
             cargoIntake.intake();
-        }
-        else {
+        } else {
             cargoIntake.stop();
         }
 
-        
         // Hatch Intake
-        if(oi.getHatchRaise()) hatchIntake.raisePivot();
-        if(oi.getHatchLower()) hatchIntake.lowerPivot();
-        if(!hatchIntake.getPIDRunning()) {
+        if (oi.getHatchRaise())
+            hatchIntake.raisePivot();
+        if (oi.getHatchLower())
+            hatchIntake.lowerPivot();
+        if (!hatchIntake.getPIDRunning()) {
             hatchIntake.setPickup(oi.getHatchPickup());
             hatchIntake.setPivot(oi.getHatchPivot());
 
-            // Only allow the hatch to eject if the hatch is not lowered and there is a hatch detected
+            // Only allow the hatch to eject if the hatch is not lowered and there is a
+            // hatch detected
             // if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
-                hatchIntake.setEject(oi.getHatchEject());
+            hatchIntake.setEject(oi.getHatchEject());
             // }
             // else {
-            //     hatchIntake.ejectRetract();
+            // hatchIntake.ejectRetract();
             // }
 
-            if(hatchIntake.getLimitSwitchPivot()) {
+            if (hatchIntake.getLimitSwitchPivot()) {
                 hatchIntake.resetEncoder();
             }
         }
         hatchIntake.updatePositionState();
         hatchIntake.outputValues();
 
-        
         // Climb
-        if(oi.getClimbAdvance()) climb.advanceClimb();
-        if(oi.getClimbReset()) climb.reset();
+        if (oi.getClimbAdvance())
+            climb.advanceClimb();
+        if (oi.getClimbReset())
+            climb.reset();
         climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
-        
+
         gyro.displayAngle();
 
         oi.updateControllers();
