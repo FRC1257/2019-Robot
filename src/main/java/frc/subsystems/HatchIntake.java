@@ -29,6 +29,7 @@ public class HatchIntake {
 
     private DigitalInput limitSwitchPivot;
     private DigitalInput limitSwitchHatch;
+    private boolean lastLimit;
 
     private Notifier notifier; // looper for updating PID loop for pivot
     private double currentPIDSetpoint; // current target position of pivot
@@ -45,16 +46,19 @@ public class HatchIntake {
         hatchPivotMotor.setIdleMode(IdleMode.kBrake);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
-        hatchPivotPID.setOutputRange(RobotMap.HATCH_PID_MIN_OUTPUT, RobotMap.HATCH_PID_MAX_OUTPUT);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
         hatchPivotPID.setI(RobotMap.HATCH_PIDF[1]);
         hatchPivotPID.setD(RobotMap.HATCH_PIDF[2]);
         hatchPivotPID.setFF(RobotMap.HATCH_PIDF[3]);
+        hatchPivotPID.setIZone(0.0);
+        hatchPivotPID.setOutputRange(RobotMap.HATCH_PID_MIN_OUTPUT, RobotMap.HATCH_PID_MAX_OUTPUT);
 
         limitSwitchPivot = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_PIVOT_ID);
         limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
+        lastLimit = true;
 
         notifier = new Notifier(this::updatePID);
+        notifier.stop();
 
         setConstantTuning();
 
@@ -110,7 +114,7 @@ public class HatchIntake {
         // {
         // adjustedSpeed = 0.0;
         // }
-        hatchPivotMotor.set(adjustedSpeed);
+        if(adjustedSpeed != 0.0 || hatchPivotMotor.get() != 0.0) hatchPivotMotor.set(adjustedSpeed);
     }
 
     public void togglePivot() {
@@ -178,6 +182,7 @@ public class HatchIntake {
     // Updates the position state for whether or not the intake is lowered
     public void updatePositionState() {
         lowered = getEncoderPosition() >= (RobotMap.HATCH_PID_LOWERED + RobotMap.HATCH_PID_RAISED) / 2.0;
+        lastLimit = getLimitSwitchPivot();
     }
 
     public boolean isLowered() {
@@ -193,11 +198,16 @@ public class HatchIntake {
     }
 
     public boolean getLimitSwitchPivot() {
-        return limitSwitchPivot.get();
+        return !limitSwitchPivot.get();
     }
 
     public boolean getLimitSwitchHatch() {
-        return limitSwitchHatch.get();
+        return !limitSwitchHatch.get();
+    }
+
+    // Returns when the limit switch is first pressed or first released
+    public boolean getLimitSwitchPivotPressed() {
+        return lastLimit != getLimitSwitchPivot();
     }
 
     public boolean getPIDRunning() {
@@ -229,18 +239,23 @@ public class HatchIntake {
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
         RobotMap.HATCH_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Hatch Max Speed", RobotMap.HATCH_MOTOR_MAX_SPEED);
-
-        RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
-
-        RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
-
-        RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
-
-        RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
+        
+        if(RobotMap.HATCH_PIDF[0] != SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0])) {
+            RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
+        }
+        if(RobotMap.HATCH_PIDF[1] != SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1])) {
+            RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
+        }
+        if(RobotMap.HATCH_PIDF[2] != SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2])) {
+            RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
+        }
+        if(RobotMap.HATCH_PIDF[3] != SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3])) {
+            RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
+        }
     }
 
     public static HatchIntake getInstance() {

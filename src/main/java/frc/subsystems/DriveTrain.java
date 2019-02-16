@@ -32,6 +32,11 @@ public class DriveTrain {
         blDrive.setIdleMode(IdleMode.kBrake);
         brDrive.setIdleMode(IdleMode.kBrake);
 
+        flDrive.setOpenLoopRampRate(2.0);
+        frDrive.setOpenLoopRampRate(2.0);
+        blDrive.setOpenLoopRampRate(2.0);
+        brDrive.setOpenLoopRampRate(2.0);
+
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
 

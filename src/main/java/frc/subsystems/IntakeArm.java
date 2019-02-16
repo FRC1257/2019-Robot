@@ -41,9 +41,11 @@ public class IntakeArm {
         intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
         intakeArmPID.setD(RobotMap.INTAKE_ARM_PIDF[2]);
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
+        intakeArmPID.setIZone(0.0);
         intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
 
         notifier = new Notifier(this::updatePID);
+        notifier.stop();
 
         reset();
     }
@@ -71,7 +73,7 @@ public class IntakeArm {
         // RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
         // adjustedSpeed = 0.0;
         // }
-        intakeArmMotor.set(adjustedSpeed);
+        if(adjustedSpeed != 0.0 || intakeArmMotor.get() != 0.0) intakeArmMotor.set(adjustedSpeed);
     }
 
     public void raiseArm() {
@@ -119,7 +121,7 @@ public class IntakeArm {
         running = true;
         intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
         System.out.println("Arm going to " + currentPIDSetpoint + 
-            " and currently at " + intakeArmEncoder.getPosition());
+            " and currently at " + intakeArmEncoder.getPosition()); 
 
         // Check if the encoder's position is within the tolerance
         if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
@@ -213,17 +215,22 @@ public class IntakeArm {
         RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Intake Arm Max Speed",
                 RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
 
-        RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
-
-        RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
-
-        RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
-
-        RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
+        if(RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
+            RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
+            RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
+            RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
+        }
+        if(RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
+            RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
+            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
+        }
     }
 
     public static IntakeArm getInstance() {
