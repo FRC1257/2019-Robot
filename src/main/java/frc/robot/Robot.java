@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
                 intakeArm.resetEncoder();
             }
         }
-        if (oi.getArmBreak())
+        if (oi.getArmPIDBreak())
             intakeArm.breakPID();
         intakeArm.updatePositionState();
         intakeArm.outputValues();
@@ -125,10 +125,12 @@ public class Robot extends TimedRobot {
             // hatchIntake.ejectRetract();
             // }
 
-            if (hatchIntake.getLimitSwitchPivot()) {
+            if (!hatchIntake.getLimitSwitchPivot()) {
                 hatchIntake.resetEncoder();
             }
         }
+        if (oi.getHatchPIDBreak())
+            hatchIntake.breakPID();
         hatchIntake.updatePositionState();
         hatchIntake.outputValues();
 

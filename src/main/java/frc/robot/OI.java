@@ -44,7 +44,7 @@ public class OI {
         return operatorController.getBumperPressed(Hand.kRight);
     }
 
-    public boolean getArmBreak() {
+    public boolean getArmPIDBreak() {
         return operatorController.getStickButton(Hand.kRight);
     }
 
@@ -76,6 +76,10 @@ public class OI {
 
     public double getHatchPivot() {
         return squareInput(operatorController.getY(Hand.kLeft));
+    }
+
+    public boolean getHatchPIDBreak() {
+        return operatorController.getStickButton(Hand.kLeft);
     }
 
     // Climb
