@@ -118,6 +118,8 @@ public class IntakeArm {
     private void updatePID() {
         running = true;
         intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
+        System.out.println("Arm going to " + currentPIDSetpoint + 
+            " and currently at " + intakeArmEncoder.getPosition());
 
         // Check if the encoder's position is within the tolerance
         if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {

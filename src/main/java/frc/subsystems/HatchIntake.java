@@ -138,6 +138,8 @@ public class HatchIntake {
     private void updatePID() {
         running = true;
         hatchPivotPID.setReference(currentPIDSetpoint, ControlType.kPosition);
+        System.out.println("Hatch going to " + currentPIDSetpoint + 
+            " and currently at " + hatchPivotEncoder.getPosition());
 
         // Check if the pivot's position is within the tolerance
         if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
