@@ -76,12 +76,14 @@ public class OI {
     }
     public boolean getClimbFrontToggle() {
         return operatorController.getDPadLeftPressed();
+        // return operatorController.getBumperPressed(Hand.kLeft);
     }
     public boolean getClimbBackToggle() {
         return operatorController.getDPadRightPressed();
+        // return operatorController.getBumperPressed(Hand.kRight);
     }
     public boolean getClimbReset() {
-        return operatorController.getDPadUpPressed();
+        return operatorController.getDPadDownPressed();
     }
     public double getClimbDriveSpeed() {
         return squareInput(driveController.getY(Hand.kLeft));
@@ -90,6 +92,9 @@ public class OI {
     public void updateControllers() {
         driveController.updatePrevDPad();
         operatorController.updatePrevDPad();
+
+        driveController.outputPrev("Drive");
+        operatorController.outputPrev("Operator");
     }
     
     public static OI getInstance() {

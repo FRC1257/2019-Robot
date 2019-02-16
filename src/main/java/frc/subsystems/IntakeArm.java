@@ -163,7 +163,7 @@ public class IntakeArm {
 
     // Whether or not the bottom limit switch is pressed
     public boolean getLimitSwitch() {
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
 
     public boolean getPIDRunning() {
@@ -174,6 +174,7 @@ public class IntakeArm {
     public void outputValues() {
         SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
         SmartDashboard.putBoolean("Intake Arm PID Active", running);
+        SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());

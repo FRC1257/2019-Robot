@@ -1,6 +1,7 @@
 package frc.util;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 // Xbox controller optimized for our drive team.
@@ -101,5 +102,9 @@ public class SnailController extends XboxController {
 
 	public void updatePrevDPad() {
 		prevDirection = getPOV(RobotMap.CONTROLLER_POV);
+	}
+
+	public void outputPrev(String prefix) {
+		SmartDashboard.putNumber(prefix + " Prev", prevDirection);
 	}
 }
