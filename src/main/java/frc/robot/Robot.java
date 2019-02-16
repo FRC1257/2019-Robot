@@ -4,7 +4,9 @@ import frc.subsystems.*;
 import frc.util.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.cameraserver.CameraServer;;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;;
 
 public class Robot extends TimedRobot {
 
@@ -35,6 +37,8 @@ public class Robot extends TimedRobot {
         hatchIntake.setConstantTuning();
 
         CameraServer.getInstance().startAutomaticCapture();
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        table.getEntry("pipeline").setNumber(2);
     }
 
     @Override
@@ -93,8 +97,9 @@ public class Robot extends TimedRobot {
                 intakeArm.resetEncoder();
             }
         }
-        if (oi.getArmPIDBreak())
+        if (oi.getArmPIDBreak()) {
             intakeArm.breakPID();
+        }
         intakeArm.updatePositionState();
         intakeArm.outputValues();
 
@@ -125,12 +130,13 @@ public class Robot extends TimedRobot {
             // hatchIntake.ejectRetract();
             // }
 
-            if (!hatchIntake.getLimitSwitchPivot()) {
+            if (hatchIntake.getLimitSwitchPivotPressed()) {
                 hatchIntake.resetEncoder();
             }
         }
-        if (oi.getHatchPIDBreak())
+        if (oi.getHatchPIDBreak()) {
             hatchIntake.breakPID();
+        }
         hatchIntake.updatePositionState();
         hatchIntake.outputValues();
 
