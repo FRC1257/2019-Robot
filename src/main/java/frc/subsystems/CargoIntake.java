@@ -8,9 +8,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class CargoIntake {
-    
+
     private static CargoIntake instance = null;
-    
+
     private WPI_VictorSPX intakeMotor;
 
     private CargoIntake() {
@@ -22,7 +22,7 @@ public class CargoIntake {
     public void shoot() {
         intakeMotor.set(RobotMap.CARGO_OUTTAKE_SPEED);
     }
-    
+
     public void intake() {
         intakeMotor.set(RobotMap.CARGO_INTAKE_SPEED);
     }
@@ -30,14 +30,14 @@ public class CargoIntake {
     public void stop() {
         intakeMotor.set(0);
     }
-    
+
     // Smart Dashboard
     // Initialize constants in Smart Dashboard
     public void setConstantTuning() {
         SmartDashboard.putNumber("Cargo Intake Speed", RobotMap.CARGO_INTAKE_SPEED);
         SmartDashboard.putNumber("Cargo Outake Speed", RobotMap.CARGO_OUTTAKE_SPEED);
     }
-    
+
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
         RobotMap.CARGO_INTAKE_SPEED = SmartDashboard.getNumber("Cargo Intake Speed", RobotMap.CARGO_INTAKE_SPEED);

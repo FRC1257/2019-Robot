@@ -7,6 +7,7 @@ import frc.robot.RobotMap;
 // Xbox controller optimized for our drive team.
 
 public class SnailController extends XboxController {
+
 	private int prevDirection;
 
 	public SnailController(int port) {
@@ -33,7 +34,7 @@ public class SnailController extends XboxController {
 	 * If they press the right bumper, use the right joystick for forward and
 	 * backward motion and the left joystick for turning
 	 */
-	
+
 	public double getForwardSpeed() {
 		if (getAButton())
 			return getY(Hand.kLeft);
@@ -57,15 +58,15 @@ public class SnailController extends XboxController {
 	}
 
 	public double applyDeadband(double number) {
-        if(Math.abs(number) < RobotMap.CONTROLLER_DEADBAND) {
-            return 0;
-        }
-        return number;
-    }
+		if (Math.abs(number) < RobotMap.CONTROLLER_DEADBAND) {
+			return 0;
+		}
+		return number;
+	}
 
-    public static double squareInput(double number) {
-        // Use abs to prevent the sign from being cancelled out
-        return Math.abs(number) * number;
+	public static double squareInput(double number) {
+		// Use abs to prevent the sign from being cancelled out
+		return Math.abs(number) * number;
 	}
 
 	public boolean getDPadUp() {

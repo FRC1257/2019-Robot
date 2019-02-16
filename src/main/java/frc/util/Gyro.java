@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.I2C.Port;
 
 public class Gyro {
+
     private static Gyro instance = null;
-    
+
     private AHRS navx;
     private double resetRoll;
     private double resetPitch;
@@ -17,9 +18,10 @@ public class Gyro {
         resetRoll = 0;
         resetPitch = 0;
     }
-    
+
     /**
      * Gets the current yaw angle.
+     * 
      * @return The angle in degrees.
      */
     public double getYawAngle() {
@@ -28,14 +30,16 @@ public class Gyro {
 
     /**
      * Gets the current roll angle.
+     * 
      * @return The angle in degrees.
      */
     public double getRollAngle() {
         return navx.getRoll() - resetRoll;
     }
-    
+
     /**
      * Gets the current pitch angle.
+     * 
      * @return The angle in degrees.
      */
     public double getPitchAngle() {
@@ -48,14 +52,14 @@ public class Gyro {
     public void zeroYawAngle() {
         navx.zeroYaw();
     }
-    
+
     /**
      * Sets the current roll angle to "0".
      */
     public void zeroRollAngle() {
         resetRoll = getRollAngle();
     }
-    
+
     /**
      * Sets the current pitch angle to "0".
      */
@@ -65,34 +69,36 @@ public class Gyro {
 
     /**
      * Gets the current rotation of the robot.
+     * 
      * @return The angle in degrees.
      */
     public double getRobotAngle() {
         return getYawAngle();
     }
-    
+
     /**
      * Gets the current tilt of the robot while climbing.
+     * 
      * @return THe angle in degrees
      */
     public double getClimbTiltAngle() {
         return getRollAngle();
     }
-    
+
     /**
      * Sets the current rotation of the robot to "0".
      */
     public void zeroRobotAngle() {
         zeroYawAngle();
     }
-    
+
     /**
      * Sets the current tilt of the robot to "0".
      */
     public void zeroClimbTiltAngle() {
         zeroRollAngle();
     }
-    
+
     /**
      * Displays the yaw angle on {@code SmartDashboard}.
      */
