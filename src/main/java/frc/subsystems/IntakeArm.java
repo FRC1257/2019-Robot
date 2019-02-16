@@ -75,16 +75,20 @@ public class IntakeArm {
     }
 
     public void raiseArm() {
-        if (currentPositionState == 0)
+        if (getPositionState() == 0)
             moveRocket();
-        else if (currentPositionState == 1)
+        else if (getPositionState() == 1)
             moveCargo();
+        else if (getPositionState() == 2)
+            moveRaised();
     }
 
     public void lowerArm() {
-        if (currentPositionState == 2)
+        if (getPositionState() == 3)
+            moveCargo();
+        else if (getPositionState() == 2)
             moveRocket();
-        else if (currentPositionState == 1)
+        else if (getPositionState() == 1)
             moveGround();
     }
 
@@ -98,6 +102,10 @@ public class IntakeArm {
 
     public void moveCargo() {
         setPIDPosition(RobotMap.INTAKE_ARM_PID_CARGO);
+    }
+
+    public void moveRaised() {
+        setPIDPosition(RobotMap.INTAKE_ARM_PID_RAISED);
     }
 
     public void setPIDPosition(double value) {

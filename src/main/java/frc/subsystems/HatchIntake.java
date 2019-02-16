@@ -114,7 +114,7 @@ public class HatchIntake {
     }
 
     public void togglePivot() {
-        if (lowered)
+        if (isLowered())
             raisePivot();
         else
             lowerPivot();

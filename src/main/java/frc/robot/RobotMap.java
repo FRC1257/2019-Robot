@@ -48,7 +48,7 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_GROUND = 0.0; // Target position for ground pickup
     public static final double INTAKE_ARM_PID_ROCKET = 10.0; // Target position for rocket
     public static final double INTAKE_ARM_PID_CARGO = 20.0; // Target position for cargo ship
-    public static final double INTAKE_ARM_PID_RAISED = 25.0;
+    public static final double INTAKE_ARM_PID_RAISED = 25.0; // Target position for straight up
     public static double INTAKE_ARM_MOTOR_MAX_SPEED = 1.0;
 
     public static final double[] INTAKE_ARM_PIDF = { 0.1, 0.0, 0.0, 0.0 };
