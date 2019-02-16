@@ -32,6 +32,8 @@ public class Robot extends TimedRobot {
         intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
         hatchIntake.setConstantTuning();
+
+        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override
@@ -78,8 +80,8 @@ public class Robot extends TimedRobot {
     
         
         // Intake Arm
-        // if(oi.getArmRaise()) intakeArm.raiseArm();
-        // if(oi.getArmLower()) intakeArm.lowerArm();
+        if(oi.getArmRaise()) intakeArm.raiseArm();
+        if(oi.getArmLower()) intakeArm.lowerArm();
         if(!intakeArm.getPIDRunning()) {
             intakeArm.setSpeed(oi.getArmSpeed());
             

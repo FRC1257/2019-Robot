@@ -34,8 +34,8 @@ public class Climb {
         frontMotor.setNeutralMode(NeutralMode.Brake);
         backMotor.setNeutralMode(NeutralMode.Brake);
 
-        notifier = new Notifier(this::correctAngle);
-        notifier.startPeriodic(RobotMap.CLIMB_UPDATE_PERIOD);
+        // notifier = new Notifier(this::correctAngle);
+        // notifier.startPeriodic(RobotMap.CLIMB_UPDATE_PERIOD);
 
         reset();
     }
@@ -82,8 +82,10 @@ public class Climb {
 
     /* Go to the next state of the climb
      * 0 - Both front and back are retracted
-     * 1 - Both front and back are extended
-     * 2 - Front is retracted, back is extended
+     * 1 - Rising up, leaning towards front
+     * 2 - Rising up, front is retracting
+     * 3 - Fully risen
+     * 4 - Front is retracted, back is extended
      */
     public void advanceClimb() {
         if(state == 0) {
@@ -96,6 +98,14 @@ public class Climb {
             state = 2;
         }
         else if(state == 2) {
+            extendFront();
+            state = 3;
+        }
+        else if(state == 3) {
+            retractFront();
+            state = 4;
+        }
+        else if(state == 4) {
             retractBack();
             state = 0;
         }
@@ -109,25 +119,25 @@ public class Climb {
         else backMotor.set(0);
     }
 
-    // If the robot is tilted beyond a critical angle while rising, retract appropriate solenoid
-    private void correctAngle() {
-        if(state == 1) {
-            double angle = Gyro.getInstance().getClimbTiltAngle();
-            // Robot is tilted backwards, so stop front
-            if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) {
-                turnOffFront();
-            }
-            // Robot is tilted forwards, so stop back
-            else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) {
-                turnOffBack();
-            }
-            // Otherwise, just extend both
-            else {
-                extendFront();
-                extendBack();
-            }
-        }
-    }
+    // // If the robot is tilted beyond a critical angle while rising, retract appropriate solenoid
+    // private void correctAngle() {
+    //     if(state == 1) {
+    //         double angle = Gyro.getInstance().getClimbTiltAngle();
+    //         // Robot is tilted backwards, so stop front
+    //         if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) {
+    //             retractFront();
+    //         }
+    //         // Robot is tilted forwards, so stop back
+    //         else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) {
+    //             retractBack();
+    //         }
+    //         // Otherwise, just extend both
+    //         else {
+    //             extendFront();
+    //             extendBack();
+    //         }
+    //     }
+    // }
 
     // Whether or not the front is currently extended
     public boolean isFrontExtended() {

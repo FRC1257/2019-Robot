@@ -68,7 +68,7 @@ public class Gyro {
      * @return The angle in degrees.
      */
     public double getRobotAngle() {
-        return getPitchAngle();
+        return getYawAngle();
     }
     
     /**
@@ -76,21 +76,21 @@ public class Gyro {
      * @return THe angle in degrees
      */
     public double getClimbTiltAngle() {
-        return getYawAngle();
+        return getRollAngle();
     }
     
     /**
      * Sets the current rotation of the robot to "0".
      */
     public void zeroRobotAngle() {
-        zeroPitchAngle();
+        zeroYawAngle();
     }
     
     /**
      * Sets the current tilt of the robot to "0".
      */
     public void zeroClimbTiltAngle() {
-        zeroYawAngle();
+        zeroRollAngle();
     }
     
     /**

@@ -24,7 +24,7 @@ public class RobotMap {
     public static final int HATCH_PICKUP_SOLENOID_ID = 4;
     public static final int HATCH_EJECT_SOLENOID_ID = 5;
     public static final int HATCH_LIMIT_SWITCH_PIVOT_ID = 2;
-    public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 1;
+    public static final int HATCH_LIMIT_SWITCH_HATCH_ID = 0;
 
     // Hatch Intake: 0 is at top, positive means lower
     public static final double HATCH_PID_LOWERED = 10.0;            // Position of the hatch intake when lowered
@@ -40,21 +40,21 @@ public class RobotMap {
 
     // Intake Arm
     public static final int INTAKE_ARM_MOTOR_ID = 6;
-    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 0;
+    public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 1;
 
     // Intake Arm: 0 is at bottom, positive means higher
     public static final double INTAKE_ARM_LOWER_THRESHOLD = 0.0;         // Lower limit of the arm's motion
     public static final double INTAKE_ARM_UPPER_THRESHOLD = 10.0;        // Upper limit of the arm's motion
     public static final double INTAKE_ARM_PID_GROUND = 0.0;              // Target position for ground pickup
-    public static final double INTAKE_ARM_PID_ROCKET = 5.0;              // Target position for rocket
-    public static final double INTAKE_ARM_PID_CARGO = 10.0;              // Target position for cargo ship
+    public static final double INTAKE_ARM_PID_ROCKET = 10.0;              // Target position for rocket
+    public static final double INTAKE_ARM_PID_CARGO = 20.0;              // Target position for cargo ship
     public static double INTAKE_ARM_MOTOR_MAX_SPEED = 1.0;
 
-    public static final double[] INTAKE_ARM_PIDF = {1.0, 2.0, 3.0, 4.0}; 
-    public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
-    public static final double INTAKE_ARM_PID_MIN_OUTPUT = -1.0;
+    public static final double[] INTAKE_ARM_PIDF = {0.1, 0.0, 0.0, 0.0}; 
+    public static final double INTAKE_ARM_PID_MAX_OUTPUT = 0.5;
+    public static final double INTAKE_ARM_PID_MIN_OUTPUT = -0.5;
     public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020;     // How often the PID will be checked in sec
-    public static final double INTAKE_ARM_PID_TOLERANCE = 5;             // How close the PID can be
+    public static final double INTAKE_ARM_PID_TOLERANCE = 0.5;           // How close the PID can be
     public static final double INTAKE_ARM_PID_TIME = 0.01;               // How long the PID has to be on target in sec
 
     // Cargo Intake
@@ -73,6 +73,6 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
-    public static final double CLIMB_CRITICAL_ANGLE = 15.0;
+    public static final double CLIMB_CRITICAL_ANGLE = 20.0;
     public static final double CLIMB_UPDATE_PERIOD = 0.020;
 }
