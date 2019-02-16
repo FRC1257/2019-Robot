@@ -140,7 +140,7 @@ public class IntakeArm {
     }
 
     /* Sets the current position state dependent on the encoder position
-     * 0 - ground, 1 - rocket, 2 - cargo
+     * 0 - ground, 1 - rocket, 2 - cargo, 3 - raised
      */
     public void updatePositionState() {
         if(getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
@@ -149,13 +149,16 @@ public class IntakeArm {
         else if(getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
             currentPositionState = 1;
         }
-        else {
+        else if(getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_CARGO + RobotMap.INTAKE_ARM_PID_RAISED) / 2.0) {
             currentPositionState = 2;
+        }
+        else {
+            currentPositionState = 3;
         }
     }
 
     /* Returns the current position state dependent on the encoder position
-     * 0 - ground, 1 - rocket, 2 - cargo
+     * 0 - ground, 1 - rocket, 2 - cargo, 3 - raised
      */
     public int getPositionState() {
         return currentPositionState;

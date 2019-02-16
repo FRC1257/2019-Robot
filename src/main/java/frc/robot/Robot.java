@@ -3,7 +3,9 @@ package frc.robot;
 
 import frc.subsystems.*;
 import frc.util.*;
-import edu.wpi.first.wpilibj.*;
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.cameraserver.CameraServer;;
 
 public class Robot extends TimedRobot {
 
@@ -107,7 +109,8 @@ public class Robot extends TimedRobot {
 
         
         // Hatch Intake
-        // if(oi.getHatchPivotToggle()) hatchIntake.togglePivot();
+        if(oi.getHatchRaise()) hatchIntake.raisePivot();
+        if(oi.getHatchLower()) hatchIntake.lowerPivot();
         if(!hatchIntake.getPIDRunning()) {
             hatchIntake.setPickup(oi.getHatchPickup());
             hatchIntake.setPivot(oi.getHatchPivot());
