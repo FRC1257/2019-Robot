@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.util.snail_vision.*;
+
 public class RobotMap {
     /**
      * Contains constants for use without the entire robot
@@ -70,4 +72,25 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
+
+    // Vision
+
+    public static final double[] AREA_TO_DISTANCE_ROCKET = {1};
+    public static final double[] AREA_TO_DISTANCE_SHIP = {1};
+
+
+    public static void initializeVision(SnailVision vision){
+        vision.ANGLE_CORRECT_P = 1;
+        vision.ANGLE_CORRECT_F = 1;
+        vision.ANGLE_CORRECT_MIN_ANGLE = 1;
+        
+        vision.GET_IN_DISTANCE_P = 1;
+        vision.GET_IN_DISTANCE_ERROR = 1;
+        vision.DISTANCE_ESTIMATION_METHOD = "area";
+
+        vision.JERK_COLLISION_THRESHOLD = 1;
+
+        vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_ROCKET)); // Rocket
+        vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_SHIP)); // Cargo Ship
+    }
 }

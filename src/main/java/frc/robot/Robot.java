@@ -3,7 +3,9 @@ package frc.robot;
 
 import frc.subsystems.*;
 import frc.util.*;
+import frc.util.snail_vision.*;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.networktables.*;
 
 public class Robot extends TimedRobot {
 
@@ -17,6 +19,8 @@ public class Robot extends TimedRobot {
     
     OI oi;
     
+    SnailVision vision; 
+
     @Override
     public void robotInit() {
         drive = DriveTrain.getInstance();
@@ -32,6 +36,9 @@ public class Robot extends TimedRobot {
         intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
         hatchIntake.setConstantTuning();
+
+        vision = new SnailVision(true); 
+        RobotMap.initializeVision(vision);
     }
 
     @Override
@@ -73,9 +80,12 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopFunctionality() {
+        // Vision
+        vision.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
+        
         // Drive
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
-    
+        
         
         // Intake Arm
         if(oi.getArmRaise()) intakeArm.raiseArm();
