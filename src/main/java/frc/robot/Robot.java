@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
 
     public void teleopFunctionality() {
         // Drive
+        if(oi.getDriveReverse()) drive.toggleReverse();
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
 
         // Intake Arm
@@ -109,7 +110,7 @@ public class Robot extends TimedRobot {
         } else if (oi.getCargoIntakeButton()) {
             cargoIntake.intake();
         } else {
-            cargoIntake.stop();
+            cargoIntake.constantIntake();
         }
 
         // Hatch Intake

@@ -29,6 +29,10 @@ public class OI {
         return driveController.getTurnSpeed();
     }
 
+    public boolean getDriveReverse() {
+        return driveController.getBButtonPressed();
+    }
+
     // Intake Arm
     public double getArmSpeed() {
         return squareInput(-operatorController.getY(Hand.kRight));
@@ -88,12 +92,12 @@ public class OI {
     }
 
     public boolean getClimbFrontToggle() {
-        return operatorController.getDPadLeftPressed();
+        return operatorController.getBackButtonPressed();
         // return operatorController.getBumperPressed(Hand.kLeft);
     }
 
     public boolean getClimbBackToggle() {
-        return operatorController.getDPadRightPressed();
+        return operatorController.getStartButtonPressed();
         // return operatorController.getBumperPressed(Hand.kRight);
     }
 

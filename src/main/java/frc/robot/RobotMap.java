@@ -61,7 +61,8 @@ public class RobotMap {
     // Cargo Intake
     public static final int CARGO_INTAKE_MOTOR_ID = 7;
     public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
-    public static double CARGO_INTAKE_SPEED = 0.5; // percentage
+    public static double CARGO_INTAKE_SPEED = 1.0; // percentage
+    public static double CARGO_CONSTANT_INTAKE_SPEED = 0.2; // percentage
 
     // Climb
     public static final int CLIMB_FRONT_MOTOR = 9;

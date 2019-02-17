@@ -19,8 +19,8 @@ public class DriveTrain {
 
     private DifferentialDrive driveTrain;
 
-    double m_maxOutput;
-
+    private boolean reversed;
+    
     private DriveTrain() {
         flDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
         frDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless);
@@ -32,15 +32,21 @@ public class DriveTrain {
         blDrive.setIdleMode(IdleMode.kBrake);
         brDrive.setIdleMode(IdleMode.kBrake);
 
-        flDrive.setOpenLoopRampRate(2.0);
-        frDrive.setOpenLoopRampRate(2.0);
-        blDrive.setOpenLoopRampRate(2.0);
-        brDrive.setOpenLoopRampRate(2.0);
+        flDrive.setOpenLoopRampRate(0.0);
+        frDrive.setOpenLoopRampRate(0.0);
+        blDrive.setOpenLoopRampRate(0.0);
+        brDrive.setOpenLoopRampRate(0.0);
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
 
         driveTrain = new DifferentialDrive(flDrive, frDrive);
+
+        reversed = false;
+    }
+
+    public void toggleReverse() {
+        reversed = !reversed;
     }
 
     public static DriveTrain getInstance() {
@@ -51,6 +57,9 @@ public class DriveTrain {
     }
 
     public void drive(double x, double z) {
-        driveTrain.arcadeDrive(x, z);
+        if(reversed)
+            driveTrain.arcadeDrive(-x, z);
+        else
+            driveTrain.arcadeDrive(x, z);
     }
 }
