@@ -139,7 +139,8 @@ public class Robot extends TimedRobot {
 
         // Turning in place
         if(oi.getTurnLeft()) turning.TurnLeft();
-        if(oi.getTurnRight()) turning.TurnRight();
+        else if(oi.getTurnRight()) turning.TurnRight();
+        else turning.disablePID();
 
         turning.displayValues();
         turning.updateConstantTuning();

@@ -55,10 +55,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
                 pidActive = true;
             }
-            else {
-            // End the PID
-                pidActive = false;
-            }
          
             // Do the PID while the x button is first pressed
             motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
@@ -79,10 +75,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
                pidActive = true;
            }
-           else {
-            // End the PID
-                pidActive = false;
-            }
   
            // Do the PID while the x button is first pressed
            motorSpeed = pid.calculate(gyro.getAngle(), Timer.getFPGATimestamp() - lastTime);
@@ -90,6 +82,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
            
            driveTrain.drive(0, motorSpeed);
 
+       }
+
+       public void disablePID() {
+           pidActive = false;
        }
 
 
