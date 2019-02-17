@@ -27,6 +27,10 @@ public class CargoIntake {
         intakeMotor.set(RobotMap.CARGO_INTAKE_SPEED);
     }
 
+    public void constantIntake() {
+        intakeMotor.set(RobotMap.CARGO_CONSTANT_INTAKE_SPEED);
+    }
+
     public void stop() {
         intakeMotor.set(0);
     }
