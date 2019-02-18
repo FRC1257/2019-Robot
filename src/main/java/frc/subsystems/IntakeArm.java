@@ -30,12 +30,11 @@ public class IntakeArm {
     private double pidTime; // the timestamp for when the PID enters the tolerance range
     private boolean running; // whether or not the PID loop is currently running
 
-    public IntakeArm() {
+    private IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
         intakeArmMotor.setIdleMode(IdleMode.kBrake);
+        intakeArmMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         intakeArmEncoder = intakeArmMotor.getEncoder();
-        limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
-
         intakeArmPID = intakeArmMotor.getPIDController();
         intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
         intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
@@ -43,6 +42,8 @@ public class IntakeArm {
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
         intakeArmPID.setIZone(0.0);
         intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
+        
+        limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
 
         notifier = new Notifier(this::updatePID);
         notifier.stop();
@@ -57,7 +58,8 @@ public class IntakeArm {
         currentPIDSetpoint = 0;
         pidTime = -1;
         running = false;
-        resetEncoder();
+        
+        resetEncoderTop();
     }
 
     // Moves the arm at a set speed and restricts the motion of the arm
@@ -120,8 +122,6 @@ public class IntakeArm {
     private void updatePID() {
         running = true;
         intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
-        System.out.println("Arm going to " + currentPIDSetpoint + 
-            " and currently at " + intakeArmEncoder.getPosition()); 
 
         // Check if the encoder's position is within the tolerance
         if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
@@ -145,8 +145,18 @@ public class IntakeArm {
         pidTime = -1;
     }
 
+    /* 
+     * Resets the encoder to the bottom position
+     */
     public void resetEncoder() {
         intakeArmEncoder.setPosition(0.0);
+    }
+    
+    /* 
+     * Resets the encoder to the top position
+     */
+    public void resetEncoderTop() {
+        intakeArmEncoder.setPosition(RobotMap.INTAKE_ARM_PID_RAISED);
     }
 
     public double getEncoderPosition() {

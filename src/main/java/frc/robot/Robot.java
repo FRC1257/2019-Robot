@@ -20,6 +20,8 @@ public class Robot extends TimedRobot {
 
     OI oi;
 
+    NetworkTable limelightNetworkTable;
+
     @Override
     public void robotInit() {
         drive = DriveTrain.getInstance();
@@ -37,8 +39,7 @@ public class Robot extends TimedRobot {
         hatchIntake.setConstantTuning();
 
         CameraServer.getInstance().startAutomaticCapture();
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        table.getEntry("pipeline").setNumber(2);
+        limelightNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
     @Override
@@ -83,8 +84,13 @@ public class Robot extends TimedRobot {
 
     public void teleopFunctionality() {
         // Drive
-        if(oi.getDriveReverse()) drive.toggleReverse();
+        if (oi.getDriveReverse())
+            drive.toggleReverse();
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
+
+        // Vision
+        if (limelightNetworkTable.getEntry("pipeline").getNumber(2).equals(2))
+            limelightNetworkTable.getEntry("pipeline").setNumber(2);
 
         // Intake Arm
         if (oi.getArmRaise())

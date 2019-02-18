@@ -44,6 +44,7 @@ public class HatchIntake {
 
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotMotor.setIdleMode(IdleMode.kBrake);
+        hatchPivotMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
@@ -142,9 +143,7 @@ public class HatchIntake {
     private void updatePID() {
         running = true;
         hatchPivotPID.setReference(currentPIDSetpoint, ControlType.kPosition);
-        System.out.println("Hatch going to " + currentPIDSetpoint + 
-            " and currently at " + hatchPivotEncoder.getPosition());
-
+        
         // Check if the pivot's position is within the tolerance
         if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
             // If this is the first time it has been detected, then update the timestamp
