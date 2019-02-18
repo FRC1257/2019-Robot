@@ -2,16 +2,19 @@ package frc.robot;
 
 public class RobotMap {
     /**
-     * Contains constants for use without the entire robot All constants should be
-     * ordered by subsystem/use The units of each measurement should be specified in
+     * Contains constants for use without the entire robot. All constants should be
+     * ordered by subsystem/use. The units of each measurement should be specified in
      * a comment
      */
 
+    // General
+    public static final int NEO_CURRENT_LIMIT = 50; // amps
+
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 0;
-    public static final int CONTROLLER_OPERATOR_PORT = 1;
-    public static final double CONTROLLER_DEADBAND = 0.08;
-    public static final int CONTROLLER_POV = 0;
+    public static final int CONTROLLER_OPERATOR_PORT = 1; 
+    public static final double CONTROLLER_DEADBAND = 0.08; // Deadband for the joysticks of the controllers
+    public static final int CONTROLLER_POV = 0; // Id for the DPad of the controllers
 
     // Drive
     public static final int DRIVE_FRONT_LEFT = 4;
@@ -74,6 +77,6 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
-    public static final double CLIMB_CRITICAL_ANGLE = 20.0;
-    public static final double CLIMB_UPDATE_PERIOD = 0.020;
+    public static final double CLIMB_CRITICAL_ANGLE = 20.0; // Critical angle before the climb stabilizer kicks in
+    public static final double CLIMB_UPDATE_PERIOD = 0.020; // How often the climb stabilizer will be run in seconds
 }

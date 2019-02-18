@@ -32,6 +32,11 @@ public class DriveTrain {
         blDrive.setIdleMode(IdleMode.kBrake);
         brDrive.setIdleMode(IdleMode.kBrake);
 
+        flDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        frDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        blDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        brDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+
         flDrive.setOpenLoopRampRate(0.0);
         frDrive.setOpenLoopRampRate(0.0);
         blDrive.setOpenLoopRampRate(0.0);
