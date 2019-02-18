@@ -29,8 +29,8 @@ public class DriveTrain {
 
         flDrive.setIdleMode(IdleMode.kBrake);
         frDrive.setIdleMode(IdleMode.kBrake);
-        blDrive.setIdleMode(IdleMode.kBrake);
-        brDrive.setIdleMode(IdleMode.kBrake);
+        blDrive.setIdleMode(IdleMode.kCoast);
+        brDrive.setIdleMode(IdleMode.kCoast);
 
         flDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         frDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
