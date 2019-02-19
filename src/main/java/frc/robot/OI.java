@@ -41,6 +41,18 @@ public class OI {
     public boolean getAimbotRelease(){
         return driveController.getTriggerAxis(Hand.kRight) == 0;
     }
+    public boolean getRecordArea(){ // For test periodic
+        return operatorController.getStickButtonPressed(Hand.kRight);
+    }
+    public boolean getSaveArea(){ // For test periodic
+        return operatorController.getStickButtonReleased(Hand.kRight);
+    }
+    public boolean getPrintArea(){ // For test periodic
+        return operatorController.getStickButtonPressed(Hand.kLeft);
+    }
+    public boolean getResetArea(){
+        return driveController.getStickButtonPressed(Hand.kRight);
+    }
 
     // Intake Arm
     public double getArmSpeed() {

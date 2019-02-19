@@ -81,6 +81,20 @@ public class Robot extends TimedRobot {
         
         if(oi.getClimbBackToggle()) climb.toggleBack();
         if(oi.getClimbFrontToggle()) climb.toggleFront();
+
+        // Vision recording measurements for area to distance
+        if(oi.getRecordArea()){
+            vision.recordTargetArea();
+        }
+        if(oi.getSaveArea()){
+            vision.clearTargetArea();
+        }
+        if(oi.getPrintArea()){
+            vision.printTargetArea();
+        }
+        if(oi.getResetArea()){
+            vision.resetTargetArea();
+        }
     }
 
     public void teleopFunctionality() {
