@@ -3,10 +3,9 @@ package frc.robot;
 import frc.subsystems.*;
 import frc.util.*;
 import frc.util.snail_vision.*;
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.networktables.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;;
@@ -25,8 +24,7 @@ public class Robot extends TimedRobot {
     
     SnailVision vision;
     double driveSpeed;
-    double turnSpeed; 
-
+    double turnSpeed;
     NetworkTable limelightNetworkTable;
 
     @Override
@@ -45,12 +43,13 @@ public class Robot extends TimedRobot {
         cargoIntake.setConstantTuning();
         hatchIntake.setConstantTuning();
 
-        vision = new SnailVision(true); 
+        vision = new SnailVision(true);
         RobotMap.initializeVision(vision);
         driveSpeed = 0;
         turnSpeed = 0;
         CameraServer.getInstance().startAutomaticCapture();
         limelightNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
+        setVisionConstantTuning();
     }
 
     @Override
@@ -106,6 +105,8 @@ public class Robot extends TimedRobot {
         if(oi.getResetArea()){
             vision.resetTargetArea();
         }
+
+        getVisionConstantTuning();
     }
 
     public void teleopFunctionality() {
@@ -226,5 +227,22 @@ public class Robot extends TimedRobot {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to default driver pipeline
             }
         }
+        outputVisionValues();
+    }
+
+    public void setVisionConstantTuning() {
+        SmartDashboard.putNumber("Vision Angle Correct P", vision.ANGLE_CORRECT_P);
+        SmartDashboard.putNumber("Vision Angle Correct F", vision.ANGLE_CORRECT_F);
+        SmartDashboard.putNumber("Vision Distance Correct P", vision.GET_IN_DISTANCE_P);
+    }
+
+    public void getVisionConstantTuning() {
+        vision.ANGLE_CORRECT_P = SmartDashboard.getNumber("Vision Angle Correct P", vision.ANGLE_CORRECT_P);
+        vision.ANGLE_CORRECT_F = SmartDashboard.getNumber("Vision Angle Correct F", vision.ANGLE_CORRECT_F);
+        vision.GET_IN_DISTANCE_P = SmartDashboard.getNumber("Vision Distance Correct P", vision.GET_IN_DISTANCE_P);
+    }
+
+    public void outputVisionValues() {
+        SmartDashboard.putNumber("Vision Jerk Value", vision.instantaneousJerk);
     }
 }

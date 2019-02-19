@@ -88,12 +88,12 @@ public class RobotMap {
     public static final double[] AREA_TO_DISTANCE_SHIP = {1};
 
     public static void initializeVision(SnailVision vision) {
-        vision.ANGLE_CORRECT_P = 1;
-        vision.ANGLE_CORRECT_F = 1;
-        vision.ANGLE_CORRECT_MIN_ANGLE = 1;
+        vision.ANGLE_CORRECT_P = -0.03;
+        vision.ANGLE_CORRECT_F = 0.05;
+        vision.ANGLE_CORRECT_MIN_ANGLE = 2.0; // degrees
         
-        vision.GET_IN_DISTANCE_P = 1;
-        vision.GET_IN_DISTANCE_ERROR = 1;
+        vision.GET_IN_DISTANCE_P = 4.0;
+        vision.GET_IN_DISTANCE_ERROR = 3.0; // inches
         vision.DISTANCE_ESTIMATION_METHOD = "area";
 
         vision.JERK_COLLISION_THRESHOLD = 1;
