@@ -58,7 +58,7 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
     public static final double INTAKE_ARM_PID_MIN_OUTPUT = -1.0;
     public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
-    public static final double INTAKE_ARM_PID_TOLERANCE = 0.5; // How close the PID can be
+    public static final double INTAKE_ARM_PID_TOLERANCE = 1.0; // How close the PID can be
     public static final double INTAKE_ARM_PID_TIME = 0.01; // How long the PID has to be on target in sec
 
     // Cargo Intake
