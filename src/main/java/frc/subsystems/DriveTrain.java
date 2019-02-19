@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
+
     private static DriveTrain instance = null;
 
     public CANSparkMax flDrive;
@@ -18,10 +19,9 @@ public class DriveTrain {
 
     private DifferentialDrive driveTrain;
 
-    double m_maxOutput;
-
+    private boolean reversed;
+    
     private DriveTrain() {
-
         flDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
         frDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_RIGHT, MotorType.kBrushless);
         blDrive = new CANSparkMax(RobotMap.DRIVE_BACK_LEFT, MotorType.kBrushless);
@@ -29,23 +29,42 @@ public class DriveTrain {
 
         flDrive.setIdleMode(IdleMode.kBrake);
         frDrive.setIdleMode(IdleMode.kBrake);
-        blDrive.setIdleMode(IdleMode.kBrake);
-        brDrive.setIdleMode(IdleMode.kBrake);
+        blDrive.setIdleMode(IdleMode.kCoast);
+        brDrive.setIdleMode(IdleMode.kCoast);
+
+        flDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        frDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        blDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        brDrive.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+
+        flDrive.setOpenLoopRampRate(0.0);
+        frDrive.setOpenLoopRampRate(0.0);
+        blDrive.setOpenLoopRampRate(0.0);
+        brDrive.setOpenLoopRampRate(0.0);
 
         blDrive.follow(flDrive);
         brDrive.follow(frDrive);
 
         driveTrain = new DifferentialDrive(flDrive, frDrive);
+
+        reversed = false;
+    }
+
+    public void toggleReverse() {
+        reversed = !reversed;
     }
 
     public static DriveTrain getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new DriveTrain();
         }
         return instance;
     }
 
     public void drive(double x, double z) {
-        driveTrain.arcadeDrive(x, z);
+        if(reversed)
+            driveTrain.arcadeDrive(-x, z);
+        else
+            driveTrain.arcadeDrive(x, z);
     }
 }

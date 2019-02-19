@@ -1,7 +1,7 @@
 /*
-Created by Adam Zamlynny
-Contact: azamlynny@hotmail.com
-*/
+ * Created by Adam Zamlynny
+ * Contact: azamlynny@hotmail.com
+ */
 
 package frc.util.snail_vision;
 
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
 public class SnailVision {
+    
     public double ANGLE_CORRECT_P;
     public double ANGLE_CORRECT_F;
     public double ANGLE_CORRECT_MIN_ANGLE;

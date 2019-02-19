@@ -17,7 +17,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 
 public class HatchIntake {
-    
+
     private static HatchIntake instance = null;
 
     private SnailSolenoid pickupSolenoid;
@@ -29,11 +29,12 @@ public class HatchIntake {
 
     private DigitalInput limitSwitchPivot;
     private DigitalInput limitSwitchHatch;
+    private boolean lastLimit;
 
-    private Notifier notifier;                // looper for updating PID loop for pivot
-    private double currentPIDSetpoint;        // current target position of pivot
-    private double pidTime;                   // the timestamp for when the PID enters the tolerance range
-    private boolean running;                  // whether or not the PID loop is currently running
+    private Notifier notifier; // looper for updating PID loop for pivot
+    private double currentPIDSetpoint; // current target position of pivot
+    private double pidTime; // the timestamp for when the PID enters the tolerance range
+    private boolean running; // whether or not the PID loop is currently running
 
     private boolean lowered;
 
@@ -43,21 +44,25 @@ public class HatchIntake {
 
         hatchPivotMotor = new CANSparkMax(RobotMap.HATCH_PIVOT_MOTOR_ID, MotorType.kBrushless);
         hatchPivotMotor.setIdleMode(IdleMode.kBrake);
+        hatchPivotMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         hatchPivotEncoder = hatchPivotMotor.getEncoder();
         hatchPivotPID = hatchPivotMotor.getPIDController();
-        hatchPivotPID.setOutputRange(RobotMap.HATCH_PID_MIN_OUTPUT, RobotMap.HATCH_PID_MAX_OUTPUT);
         hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
         hatchPivotPID.setI(RobotMap.HATCH_PIDF[1]);
         hatchPivotPID.setD(RobotMap.HATCH_PIDF[2]);
         hatchPivotPID.setFF(RobotMap.HATCH_PIDF[3]);
+        hatchPivotPID.setIZone(0.0);
+        hatchPivotPID.setOutputRange(RobotMap.HATCH_PID_MIN_OUTPUT, RobotMap.HATCH_PID_MAX_OUTPUT);
 
         limitSwitchPivot = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_PIVOT_ID);
         limitSwitchHatch = new DigitalInput(RobotMap.HATCH_LIMIT_SWITCH_HATCH_ID);
+        lastLimit = true;
 
         notifier = new Notifier(this::updatePID);
+        notifier.stop();
 
         setConstantTuning();
-        
+
         reset();
     }
 
@@ -85,7 +90,7 @@ public class HatchIntake {
     public void pickupRetract() {
         pickupSolenoid.set(false);
     }
-    
+
     public void setEject(boolean eject) {
         ejectSolenoid.set(eject);
     }
@@ -99,51 +104,70 @@ public class HatchIntake {
     }
 
     public void setPivot(double value) {
-        hatchPivotMotor.set(value * RobotMap.HATCH_MOTOR_MAX_SPEED);
+        double adjustedSpeed = value * RobotMap.HATCH_MOTOR_MAX_SPEED;
+        // // Pivot is moving up and is past the upper threshold
+        // if(adjustedSpeed < 0.0 && getEncoderPosition() <= RobotMap.HATCH_PID_RAISED)
+        // {
+        // adjustedSpeed = 0.0;
+        // }
+        // // Pivot is moving down and is past the lower threshold
+        // if(adjustedSpeed > 0.0 && getEncoderPosition() >= RobotMap.HATCH_PID_LOWERED)
+        // {
+        // adjustedSpeed = 0.0;
+        // }
+        if(adjustedSpeed != 0.0 || hatchPivotMotor.get() != 0.0) hatchPivotMotor.set(adjustedSpeed);
     }
 
     public void togglePivot() {
-        if(lowered) raisePivot();
-        else lowerPivot();
+        if (isLowered())
+            raisePivot();
+        else
+            lowerPivot();
     }
 
     public void raisePivot() {
-        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
+        setPIDPosition(RobotMap.HATCH_PID_RAISED);
     }
 
     public void lowerPivot() {
-        setPIDPosition(RobotMap.HATCH_PID_RAISED);
+        setPIDPosition(RobotMap.HATCH_PID_LOWERED);
     }
-    
+
     public void setPIDPosition(double value) {
         hatchPivotPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
+        hatchPivotPID.setIAccum(0);
         notifier.startPeriodic(RobotMap.HATCH_PID_UPDATE_PERIOD);
     }
 
     private void updatePID() {
         running = true;
-
+        hatchPivotPID.setReference(currentPIDSetpoint, ControlType.kPosition);
+        
         // Check if the pivot's position is within the tolerance
-        if(Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
+        if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.HATCH_PID_TOLERANCE) {
             // If this is the first time it has been detected, then update the timestamp
-            if(pidTime == -1) {
+            if (pidTime == -1) {
                 pidTime = Timer.getFPGATimestamp();
             }
 
             // Check if the pivot's position has been inside the tolerance for long enough
-            if((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
-                notifier.stop();
-                running = false;
+            if ((Timer.getFPGATimestamp() - pidTime) >= RobotMap.HATCH_PID_TIME) {
+                breakPID();
             }
-        }
-        else {
+        } else {
             pidTime = -1;
         }
     }
-    
+
+    public void breakPID() {
+        notifier.stop();
+        running = false;
+        pidTime = -1;
+    }
+
     public void resetEncoder() {
-        // hatchPivotEncoder.setPosition(0.0);
+        hatchPivotEncoder.setPosition(0.0);
     }
 
     public double getEncoderPosition() {
@@ -157,6 +181,7 @@ public class HatchIntake {
     // Updates the position state for whether or not the intake is lowered
     public void updatePositionState() {
         lowered = getEncoderPosition() >= (RobotMap.HATCH_PID_LOWERED + RobotMap.HATCH_PID_RAISED) / 2.0;
+        lastLimit = getLimitSwitchPivot();
     }
 
     public boolean isLowered() {
@@ -166,17 +191,22 @@ public class HatchIntake {
     public boolean getPickupExtended() {
         return pickupSolenoid.get();
     }
-    
+
     public boolean getEjectExtended() {
         return ejectSolenoid.get();
     }
 
     public boolean getLimitSwitchPivot() {
-        return limitSwitchPivot.get();
+        return !limitSwitchPivot.get();
     }
-    
+
     public boolean getLimitSwitchHatch() {
-        return limitSwitchHatch.get();
+        return !limitSwitchHatch.get();
+    }
+
+    // Returns when the limit switch is first pressed or first released
+    public boolean getLimitSwitchPivotPressed() {
+        return lastLimit != getLimitSwitchPivot();
     }
 
     public boolean getPIDRunning() {
@@ -204,22 +234,27 @@ public class HatchIntake {
         SmartDashboard.putNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
         SmartDashboard.putNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
     }
-    
+
     // Update constants from Smart Dashboard
     public void getConstantTuning() {
         RobotMap.HATCH_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Hatch Max Speed", RobotMap.HATCH_MOTOR_MAX_SPEED);
-
-        RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
-
-        RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
-
-        RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
         
-        RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
-        hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
+        if(RobotMap.HATCH_PIDF[0] != SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0])) {
+            RobotMap.HATCH_PIDF[0] = SmartDashboard.getNumber("Hatch P", RobotMap.HATCH_PIDF[0]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[0]);
+        }
+        if(RobotMap.HATCH_PIDF[1] != SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1])) {
+            RobotMap.HATCH_PIDF[1] = SmartDashboard.getNumber("Hatch I", RobotMap.HATCH_PIDF[1]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[1]);
+        }
+        if(RobotMap.HATCH_PIDF[2] != SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2])) {
+            RobotMap.HATCH_PIDF[2] = SmartDashboard.getNumber("Hatch D", RobotMap.HATCH_PIDF[2]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[2]);
+        }
+        if(RobotMap.HATCH_PIDF[3] != SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3])) {
+            RobotMap.HATCH_PIDF[3] = SmartDashboard.getNumber("Hatch F", RobotMap.HATCH_PIDF[3]);
+            hatchPivotPID.setP(RobotMap.HATCH_PIDF[3]);
+        }
     }
 
     public static HatchIntake getInstance() {
