@@ -1,7 +1,7 @@
 package frc.subsystems;
 
 import frc.robot.RobotMap;
-
+import frc.util.SnailSparkMaxPIDF;
 import edu.wpi.first.wpilibj.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class IntakeArm {
@@ -19,46 +17,31 @@ public class IntakeArm {
 
     private CANSparkMax intakeArmMotor;
     private CANEncoder intakeArmEncoder;
-    private CANPIDController intakeArmPID;
 
     private DigitalInput limitSwitch;
 
     private int currentPositionState; // 0 - ground, 1 - rocket, 2 - cargo ship
 
-    private Notifier notifier; // looper for updating PID loop for arm
-    private double currentPIDSetpoint; // current target position of arm
-    private double pidTime; // the timestamp for when the PID enters the tolerance range
-    private boolean running; // whether or not the PID loop is currently running
+    private SnailSparkMaxPIDF pidHandler;
 
     private IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
         intakeArmMotor.setIdleMode(IdleMode.kBrake);
         intakeArmMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         intakeArmEncoder = intakeArmMotor.getEncoder();
-        intakeArmPID = intakeArmMotor.getPIDController();
-        intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
-        intakeArmPID.setI(RobotMap.INTAKE_ARM_PIDF[1]);
-        intakeArmPID.setD(RobotMap.INTAKE_ARM_PIDF[2]);
-        intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
-        intakeArmPID.setIZone(0.0);
-        intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
         
         limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
 
-        notifier = new Notifier(this::updatePID);
-        notifier.stop();
+        pidHandler = new SnailSparkMaxPIDF(intakeArmMotor, RobotMap.INTAKE_ARM_PIDF, RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD, 
+            RobotMap.INTAKE_ARM_PID_TOLERANCE, RobotMap.INTAKE_ARM_PID_TIME);
 
         reset();
     }
 
     public void reset() {
         intakeArmMotor.set(0);
-
         currentPositionState = 0;
-        currentPIDSetpoint = 0;
-        pidTime = -1;
-        running = false;
-        
+        pidHandler.reset();
         resetEncoderTop();
     }
 
@@ -97,52 +80,23 @@ public class IntakeArm {
     }
 
     public void moveGround() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_GROUND);
+        pidHandler.setPIDPosition(RobotMap.INTAKE_ARM_PID_GROUND);
     }
 
     public void moveRocket() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_ROCKET);
+        pidHandler.setPIDPosition(RobotMap.INTAKE_ARM_PID_ROCKET);
     }
 
     public void moveCargo() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_CARGO);
+        pidHandler.setPIDPosition(RobotMap.INTAKE_ARM_PID_CARGO);
     }
 
     public void moveRaised() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_RAISED);
-    }
-
-    public void setPIDPosition(double value) {
-        intakeArmPID.setReference(value, ControlType.kPosition);
-        currentPIDSetpoint = value;
-        intakeArmPID.setIAccum(0);
-        notifier.startPeriodic(RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD);
-    }
-
-    private void updatePID() {
-        running = true;
-        intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
-
-        // Check if the encoder's position is within the tolerance
-        if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
-            // If this is the first time it has been detected, then update the timestamp
-            if (pidTime == -1) {
-                pidTime = Timer.getFPGATimestamp();
-            }
-
-            // Check if the encoder's position has been inside the tolerance for long enough
-            if ((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
-                breakPID();
-            }
-        } else {
-            pidTime = -1;
-        }
+        pidHandler.setPIDPosition(RobotMap.INTAKE_ARM_PID_RAISED);
     }
 
     public void breakPID() {
-        notifier.stop();
-        running = false;
-        pidTime = -1;
+        pidHandler.breakPID();
     }
 
     /* 
@@ -197,27 +151,24 @@ public class IntakeArm {
     }
 
     public boolean getPIDRunning() {
-        return running;
+        return pidHandler.isRunning();
     }
 
     // Output values to Smart Dashboard
     public void outputValues() {
         SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
-        SmartDashboard.putBoolean("Intake Arm PID Active", running);
-        SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
+
+        pidHandler.outputValues("Intake Arm ");
     }
 
     // Initialize constants in Smart Dashboard
     public void setConstantTuning() {
         SmartDashboard.putNumber("Intake Arm Max Speed", RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
 
-        SmartDashboard.putNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
-        SmartDashboard.putNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
-        SmartDashboard.putNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
-        SmartDashboard.putNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
+        pidHandler.setConstantTuning("Intake Arm ", RobotMap.INTAKE_ARM_PIDF);
     }
 
     // Update constants from Smart Dashboard
@@ -225,22 +176,7 @@ public class IntakeArm {
         RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Intake Arm Max Speed",
                 RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
 
-        if(RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
-            RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
-            RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
-            RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
-        }
-        if(RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
-            RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
-            intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
-        }
+        pidHandler.getConstantTuning("Intake Arm ", RobotMap.INTAKE_ARM_PIDF);
     }
 
     public static IntakeArm getInstance() {
