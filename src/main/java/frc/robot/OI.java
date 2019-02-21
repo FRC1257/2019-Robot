@@ -106,7 +106,7 @@ public class OI {
     }
 
     public double getClimbDriveSpeed() {
-        return squareInput(driveController.getY(Hand.kLeft));
+        return squareInput(driveController.getForwardSpeed());
     }
 
     public void updateControllers() {
