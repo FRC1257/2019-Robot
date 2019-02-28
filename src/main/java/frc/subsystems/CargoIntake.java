@@ -16,6 +16,13 @@ public class CargoIntake {
     private CargoIntake() {
         intakeMotor = new WPI_VictorSPX(RobotMap.CARGO_INTAKE_MOTOR_ID);
         intakeMotor.setNeutralMode(NeutralMode.Brake);
+
+        setConstantTuning();
+        reset();
+    }
+
+    public void reset() {
+        intakeMotor.set(0);
     }
 
     // Motor Functions

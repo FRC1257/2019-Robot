@@ -39,17 +39,11 @@ public class OI {
     }
 
     public boolean getArmRaise() {
-        // return false;
         return operatorController.getBumperPressed(Hand.kLeft);
     }
 
     public boolean getArmLower() {
-        // return false;
         return operatorController.getBumperPressed(Hand.kRight);
-    }
-
-    public boolean getArmPIDBreak() {
-        return operatorController.getStickButton(Hand.kRight);
     }
 
     // Cargo Intake
@@ -82,10 +76,6 @@ public class OI {
         return squareInput(operatorController.getY(Hand.kLeft));
     }
 
-    public boolean getHatchPIDBreak() {
-        return operatorController.getStickButton(Hand.kLeft);
-    }
-
     // Climb
     public boolean getClimbAdvance() {
         return operatorController.getDPadUpPressed();
@@ -93,12 +83,10 @@ public class OI {
 
     public boolean getClimbFrontToggle() {
         return operatorController.getBackButtonPressed();
-        // return operatorController.getBumperPressed(Hand.kLeft);
     }
 
     public boolean getClimbBackToggle() {
         return operatorController.getStartButtonPressed();
-        // return operatorController.getBumperPressed(Hand.kRight);
     }
 
     public boolean getClimbReset() {

@@ -32,22 +32,18 @@ public class RobotMap {
     // Hatch Intake: 0 is at top, positive means lower
     public static final double HATCH_PID_LOWERED = 11.0; // Position of the hatch intake when lowered
     public static final double HATCH_PID_RAISED = -0.7; // Position of the hatch intake when raised
-    public static double HATCH_MOTOR_MAX_SPEED = 1.0;
 
     public static double[] HATCH_PIDF = { 0.045, 0.0, 0.0, 0.0 };
+    public static final double HATCH_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
+    public static final double HATCH_MOTOR_PID_STEP = 0.1;
     public static final double HATCH_PID_MAX_OUTPUT = 0.8;
     public static final double HATCH_PID_MIN_OUTPUT = -0.8;
-    public static final double HATCH_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
-    public static final double HATCH_PID_TOLERANCE = 0.5; // How close the PID can be
-    public static final double HATCH_PID_TIME = 0.01; // How long the PID has to be within the tolerance in sec
 
     // Intake Arm
     public static final int INTAKE_ARM_MOTOR_ID = 6;
     public static final int INTAKE_ARM_LIMIT_SWITCH_ID = 1;
 
     // Intake Arm: 0 is at bottom, positive means higher
-    public static final double INTAKE_ARM_LOWER_THRESHOLD = 0.0; // Lower limit of the arm's motion
-    public static final double INTAKE_ARM_UPPER_THRESHOLD = 10.0; // Upper limit of the arm's motion
     public static final double INTAKE_ARM_PID_GROUND = 0.0; // Target position for ground pickup
     public static final double INTAKE_ARM_PID_ROCKET = 11.0; // Target position for rocket
     public static final double INTAKE_ARM_PID_CARGO = 18.5; // Target position for cargo ship
@@ -55,11 +51,10 @@ public class RobotMap {
     public static double INTAKE_ARM_MOTOR_MAX_SPEED = 1.0;
 
     public static final double[] INTAKE_ARM_PIDF = { 0.1, 0.0, 0.0, 0.0 };
+    public static final double INTAKE_ARM_UPDATE_PERIOD = 0.020;
+    public static final double INTAKE_ARM_MOTOR_PID_STEP = 0.1;
     public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
     public static final double INTAKE_ARM_PID_MIN_OUTPUT = -1.0;
-    public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
-    public static final double INTAKE_ARM_PID_TOLERANCE = 1.0; // How close the PID can be
-    public static final double INTAKE_ARM_PID_TIME = 0.01; // How long the PID has to be on target in sec
 
     // Cargo Intake
     public static final int CARGO_INTAKE_MOTOR_ID = 7;

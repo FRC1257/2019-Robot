@@ -23,12 +23,15 @@ public class IntakeArm {
 
     private DigitalInput limitSwitch;
 
-    private int currentPositionState; // 0 - ground, 1 - rocket, 2 - cargo ship
+    private double currentSetpoint;
 
-    private Notifier notifier; // looper for updating PID loop for arm
-    private double currentPIDSetpoint; // current target position of arm
-    private double pidTime; // the timestamp for when the PID enters the tolerance range
-    private boolean running; // whether or not the PID loop is currently running
+    public enum ArmPositionState {
+        GROUND, ROCKET, CARGO_SHIP, RAISED;
+    }
+
+    private ArmPositionState currentPositionState;
+
+    private Notifier updater;
 
     private IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
@@ -42,117 +45,105 @@ public class IntakeArm {
         intakeArmPID.setFF(RobotMap.INTAKE_ARM_PIDF[3]);
         intakeArmPID.setIZone(0.0);
         intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
-        
+
         limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
 
-        notifier = new Notifier(this::updatePID);
-        notifier.stop();
+        updater = new Notifier(this::update);
+        updater.startPeriodic(RobotMap.INTAKE_ARM_UPDATE_PERIOD);
 
+        setConstantTuning();
         reset();
+    }
+
+    /**
+     * Update position state
+     * Reset encoder
+     * Update PID
+     * Output to Smart Dashboard
+     */
+    private void update() {
+        if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
+            currentPositionState = ArmPositionState.GROUND;
+        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
+            currentPositionState = ArmPositionState.ROCKET;
+        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_CARGO + RobotMap.INTAKE_ARM_PID_RAISED) / 2.0) {
+            currentPositionState = ArmPositionState.CARGO_SHIP;
+        } else {
+            currentPositionState = ArmPositionState.RAISED;
+        }
+
+        if (getLimitSwitch()) {
+            resetEncoder();
+        }
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
+        outputValues();
     }
 
     public void reset() {
         intakeArmMotor.set(0);
-
-        currentPositionState = 0;
-        currentPIDSetpoint = 0;
-        pidTime = -1;
-        running = false;
-        
+        currentPositionState = ArmPositionState.RAISED;
         resetEncoderTop();
+        currentSetpoint = getEncoderPosition();
     }
 
     // Moves the arm at a set speed and restricts the motion of the arm
     public void setSpeed(double value) {
-        double adjustedSpeed = value * RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED;
-        // // Arm is moving up and is past the upper threshold
-        // if(speed > 0.0 && getEncoderPosition() >=
-        // RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
-        // adjustedSpeed = 0.0;
-        // }
-        // // Arm is moving down and is past the lower threshold
-        // if(speed < 0.0 && getEncoderPosition() <=
-        // RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
-        // adjustedSpeed = 0.0;
-        // }
-        if(adjustedSpeed != 0.0 || intakeArmMotor.get() != 0.0) intakeArmMotor.set(adjustedSpeed);
+        double adjustedSpeed = value * RobotMap.INTAKE_ARM_MOTOR_PID_STEP;
+        currentSetpoint += adjustedSpeed;
+        if (currentSetpoint < RobotMap.INTAKE_ARM_PID_GROUND) {
+            currentSetpoint = RobotMap.INTAKE_ARM_PID_GROUND;
+        } else if (currentSetpoint > RobotMap.INTAKE_ARM_PID_RAISED) {
+            currentSetpoint = RobotMap.INTAKE_ARM_PID_RAISED;
+        }
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
     }
 
     public void raiseArm() {
-        if (getPositionState() == 0)
+        if (getPositionState() == ArmPositionState.GROUND)
             moveRocket();
-        else if (getPositionState() == 1)
+        else if (getPositionState() == ArmPositionState.ROCKET)
             moveCargo();
-        else if (getPositionState() == 2)
+        else if (getPositionState() == ArmPositionState.CARGO_SHIP)
             moveRaised();
     }
 
     public void lowerArm() {
-        if (getPositionState() == 3)
+        if (getPositionState() == ArmPositionState.RAISED)
             moveCargo();
-        else if (getPositionState() == 2)
+        else if (getPositionState() == ArmPositionState.CARGO_SHIP)
             moveRocket();
-        else if (getPositionState() == 1)
+        else if (getPositionState() == ArmPositionState.ROCKET)
             moveGround();
     }
 
     public void moveGround() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_GROUND);
+        currentSetpoint = RobotMap.INTAKE_ARM_PID_GROUND;
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
     }
 
     public void moveRocket() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_ROCKET);
+        currentSetpoint = RobotMap.INTAKE_ARM_PID_ROCKET;
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
     }
 
     public void moveCargo() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_CARGO);
+        currentSetpoint = RobotMap.INTAKE_ARM_PID_CARGO;
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
     }
 
     public void moveRaised() {
-        setPIDPosition(RobotMap.INTAKE_ARM_PID_RAISED);
+        currentSetpoint = RobotMap.INTAKE_ARM_PID_RAISED;
+        intakeArmPID.setReference(currentSetpoint, ControlType.kPosition);
     }
 
-    public void setPIDPosition(double value) {
-        intakeArmPID.setReference(value, ControlType.kPosition);
-        currentPIDSetpoint = value;
-        intakeArmPID.setIAccum(0);
-        notifier.startPeriodic(RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD);
-    }
-
-    private void updatePID() {
-        running = true;
-        intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
-
-        // Check if the encoder's position is within the tolerance
-        if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
-            // If this is the first time it has been detected, then update the timestamp
-            if (pidTime == -1) {
-                pidTime = Timer.getFPGATimestamp();
-            }
-
-            // Check if the encoder's position has been inside the tolerance for long enough
-            if ((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
-                breakPID();
-            }
-        } else {
-            pidTime = -1;
-        }
-    }
-
-    public void breakPID() {
-        notifier.stop();
-        running = false;
-        pidTime = -1;
-    }
-
-    /* 
+    /*
      * Resets the encoder to the bottom position
      */
     public void resetEncoder() {
         intakeArmEncoder.setPosition(0.0);
     }
-    
-    /* 
+
+    /*
      * Resets the encoder to the top position
      */
     public void resetEncoderTop() {
@@ -171,23 +162,11 @@ public class IntakeArm {
      * Sets the current position state dependent on the encoder position 0 - ground,
      * 1 - rocket, 2 - cargo, 3 - raised
      */
-    public void updatePositionState() {
-        if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
-            currentPositionState = 0;
-        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
-            currentPositionState = 1;
-        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_CARGO + RobotMap.INTAKE_ARM_PID_RAISED) / 2.0) {
-            currentPositionState = 2;
-        } else {
-            currentPositionState = 3;
-        }
-    }
 
     /*
-     * Returns the current position state dependent on the encoder position 0 -
-     * ground, 1 - rocket, 2 - cargo, 3 - raised
+     * Returns the current position state dependent on the encoder position
      */
-    public int getPositionState() {
+    public ArmPositionState getPositionState() {
         return currentPositionState;
     }
 
@@ -196,15 +175,10 @@ public class IntakeArm {
         return !limitSwitch.get();
     }
 
-    public boolean getPIDRunning() {
-        return running;
-    }
-
     // Output values to Smart Dashboard
     public void outputValues() {
-        SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
-        SmartDashboard.putBoolean("Intake Arm PID Active", running);
-        SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
+        SmartDashboard.putString("Intake Arm Position State", getPositionState().name());
+        SmartDashboard.putNumber("Intake Arm PID Setpoint", currentSetpoint);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
@@ -225,19 +199,19 @@ public class IntakeArm {
         RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED = SmartDashboard.getNumber("Intake Arm Max Speed",
                 RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED);
 
-        if(RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
+        if (RobotMap.INTAKE_ARM_PIDF[0] != SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0])) {
             RobotMap.INTAKE_ARM_PIDF[0] = SmartDashboard.getNumber("Intake Arm P", RobotMap.INTAKE_ARM_PIDF[0]);
             intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
         }
-        if(RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
+        if (RobotMap.INTAKE_ARM_PIDF[1] != SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1])) {
             RobotMap.INTAKE_ARM_PIDF[1] = SmartDashboard.getNumber("Intake Arm I", RobotMap.INTAKE_ARM_PIDF[1]);
             intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[1]);
         }
-        if(RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
+        if (RobotMap.INTAKE_ARM_PIDF[2] != SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2])) {
             RobotMap.INTAKE_ARM_PIDF[2] = SmartDashboard.getNumber("Intake Arm D", RobotMap.INTAKE_ARM_PIDF[2]);
             intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[2]);
         }
-        if(RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
+        if (RobotMap.INTAKE_ARM_PIDF[3] != SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3])) {
             RobotMap.INTAKE_ARM_PIDF[3] = SmartDashboard.getNumber("Intake Arm F", RobotMap.INTAKE_ARM_PIDF[3]);
             intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[3]);
         }

@@ -34,10 +34,6 @@ public class Robot extends TimedRobot {
 
         oi = OI.getInstance();
 
-        intakeArm.setConstantTuning();
-        cargoIntake.setConstantTuning();
-        hatchIntake.setConstantTuning();
-
         CameraServer.getInstance().startAutomaticCapture();
         limelightNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
@@ -75,40 +71,28 @@ public class Robot extends TimedRobot {
         intakeArm.getConstantTuning();
         cargoIntake.getConstantTuning();
         hatchIntake.getConstantTuning();
-
-        if (oi.getClimbBackToggle())
-            climb.toggleBack();
-        if (oi.getClimbFrontToggle())
-            climb.toggleFront();
     }
 
     public void teleopFunctionality() {
         // Drive
-        if (oi.getDriveReverse())
+        if (oi.getDriveReverse()) {
             drive.toggleReverse();
+        }
         drive.drive(oi.getDriveForwardSpeed(), oi.getDriveTurnSpeed());
 
         // Vision
-        if (limelightNetworkTable.getEntry("pipeline").getNumber(2).equals(2))
+        if (limelightNetworkTable.getEntry("pipeline").getNumber(2).equals(2)) {
             limelightNetworkTable.getEntry("pipeline").setNumber(2);
+        }
 
         // Intake Arm
-        if (oi.getArmRaise())
+        if (oi.getArmRaise()) {
             intakeArm.raiseArm();
-        if (oi.getArmLower())
+        }
+        if (oi.getArmLower()) {
             intakeArm.lowerArm();
-        if (!intakeArm.getPIDRunning()) {
-            intakeArm.setSpeed(oi.getArmSpeed());
-
-            if (intakeArm.getLimitSwitch()) {
-                intakeArm.resetEncoder();
-            }
         }
-        if (oi.getArmPIDBreak()) {
-            intakeArm.breakPID();
-        }
-        intakeArm.updatePositionState();
-        intakeArm.outputValues();
+        intakeArm.setSpeed(oi.getArmSpeed());
 
         // Cargo Intake
         if (oi.getCargoShootButton()) {
@@ -120,38 +104,29 @@ public class Robot extends TimedRobot {
         }
 
         // Hatch Intake
-        if (oi.getHatchRaise())
+        if (oi.getHatchRaise()) {
             hatchIntake.raisePivot();
-        if (oi.getHatchLower())
+        }
+        if (oi.getHatchLower()) {
             hatchIntake.lowerPivot();
-        if (!hatchIntake.getPIDRunning()) {
-            hatchIntake.setPickup(oi.getHatchPickup());
-            hatchIntake.setPivot(oi.getHatchPivot());
-
-            // Only allow the hatch to eject if the hatch is not lowered and there is a
-            // hatch detected
-            // if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
-            hatchIntake.setEject(oi.getHatchEject());
-            // }
-            // else {
-            // hatchIntake.ejectRetract();
-            // }
-
-            if (hatchIntake.getLimitSwitchPivotPressed()) {
-                hatchIntake.resetEncoder();
-            }
         }
-        if (oi.getHatchPIDBreak()) {
-            hatchIntake.breakPID();
-        }
-        hatchIntake.updatePositionState();
-        hatchIntake.outputValues();
+        hatchIntake.setPickup(oi.getHatchPickup());
+        hatchIntake.setPivot(oi.getHatchPivot());
+        hatchIntake.setEject(oi.getHatchEject());
 
         // Climb
-        if (oi.getClimbAdvance())
+        if (oi.getClimbAdvance()) {
             climb.advanceClimb();
-        if (oi.getClimbReset())
+        }
+        if (oi.getClimbReset()) {
             climb.reset();
+        }
+        if (oi.getClimbBackToggle()) {
+            climb.toggleBack();
+        }
+        if (oi.getClimbFrontToggle()) {
+            climb.toggleFront();
+        }
         climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
 
