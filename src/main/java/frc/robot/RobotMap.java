@@ -22,6 +22,8 @@ public class RobotMap {
     public static final int DRIVE_BACK_LEFT = 2;
     public static final int DRIVE_BACK_RIGHT = 1;
 
+    public static double[] DRIVE_TURN_PIDF = { 0.01, 0.0, 0.0, 0.0 };
+
     // Hatch Intake
     public static final int HATCH_PIVOT_MOTOR_ID = 5;
     public static final int HATCH_PICKUP_SOLENOID_ID = 4;
