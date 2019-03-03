@@ -1,11 +1,15 @@
 package frc.subsystems;
 
 import frc.robot.RobotMap;
+import frc.util.Gyro;
+import frc.util.SynchronousPIDF;
 
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
@@ -20,6 +24,11 @@ public class DriveTrain {
     private DifferentialDrive driveTrain;
 
     private boolean reversed;
+
+    private Gyro gyro;
+    private boolean turnPIDActive;
+    private double lastTime;
+    private SynchronousPIDF pidController;
     
     private DriveTrain() {
         flDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
@@ -47,11 +56,96 @@ public class DriveTrain {
 
         driveTrain = new DifferentialDrive(flDrive, frDrive);
 
+        gyro = Gyro.getInstance();
+        pidController = new SynchronousPIDF(RobotMap.DRIVE_TURN_PIDF[0], RobotMap.DRIVE_TURN_PIDF[1], 
+            RobotMap.DRIVE_TURN_PIDF[2], RobotMap.DRIVE_TURN_PIDF[3]);
+
+        setConstantTuning();
+        reset();
+    }
+
+    public void reset() {
+        flDrive.set(0);
+        frDrive.set(0);
+        blDrive.set(0);
+        brDrive.set(0);
+
         reversed = false;
+
+        turnPIDActive = false;
+        lastTime = -1;
+    }
+
+    public void drive(double x, double z) {
+        if(reversed) {
+            driveTrain.arcadeDrive(-x, z);
+        }
+        else {
+            driveTrain.arcadeDrive(x, z);
+        }
+    }
+
+    public void turnLeft() {
+        if(!turnPIDActive) {
+            gyro.zeroRobotAngle();
+            pidController.reset();
+
+            pidController.setSetpoint(-90);
+            lastTime = Timer.getFPGATimestamp();
+
+            turnPIDActive = true;
+        }
+
+        drive(0, pidController.calculate(gyro.getRobotAngle(), Timer.getFPGATimestamp() - lastTime));
+        lastTime = Timer.getFPGATimestamp();
+    }
+
+    public void turnRight() {
+        if(!turnPIDActive) {
+            gyro.zeroRobotAngle();
+            pidController.reset();
+
+            pidController.setSetpoint(90);
+            lastTime = Timer.getFPGATimestamp();
+
+            turnPIDActive = true;
+        }
+
+        drive(0, pidController.calculate(gyro.getRobotAngle(), Timer.getFPGATimestamp() - lastTime));
+        lastTime = Timer.getFPGATimestamp();
+    }
+
+    public void resetPID() {
+        turnPIDActive = false;
+        pidController.reset();
     }
 
     public void toggleReverse() {
         reversed = !reversed;
+    }
+
+    // Output values to Smart Dashboard
+    public void outputValues() {
+        SmartDashboard.putBoolean("Drive Reversed", reversed);
+    }
+
+    // Initialize constants in Smart Dashboard
+    public void setConstantTuning() {
+        SmartDashboard.putNumber("Drive Turn P", RobotMap.DRIVE_TURN_PIDF[0]);
+        SmartDashboard.putNumber("Drive Turn I", RobotMap.DRIVE_TURN_PIDF[1]);
+        SmartDashboard.putNumber("Drive Turn D", RobotMap.DRIVE_TURN_PIDF[2]);
+        SmartDashboard.putNumber("Drive Turn F", RobotMap.DRIVE_TURN_PIDF[3]);
+    }
+
+    // Update constants from Smart Dashboard
+    public void getConstantTuning() {
+        RobotMap.DRIVE_TURN_PIDF[0] = SmartDashboard.getNumber("Drive Turn P", RobotMap.DRIVE_TURN_PIDF[0]);
+        RobotMap.DRIVE_TURN_PIDF[1] = SmartDashboard.getNumber("Drive Turn I", RobotMap.DRIVE_TURN_PIDF[1]);
+        RobotMap.DRIVE_TURN_PIDF[2] = SmartDashboard.getNumber("Drive Turn D", RobotMap.DRIVE_TURN_PIDF[2]);
+        RobotMap.DRIVE_TURN_PIDF[3] = SmartDashboard.getNumber("Drive Turn F", RobotMap.DRIVE_TURN_PIDF[3]);
+
+        pidController.setPID(RobotMap.DRIVE_TURN_PIDF[0], RobotMap.DRIVE_TURN_PIDF[1], 
+            RobotMap.DRIVE_TURN_PIDF[2], RobotMap.DRIVE_TURN_PIDF[3]);
     }
 
     public static DriveTrain getInstance() {
@@ -59,12 +153,5 @@ public class DriveTrain {
             instance = new DriveTrain();
         }
         return instance;
-    }
-
-    public void drive(double x, double z) {
-        if(reversed)
-            driveTrain.arcadeDrive(-x, z);
-        else
-            driveTrain.arcadeDrive(x, z);
     }
 }

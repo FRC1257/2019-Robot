@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
         teleopFunctionality();
 
         // Test Code
+        drive.getConstantTuning();
         intakeArm.getConstantTuning();
         cargoIntake.getConstantTuning();
         hatchIntake.getConstantTuning();
@@ -116,14 +117,24 @@ public class Robot extends TimedRobot {
 
         // Vision
         visionFunctionality();
-
-        // Drive
         driveSpeed += oi.getDriveForwardSpeed();
         turnSpeed += oi.getDriveTurnSpeed();
-        drive.drive(driveSpeed, turnSpeed);
 
-        if (oi.getDriveReverse())
+        // Drive
+        if (oi.getDriveReverse()) {
             drive.toggleReverse();
+        }
+        if (oi.getDriveTurnLeft()) {
+            drive.turnLeft();
+        }
+        else if (oi.getDriveTurnRight()) {
+            drive.turnRight();
+        }
+        else {
+            drive.resetPID();
+            drive.drive(driveSpeed, turnSpeed);
+        }
+        drive.outputValues();
 
         // Intake Arm
         if (oi.getArmRaise())

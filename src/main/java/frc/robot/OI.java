@@ -63,7 +63,15 @@ public class OI {
     }
 
     public boolean getDriveReverse() {
-        return driveController.getBButtonPressed();
+        return driveController.getYButtonPressed();
+    }
+
+    public boolean getDriveTurnLeft() {
+        return driveController.getXButton();
+    }
+
+    public boolean getDriveTurnRight() {
+        return driveController.getBButton();
     }
 
     // Intake Arm
