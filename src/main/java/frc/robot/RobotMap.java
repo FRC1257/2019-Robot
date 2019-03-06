@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.util.snail_vision.*;
+
 public class RobotMap {
     /**
      * Contains constants for use without the entire robot. All constants should be
@@ -80,4 +82,24 @@ public class RobotMap {
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
     public static final double CLIMB_CRITICAL_ANGLE = 5.0; // Critical angle before the climb stabilizer kicks in
     public static final double CLIMB_UPDATE_PERIOD = 0.020; // How often the climb stabilizer will be run in seconds
+    
+
+    // Vision
+    public static final double[] AREA_TO_DISTANCE_ROCKET = {1};
+    public static final double[] AREA_TO_DISTANCE_SHIP = {1};
+
+    public static void initializeVision(SnailVision vision) {
+        vision.ANGLE_CORRECT_P = -0.03;
+        vision.ANGLE_CORRECT_F = 0.05;
+        vision.ANGLE_CORRECT_MIN_ANGLE = 2.0; // degrees
+        
+        vision.GET_IN_DISTANCE_P = 4.0;
+        vision.GET_IN_DISTANCE_ERROR = 3.0; // inches
+        vision.DISTANCE_ESTIMATION_METHOD = "area";
+
+        vision.JERK_COLLISION_THRESHOLD = 1;
+
+        vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_ROCKET)); // Rocket
+        vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_SHIP)); // Cargo Ship
+    }
 }

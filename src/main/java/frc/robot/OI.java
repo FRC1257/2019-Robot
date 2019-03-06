@@ -29,6 +29,39 @@ public class OI {
         return driveController.getTurnSpeed();
     }
 
+    // Vison
+    public double getTurnCorrect() {
+        return driveController.getTriggerAxis(Hand.kLeft);
+    }
+
+    public boolean getTurnCorrectRelease() {
+        return driveController.getTriggerAxis(Hand.kLeft) == 0;
+    }
+
+    public double getAimbot() {
+        return driveController.getTriggerAxis(Hand.kRight);
+    }
+
+    public boolean getAimbotRelease() {
+        return driveController.getTriggerAxis(Hand.kRight) == 0;
+    }
+
+    public boolean getRecordArea() { // For test periodic
+        return operatorController.getStickButtonPressed(Hand.kRight);
+    }
+
+    public boolean getSaveArea() { // For test periodic
+        return operatorController.getStickButtonReleased(Hand.kRight);
+    }
+
+    public boolean getPrintArea() { // For test periodic
+        return operatorController.getStickButtonPressed(Hand.kLeft);
+    }
+
+    public boolean getResetArea() {
+        return driveController.getStickButtonPressed(Hand.kRight);
+    }
+
     public boolean getDriveReverse() {
         return driveController.getBButtonPressed();
     }
