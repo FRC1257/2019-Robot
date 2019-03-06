@@ -114,8 +114,8 @@ public class Robot extends TimedRobot {
         turnSpeed = 0;
 
         // Vision
-        vision.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
         visionFunctionality();
+        
 
         // Drive
         driveSpeed += oi.getDriveForwardSpeed();
@@ -195,17 +195,19 @@ public class Robot extends TimedRobot {
     }
 
     public void visionFunctionality() {
+        vision.gyroFunctionality();
+
         if (oi.getTurnCorrect() > 0 && oi.getTurnCorrect() < 0.9) {
             if (vision.currentPipeline.get(0) != 1){
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1 target to expand vision
-                turnSpeed += vision.angleCorrect();
             }
+            turnSpeed += vision.angleCorrect();
         }
         else if (oi.getTurnCorrect() > 0.9) {
             if (vision.currentPipeline.get(0) != 0) {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
-                turnSpeed += vision.angleCorrect();
             }
+            turnSpeed += vision.angleCorrect();
         }
         
         if (oi.getTurnCorrectRelease()) {
@@ -217,8 +219,13 @@ public class Robot extends TimedRobot {
         if (oi.getAimbot() > 0) {
             if(vision.currentPipeline.get(0) != 1) {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1 target to expand vision
-                driveSpeed += vision.getInDistance(vision.TARGETS.get(0)); // Needs to be updated, but currently only 1 target
-                turnSpeed += vision.angleCorrect();
+            }
+            turnSpeed += vision.angleCorrect();
+            if(vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD){
+                hatchIntake.pickupExtend();
+            }
+            else{
+                hatchIntake.pickupRetract();
             }
         }
         
