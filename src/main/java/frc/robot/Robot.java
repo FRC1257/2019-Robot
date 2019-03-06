@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
     Gyro gyro;
 
     OI oi;
-    
+
     SnailVision vision;
     double driveSpeed;
     double turnSpeed;
@@ -86,23 +86,24 @@ public class Robot extends TimedRobot {
         cargoIntake.getConstantTuning();
         hatchIntake.getConstantTuning();
 
-        if (oi.getClimbBackToggle())
+        if (oi.getClimbBackToggle()) {
             climb.toggleBack();
-        if (oi.getClimbFrontToggle())
+        }
+        if (oi.getClimbFrontToggle()) {
             climb.toggleFront();
-            
+        }
 
         // Vision recording measurements for area to distance
-        if(oi.getRecordArea()){
+        if (oi.getRecordArea()) {
             vision.recordTargetArea();
         }
-        if(oi.getSaveArea()){
+        if (oi.getSaveArea()) {
             vision.clearTargetArea();
         }
-        if(oi.getPrintArea()){
+        if (oi.getPrintArea()) {
             vision.printTargetArea();
         }
-        if(oi.getResetArea()){
+        if (oi.getResetArea()) {
             vision.resetTargetArea();
         }
 
@@ -115,14 +116,12 @@ public class Robot extends TimedRobot {
 
         // Vision
         visionFunctionality();
-        
 
         // Drive
         driveSpeed += oi.getDriveForwardSpeed();
         turnSpeed += oi.getDriveTurnSpeed();
         drive.drive(driveSpeed, turnSpeed);
 
-        
         if (oi.getDriveReverse())
             drive.toggleReverse();
 
@@ -195,43 +194,52 @@ public class Robot extends TimedRobot {
     }
 
     public void visionFunctionality() {
-        vision.gyroFunctionality();
+        // vision.gyroFunctionality();
+        vision.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
 
         if (oi.getTurnCorrect() > 0 && oi.getTurnCorrect() < 0.9) {
-            if (vision.currentPipeline.get(0) != 1){
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1 target to expand vision
+            if (vision.currentPipeline.get(0) != 1) {
+                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1
+                                                                                                        // target to
+                                                                                                        // expand vision
             }
-            turnSpeed += vision.angleCorrect();
-        }
-        else if (oi.getTurnCorrect() > 0.9) {
+            turnSpeed -= vision.angleCorrect();
+        } else if (oi.getTurnCorrect() > 0.9) {
             if (vision.currentPipeline.get(0) != 0) {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
             }
-            turnSpeed += vision.angleCorrect();
+            turnSpeed -= vision.angleCorrect();
         }
-        
+
         if (oi.getTurnCorrectRelease()) {
-            if(vision.currentPipeline.get(0) != 2) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to default driver pipeline
+            if (vision.currentPipeline.get(0) != 2) {
+                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                                                                                                        // default
+                                                                                                        // driver
+                                                                                                        // pipeline
             }
         }
 
         if (oi.getAimbot() > 0) {
-            if(vision.currentPipeline.get(0) != 1) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1 target to expand vision
+            if (vision.currentPipeline.get(0) != 1) {
+                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1
+                                                                                                        // target to
+                                                                                                        // expand vision
             }
             turnSpeed += vision.angleCorrect();
-            if(vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD){
+            if (vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD) {
                 hatchIntake.pickupExtend();
-            }
-            else{
+            } else {
                 hatchIntake.pickupRetract();
             }
         }
-        
+
         if (oi.getAimbotRelease()) {
-            if(vision.currentPipeline.get(0) != 2) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to default driver pipeline
+            if (vision.currentPipeline.get(0) != 2) {
+                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                                                                                                        // default
+                                                                                                        // driver
+                                                                                                        // pipeline
             }
         }
         outputVisionValues();

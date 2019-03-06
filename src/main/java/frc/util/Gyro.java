@@ -99,6 +99,10 @@ public class Gyro {
         zeroRollAngle();
     }
 
+    public boolean isConnected() {
+        return navx.isConnected();
+    }
+
     /**
      * Displays the yaw angle on {@code SmartDashboard}.
      */
@@ -109,6 +113,7 @@ public class Gyro {
 
         SmartDashboard.putNumber("Robot Angle", getRobotAngle());
         SmartDashboard.putNumber("Climb Tilt Angle", getClimbTiltAngle());
+        SmartDashboard.putBoolean("Gyro Connected", isConnected());
     }
 
     public static Gyro getInstance() {
