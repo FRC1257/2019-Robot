@@ -11,6 +11,10 @@ public class SnailDoubleSolenoid extends DoubleSolenoid {
     public SnailDoubleSolenoid(int forwardChannel, int reverseChannel) {
         super(forwardChannel, reverseChannel);
     }
+    
+    public SnailDoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel) {
+        super(moduleNumber, forwardChannel, reverseChannel);
+    }
 
     @Override
     public void set(Value value) {

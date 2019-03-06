@@ -9,6 +9,7 @@ public class RobotMap {
 
     // General
     public static final int NEO_CURRENT_LIMIT = 50; // amps
+    public static final int PCM_SECONDARY_ID = 10;
 
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 0;
@@ -77,6 +78,6 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
-    public static final double CLIMB_CRITICAL_ANGLE = 20.0; // Critical angle before the climb stabilizer kicks in
+    public static final double CLIMB_CRITICAL_ANGLE = 5.0; // Critical angle before the climb stabilizer kicks in
     public static final double CLIMB_UPDATE_PERIOD = 0.020; // How often the climb stabilizer will be run in seconds
 }
