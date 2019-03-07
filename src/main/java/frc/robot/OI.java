@@ -35,7 +35,7 @@ public class OI {
     }
 
     public boolean getTurnCorrectRelease() {
-        return driveController.getTriggerAxis(Hand.kLeft) == 0;
+        return (driveController.getTriggerAxis(Hand.kLeft) == 0);
     }
 
     public double getAimbot() {
