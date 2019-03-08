@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
 public class SnailVision {
-    
+
     public double ANGLE_CORRECT_P;
     public double ANGLE_CORRECT_F;
     public double ANGLE_CORRECT_MIN_ANGLE;
@@ -27,13 +27,14 @@ public class SnailVision {
     public double CAMERA_HEIGHT;
     public double CAMERA_ANGLE;
 
-    public double horizontalAngleFromTarget; // -180 to 0 to 180 degrees. Represents the last location the target was seen.
+    public double horizontalAngleFromTarget; // -180 to 0 to 180 degrees. Represents the last location the target was
+                                             // seen.
 
     public ArrayList<Double> storedTargetAreaValues;
     public ArrayList<Double> targetAreaValues;
 
-    public ArrayList<Double> TargetX; // Target's angle on the x-axis 
-    public ArrayList<Double> TargetY; // Target's angle on the y-axis 
+    public ArrayList<Double> TargetX; // Target's angle on the x-axis
+    public ArrayList<Double> TargetY; // Target's angle on the y-axis
     public ArrayList<Double> TargetA; // Target's area on the screen
     public ArrayList<Boolean> TargetV; // Target's Visibility on the screen 1.0 = true 0.0 = false
     public ArrayList<Double> TargetS; // Target's skew/rotation on the screen
@@ -45,11 +46,12 @@ public class SnailVision {
     public ArrayList<Byte> currentPipeline; // Array because it might be used when switching pipeline
     public int retainedData;
 
-    public  ArrayList<Target> TARGETS = new ArrayList<Target>();
+    public ArrayList<Target> TARGETS = new ArrayList<Target>();
 
     // Gyroscope Variables
     public boolean useGyro;
-    public String rotationalAxis; // Yaw - navx is flat pointing forward Pitch - navx is vertical pointing forward Roll - navx is vertical pointing sideways
+    public String rotationalAxis; // Yaw - navx is flat pointing forward Pitch - navx is vertical pointing forward
+                                  // Roll - navx is vertical pointing sideways
     public AHRS navx;
     public double resetAngle;
     public double currentAcceleration;
@@ -88,7 +90,7 @@ public class SnailVision {
         }
 
         useGyro = utilizeGyro;
-        if(useGyro == true){
+        if (useGyro == true) {
             rotationalAxis = "yaw"; // Default is yaw
             navx = new AHRS(Port.kMXP);
             pastAcceleration = 0;
@@ -97,12 +99,17 @@ public class SnailVision {
             Timer.start();
             printIterationTime = false;
         }
+
+        for(byte i = 0; i < 60; i++) {
+            currentPipeline.add(i);
+        }
     }
 
-    public void networkTableFunctionality(NetworkTable Table){ // Works with limelight!
+    public void networkTableFunctionality(NetworkTable Table) { // Works with limelight!
         // NetworkTable Table = NetworkTableInstance.getDefault().getTable("limelight");
-        
-        // Creates objects which retrieve data from the limelight. The limelight MUST have these entries. Fill with 0 if they do not exist
+
+        // Creates objects which retrieve data from the limelight. The limelight MUST
+        // have these entries. Fill with 0 if they do not exist
         NetworkTableEntry txE = Table.getEntry("tx");
         NetworkTableEntry tyE = Table.getEntry("ty");
         NetworkTableEntry taE = Table.getEntry("ta");
@@ -115,14 +122,13 @@ public class SnailVision {
         NetworkTableEntry tvertE = Table.getEntry("tvert");
         NetworkTableEntry tgetpipeE = Table.getEntry("getpipe");
 
-        TargetX.add(0, txE.getDouble(0)); // Target's angle on the x-axis 
-        TargetY.add(0, tyE.getDouble(0)); // Target's angle on the y-axis 
+        TargetX.add(0, txE.getDouble(0)); // Target's angle on the x-axis
+        TargetY.add(0, tyE.getDouble(0)); // Target's angle on the y-axis
         TargetA.add(0, taE.getDouble(0)); // Target's area on the screen
         double targetVisible = tvE.getDouble(0); // Converts double 1.0 or 0.0 for visibility to a boolean to save RAM
-        if(targetVisible == 1.0){
+        if (targetVisible == 1.0) {
             TargetV.add(0, true);
-        }
-        else if(targetVisible == 0.0){
+        } else if (targetVisible == 0.0) {
             TargetV.add(0, false);
         }
         TargetS.add(0, tsE.getDouble(0)); // Target's skew/rotation on the screen
@@ -159,23 +165,25 @@ public class SnailVision {
             Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
         }
 
-        double Kf = ANGLE_CORRECT_F;  // Minimum motor input to move robot in case P can't do it 
+        double Kf = ANGLE_CORRECT_F; // Minimum motor input to move robot in case P can't do it
         double Kp = ANGLE_CORRECT_P; // for PID
-        double heading_error = tx; 
+        double heading_error = tx;
         double steering_adjust = 0.0;
 
-        if (tx > ANGLE_CORRECT_MIN_ANGLE){ // If the angle of the target is farther than n degrees do normal pid
+        if (tx > ANGLE_CORRECT_MIN_ANGLE) { // If the angle of the target is farther than n degrees do normal pid
             steering_adjust = Kp * heading_error;
-        } 
-        else if (tx < ANGLE_CORRECT_MIN_ANGLE) // If angle fo the target is less than n degrees, the motor will not be able to move the robot due to friction, so Kf is added to give it the minimum speed to move
+        } else if (tx < ANGLE_CORRECT_MIN_ANGLE) // If angle fo the target is less than n degrees, the motor will not be
+                                                 // able to move the robot due to friction, so Kf is added to give it
+                                                 // the minimum speed to move
         {
             steering_adjust = Kp * heading_error + Kf;
         }
 
-        return(-steering_adjust); // return motor output
+        return (-steering_adjust); // return motor output
     }
 
-    public double getInDistance(Target Target){ // targetHeightLevel is used for if there are multiple levels of targets 
+    public double getInDistance(Target Target) { // targetHeightLevel is used for if there are multiple levels of
+                                                 // targets
         double currentDistance = 0;
 
         if(DISTANCE_ESTIMATION_METHOD.equals("area")){
@@ -183,19 +191,18 @@ public class SnailVision {
         }
         else if(DISTANCE_ESTIMATION_METHOD.equals("trig")){
             currentDistance = trigDistance(Target);
+        } else {
+            return (0); // No distance estimation method was selected
         }
-        else{
-            return(0); // No distance estimation method was selected
-        }
-        
+
         double distanceError = currentDistance - Target.DESIRED_DISTANCE;
         double driving_adjust = 0;
 
-        if(distanceError > GET_IN_DISTANCE_ERROR){ // 3 inches of error space for PID
+        if (distanceError > GET_IN_DISTANCE_ERROR) { // 3 inches of error space for PID
             driving_adjust = GET_IN_DISTANCE_P * distanceError;
         }
 
-        return(driving_adjust); // return motor output
+        return (driving_adjust); // return motor output
     }
     
     public double areaDistance(Target Target){ // Returns inches significant up to the tenths place
@@ -276,16 +283,15 @@ public class SnailVision {
             else if(horizontalAngleFromTarget > 0){
                 return(0.5);
             }
-        }
-        else if (tv == true){ // If the target is on the screen then auto-aim towards it
-            return(angleCorrect());
+        } else if (tv == true) { // If the target is on the screen then auto-aim towards it
+            return (angleCorrect());
         }
 
-        return(0);
+        return (0);
     }
 
-    public void trackTargetPosition(){
-        if(useGyro == true){ // Track where the target is to turn towards it quicker
+    public void trackTargetPosition() {
+        if (useGyro == true) { // Track where the target is to turn towards it quicker
             horizontalAngleFromTarget = getRotationalAngle();
         }
         else if (useGyro == false){ // Track where the target last left the screen to turn towards there
@@ -310,31 +316,35 @@ public class SnailVision {
         }
         storedTargetAreaValues.add(ta);
         Collections.sort(storedTargetAreaValues); // Sorts the values so that the maximum and minimum could be found
-        if(storedTargetAreaValues.size() > 50){ // Removes outliers on the very edges
+        if (storedTargetAreaValues.size() > 50) { // Removes outliers on the very edges
             storedTargetAreaValues.remove(0);
             storedTargetAreaValues.remove(storedTargetAreaValues.size() - 1);
         }
     }
 
-    public void clearTargetArea(){ // Releasing the button saves an average of the good data and clears a temporary array
+    public void clearTargetArea() { // Releasing the button saves an average of the good data and clears a temporary
+                                    // array
         storedTargetAreaValues.remove(0);
-        storedTargetAreaValues.remove(storedTargetAreaValues.size() - 1); // Removes final 2 possible outliers before averaging
+        storedTargetAreaValues.remove(storedTargetAreaValues.size() - 1); // Removes final 2 possible outliers before
+                                                                          // averaging
         double total = 0;
-        for(int i = 0; i < storedTargetAreaValues.size(); i++){ // Adds up all values stored to find the average
+        for (int i = 0; i < storedTargetAreaValues.size(); i++) { // Adds up all values stored to find the average
             total += storedTargetAreaValues.get(i);
         }
-        double average = total / storedTargetAreaValues.size(); // Average is found so that outliers do not impact the data
+        double average = total / storedTargetAreaValues.size(); // Average is found so that outliers do not impact the
+                                                                // data
         targetAreaValues.add(average);
         storedTargetAreaValues.clear();
-    }  
+    }
 
-    public void resetTargetArea(){ // Completely resets the target measurement data collection process so that code doesn't have to be redeployed to measure another target
+    public void resetTargetArea() { // Completely resets the target measurement data collection process so that code
+                                    // doesn't have to be redeployed to measure another target
         clearTargetArea();
         targetAreaValues.clear();
     }
 
-    public void printTargetArea(){ // So that the user can copy and paste the data and make it a constant
-        for(int i = 0; i < targetAreaValues.size() - 1; i++){
+    public void printTargetArea() { // So that the user can copy and paste the data and make it a constant
+        for (int i = 0; i < targetAreaValues.size() - 1; i++) {
             System.out.print(targetAreaValues.get(i) + ", ");
         }
         if(targetAreaValues.size() > 0){ // So that if a user presses the button without first saving any values the program does not crash
@@ -347,53 +357,53 @@ public class SnailVision {
 
     // NetworkTable functions are below
 
-    public static void changePipeline(NetworkTable Table, int pipeline){
-        if(pipeline < 0 || pipeline > 9){
-            pipeline = 0; // In case that someone tries to switch to an impossible pipeline then set it to default.
+    public static void changePipeline(NetworkTable Table, int pipeline) {
+        if (pipeline < 0 || pipeline > 9) {
+            pipeline = 0; // In case that someone tries to switch to an impossible pipeline then set it to
+                          // default.
         }
         Table.getEntry("pipeline").setNumber(pipeline);
     }
 
     // Limelight ONLY functions
 
-    public static void toggleLimelightScreenshot(NetworkTable Table){ // Takes 2 screenshots per second
-        if(Table.getEntry("snapshot").getDouble(0) == 0){ // If the camera is not taking screenshots currently
+    public static void toggleLimelightScreenshot(NetworkTable Table) { // Takes 2 screenshots per second
+        if (Table.getEntry("snapshot").getDouble(0) == 0) { // If the camera is not taking screenshots currently
             Table.getEntry("snapshot").setNumber(1);
-        }
-        else if(Table.getEntry("snapshot").getDouble(0) == 1){ // If the camera is taking screenshots currently
+        } else if (Table.getEntry("snapshot").getDouble(0) == 1) { // If the camera is taking screenshots currently
             Table.getEntry("snapshot").setNumber(0);
         }
     }
 
-    public static void turnOffLimelight(NetworkTable Table){
-        if(Table.getEntry("ledMode").getDouble(0) != 1){
+    public static void turnOffLimelight(NetworkTable Table) {
+        if (Table.getEntry("ledMode").getDouble(0) != 1) {
             Table.getEntry("ledMode").setNumber(1);
         }
     }
 
-    public static void turnOnLimelight(NetworkTable Table){
-        if(Table.getEntry("ledMode").getDouble(0) != 3){
+    public static void turnOnLimelight(NetworkTable Table) {
+        if (Table.getEntry("ledMode").getDouble(0) != 3) {
             Table.getEntry("ledMode").setNumber(3);
         }
     }
 
-    public static void blinkLimelight(NetworkTable Table){
-        if(Table.getEntry("ledMode").getDouble(0) != 2){
+    public static void blinkLimelight(NetworkTable Table) {
+        if (Table.getEntry("ledMode").getDouble(0) != 2) {
             Table.getEntry("ledMode").setNumber(2);
         }
     }
 
-    public static void toggleLimelightMode(NetworkTable Table){ // 0 = vision processing 1 = drive camera
-        if(Table.getEntry("camMode").getDouble(0) == 0){
+    public static void toggleLimelightMode(NetworkTable Table) { // 0 = vision processing 1 = drive camera
+        if (Table.getEntry("camMode").getDouble(0) == 0) {
             Table.getEntry("camMode").setNumber(1);
-        }
-        else if(Table.getEntry("camMode").getDouble(0) == 1){
+        } else if (Table.getEntry("camMode").getDouble(0) == 1) {
             Table.getEntry("camMode").setNumber(0);
         }
     }
 
-    // Gyroscope NavX functionality - Included in SnailVision so that gyro works even if it is nowhere else in the project
-    public void gyroFunctionality(){
+    // Gyroscope NavX functionality - Included in SnailVision so that gyro works
+    // even if it is nowhere else in the project
+    public void gyroFunctionality() {
         // Used for tracking the target offscreen
         if(TargetV.size() > 0 && TargetX.size() > 0){
             if(TargetV.get(0) == true){
@@ -405,7 +415,8 @@ public class SnailVision {
             Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
         }
 
-        // Allows the user to see how long the RoboRIO delays between iterations if printIterationTime = true
+        // Allows the user to see how long the RoboRIO delays between iterations if
+        // printIterationTime = true
         printIterationTime();
 
         // Used for jerk and collision detection
@@ -421,9 +432,8 @@ public class SnailVision {
         }
         else if(rotationalAxis.equals("pitch")){
             return getPitchAngle(); // resetAngle is here to act as a reset function
-        }
-        else{
-            return(0); // Just in case something breaks
+        } else {
+            return (0); // Just in case something breaks
         }
     }
 
@@ -440,13 +450,14 @@ public class SnailVision {
     }
 
     public double getYawAngle() {
-        return (navx.getYaw() - resetAngle); // Even though yaw has a reset funciton it is used like this so that an origin could be set
+        return (navx.getYaw() - resetAngle); // Even though yaw has a reset funciton it is used like this so that an
+                                             // origin could be set
     }
 
     public double getRollAngle() {
         return (navx.getRoll() - resetAngle);
     }
-    
+
     public double getPitchAngle() {
         return (navx.getPitch() - resetAngle);
     }
@@ -471,11 +482,12 @@ public class SnailVision {
         currentAcceleration = getAcceleration();
         double jerk = (pastAcceleration - currentAcceleration) / Timer.get(); // Change in accelleration = jerk
         Timer.reset();
-        return(jerk);
+        Timer.start();
+        return (jerk);
     }
 
-    public void printIterationTime(){
-        if(printIterationTime == true){
+    public void printIterationTime() {
+        if (printIterationTime == true) {
             System.out.print(Timer.get() + ", ");
         }
     }

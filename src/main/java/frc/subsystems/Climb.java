@@ -26,16 +26,16 @@ public class Climb {
     private Notifier notifier;
 
     private Climb() {
-        frontSolenoid = new SnailDoubleSolenoid(RobotMap.CLIMB_FRONT_SOLENOID_FORWARD, RobotMap.CLIMB_FRONT_SOLENOID_REVERSE);
-        backSolenoid = new SnailDoubleSolenoid(RobotMap.CLIMB_BACK_SOLENOID_FORWARD, RobotMap.CLIMB_BACK_SOLENOID_REVERSE);
+        frontSolenoid = new SnailDoubleSolenoid(RobotMap.PCM_SECONDARY_ID, RobotMap.CLIMB_FRONT_SOLENOID_FORWARD, RobotMap.CLIMB_FRONT_SOLENOID_REVERSE);
+        backSolenoid = new SnailDoubleSolenoid(RobotMap.PCM_SECONDARY_ID, RobotMap.CLIMB_BACK_SOLENOID_FORWARD, RobotMap.CLIMB_BACK_SOLENOID_REVERSE);
 
         frontMotor = new WPI_VictorSPX(RobotMap.CLIMB_FRONT_MOTOR);
         backMotor = new WPI_VictorSPX(RobotMap.CLIMB_BACK_MOTOR);
         frontMotor.setNeutralMode(NeutralMode.Brake);
         backMotor.setNeutralMode(NeutralMode.Brake);
 
-        // notifier = new Notifier(this::correctAngle);
-        // notifier.startPeriodic(RobotMap.CLIMB_UPDATE_PERIOD);
+        notifier = new Notifier(this::correctAngle);
+        notifier.startPeriodic(RobotMap.CLIMB_UPDATE_PERIOD);
 
         reset();
     }
@@ -44,6 +44,8 @@ public class Climb {
     public void reset() {
         retractFront();
         retractBack();
+
+        state = 0;
     }
 
     public void toggleFront() {
@@ -82,62 +84,50 @@ public class Climb {
 
     /* Go to the next state of the climb
      * 0 - Both front and back are retracted
-     * 1 - Rising up, leaning towards front
-     * 2 - Rising up, front is retracting
-     * 3 - Fully risen
-     * 4 - Front is retracted, back is extended
+     * 1 - Both front and back are extended
+     * 2 - Back is retracted, front is extended
      */
     public void advanceClimb() {
         if(state == 0) {
+            state = 1;
             extendFront();
             extendBack();
-            state = 1;
         }
         else if(state == 1) {
-            retractFront();
             state = 2;
+            retractBack();
         }
         else if(state == 2) {
-            extendFront();
-            state = 3;
-        }
-        else if(state == 3) {
-            retractFront();
-            state = 4;
-        }
-        else if(state == 4) {
-            retractBack();
             state = 0;
+            retractFront();
         }
     }
 
     public void climbDrive(double speed) {
         double adjustedSpeed = speed * RobotMap.CLIMB_MOTOR_MAX_SPEED;
-        if(isFrontExtended()) frontMotor.set(adjustedSpeed);
-        else frontMotor.set(0);
-        if(isBackExtended()) backMotor.set(adjustedSpeed);
-        else backMotor.set(0);
+        frontMotor.set(adjustedSpeed);
+        backMotor.set(adjustedSpeed);
     }
 
-    // // If the robot is tilted beyond a critical angle while rising, retract appropriate solenoid
-    // private void correctAngle() {
-    //     if(state == 1) {
-    //         double angle = Gyro.getInstance().getClimbTiltAngle();
-    //         // Robot is tilted backwards, so stop front
-    //         if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) {
-    //             retractFront();
-    //         }
-    //         // Robot is tilted forwards, so stop back
-    //         else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) {
-    //             retractBack();
-    //         }
-    //         // Otherwise, just extend both
-    //         else {
-    //             extendFront();
-    //             extendBack();
-    //         }
-    //     }
-    // }
+    // If the robot is tilted beyond a critical angle while rising, stop appropriate solenoid
+    private void correctAngle() {
+        if(state == 1) {
+            double angle = Gyro.getInstance().getClimbTiltAngle();
+            // Robot is tilted forwards, so stop back
+            if(angle > RobotMap.CLIMB_CRITICAL_ANGLE) {
+                turnOffBack();
+            }
+            // Robot is tilted backwards, so stop front
+            else if(angle < -RobotMap.CLIMB_CRITICAL_ANGLE) {
+                turnOffFront();
+            }
+            // Otherwise, just extend both
+            else {
+                extendFront();
+                extendBack();
+            }
+        }
+    }
 
     // Whether or not the front is currently extended
     public boolean isFrontExtended() {
@@ -154,6 +144,7 @@ public class Climb {
         SmartDashboard.putBoolean("Climb Back Extended", isBackExtended());
         SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
         SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
+        SmartDashboard.putNumber("Climb State", state);
     }
     
     public static Climb getInstance() { 

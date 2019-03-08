@@ -11,6 +11,7 @@ public class RobotMap {
 
     // General
     public static final int NEO_CURRENT_LIMIT = 50; // amps
+    public static final int PCM_SECONDARY_ID = 10;
 
     // Controllers
     public static final int CONTROLLER_DRIVE_PORT = 0;
@@ -60,7 +61,7 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
     public static final double INTAKE_ARM_PID_MIN_OUTPUT = -1.0;
     public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
-    public static final double INTAKE_ARM_PID_TOLERANCE = 0.5; // How close the PID can be
+    public static final double INTAKE_ARM_PID_TOLERANCE = 1.0; // How close the PID can be
     public static final double INTAKE_ARM_PID_TIME = 0.01; // How long the PID has to be on target in sec
 
     // Cargo Intake
@@ -79,7 +80,7 @@ public class RobotMap {
     public static final int CLIMB_BACK_SOLENOID_REVERSE = 3;
 
     public static double CLIMB_MOTOR_MAX_SPEED = 1.0;
-    public static final double CLIMB_CRITICAL_ANGLE = 20.0; // Critical angle before the climb stabilizer kicks in
+    public static final double CLIMB_CRITICAL_ANGLE = 5.0; // Critical angle before the climb stabilizer kicks in
     public static final double CLIMB_UPDATE_PERIOD = 0.020; // How often the climb stabilizer will be run in seconds
     
 
@@ -88,8 +89,8 @@ public class RobotMap {
     public static final double[] AREA_TO_DISTANCE_SHIP = {1};
 
     public static void initializeVision(SnailVision vision) {
-        vision.ANGLE_CORRECT_P = -0.03;
-        vision.ANGLE_CORRECT_F = 0.05;
+        vision.ANGLE_CORRECT_P = -0.02;
+        vision.ANGLE_CORRECT_F = 0.2;
         vision.ANGLE_CORRECT_MIN_ANGLE = 2.0; // degrees
         
         vision.GET_IN_DISTANCE_P = 4.0;
