@@ -6,6 +6,7 @@
 package frc.util.snail_vision;
 
 import edu.wpi.first.networktables.*;
+import frc.util.snail_vision.*;
 
 import com.kauailabs.navx.frc.*;
 
@@ -43,6 +44,7 @@ public class SnailVision {
     public ArrayList<Double> TargetHorizontal; // Horizontal length of the fitted bounding box
     public ArrayList<Double> TargetVertical; // Vertical length of the fitted bounding box
     public ArrayList<Byte> currentPipeline; // Array because it might be used when switching pipeline
+    public int retainedData;
 
     public ArrayList<Target> TARGETS = new ArrayList<Target>();
 
@@ -59,9 +61,10 @@ public class SnailVision {
     public double JERK_COLLISION_THRESHOLD; // What the jerk has to be for it to be considered a collision
     public boolean printIterationTime;
 
-    public SnailVision(boolean utilizeGyro) {
-        TargetX = new ArrayList<Double>(); // Target's angle on the x-axis
-        TargetY = new ArrayList<Double>(); // Target's angle on the y-axis
+    public SnailVision(boolean utilizeGyro){
+        retainedData = 60;
+        TargetX = new ArrayList<Double>(); // Target's angle on the x-axis 
+        TargetY = new ArrayList<Double>(); // Target's angle on the y-axis 
         TargetA = new ArrayList<Double>(); // Target's area on the screen
         TargetV = new ArrayList<Boolean>(); // Target's visibility on the screen
         TargetS = new ArrayList<Double>(); // Target's skew/rotation on the screen
@@ -70,8 +73,21 @@ public class SnailVision {
         TargetLong = new ArrayList<Double>(); // Sidelength of longest side of the fitted bounding box (pixels)
         TargetHorizontal = new ArrayList<Double>(); // Horizontal length of the fitted bounding box
         TargetVertical = new ArrayList<Double>(); // Vertical length of the fitted bounding box
-        currentPipeline = new ArrayList<Byte>(); // Array because it might be used when switching pipeline. Byte saves
-                                                 // RAM
+        currentPipeline = new ArrayList<Byte>(); // Array because it might be used when switching pipeline. Byte saves RAM
+        
+        for(int i = 0; i < retainedData; i++){ // To prevent ArrayOutofBoundsException
+            TargetX.add(0.0);
+            TargetY.add(0.0);
+            TargetA.add(0.0);
+            TargetV.add(true);
+            TargetS.add(0.0);
+            Latency.add(0);
+            TargetShort.add(0.0);
+            TargetLong.add(0.0);
+            TargetHorizontal.add(0.0);
+            TargetVertical.add(0.0);
+            currentPipeline.add((byte) 0);
+        }
 
         useGyro = utilizeGyro;
         if (useGyro == true) {
@@ -122,24 +138,32 @@ public class SnailVision {
         TargetHorizontal.add(0, thorE.getDouble(0)); // Horizontal length of the fitted bounding box
         TargetVertical.add(0, tvertE.getDouble(0)); // Vertical length of the fitted bounding box
         currentPipeline.add(0, (byte) tgetpipeE.getDouble(0));
-
-        if (TargetX.size() > 60) { // Removes the last entry in the arraylist and shifts over the rest
-            TargetX.remove(60); // Target's angle on the x-axis
-            TargetY.remove(60); // Target's angle on the y-axis
-            TargetA.remove(60); // Target's area on the screen
-            TargetV.remove(60); // Target's visibility on the screen
-            TargetS.remove(60); // Target's skew/rotation on the screen
-            Latency.remove(60); // Latency of the camera in miliseconds
-            TargetShort.remove(60); // Sidelength of shortest side of the fitted bounding box (pixels)
-            TargetLong.remove(60); // Sidelength of longest side of the fitted bounding box (pixels)
-            TargetHorizontal.remove(60); // Horizontal length of the fitted bounding box
-            TargetVertical.remove(60); // Vertical length of the fitted bounding box
-            currentPipeline.remove(60); // Array because it might be used when switching pipeline
+            
+        if(TargetX.size() > retainedData){ // Removes the last entry in the arraylist and shifts over the rest
+            for(int i = 0; i < TargetX.size() - retainedData; i++){
+                TargetX.remove(retainedData); // Target's angle on the x-axis 
+                TargetY.remove(retainedData); // Target's angle on the y-axis 
+                TargetA.remove(retainedData); // Target's area on the screen
+                TargetV.remove(retainedData); // Target's visibility on the screen 
+                TargetS.remove(retainedData); // Target's skew/rotation on the screen
+                Latency.remove(retainedData); // Latency of the camera in miliseconds
+                TargetShort.remove(retainedData); // Sidelength of shortest side of the fitted bounding box (pixels)
+                TargetLong.remove(retainedData); // Sidelength of longest side of the fitted bounding box (pixels)
+                TargetHorizontal.remove(retainedData); // Horizontal length of the fitted bounding box
+                TargetVertical.remove(retainedData); // Vertical length of the fitted bounding box
+                currentPipeline.remove(retainedData); // Array because it might be used when switching pipeline
+            }
         }
     }
 
-    public double angleCorrect() {
-        double tx = TargetX.get(0); // Gets the angle of how far away from the corsshair the object is
+    public double angleCorrect(){
+        double tx = 0;
+        if(TargetX.size() > 0){
+            tx = TargetX.get(0); // Gets the angle of how far away from the corsshair the object is
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
 
         double Kf = ANGLE_CORRECT_F; // Minimum motor input to move robot in case P can't do it
         double Kp = ANGLE_CORRECT_P; // for PID
@@ -162,9 +186,10 @@ public class SnailVision {
                                                  // targets
         double currentDistance = 0;
 
-        if (DISTANCE_ESTIMATION_METHOD.equals("area")) {
+        if(DISTANCE_ESTIMATION_METHOD.equals("area")){
             currentDistance = areaDistance(Target);
-        } else if (DISTANCE_ESTIMATION_METHOD.equals("trig")) {
+        }
+        else if(DISTANCE_ESTIMATION_METHOD.equals("trig")){
             currentDistance = trigDistance(Target);
         } else {
             return (0); // No distance estimation method was selected
@@ -179,81 +204,84 @@ public class SnailVision {
 
         return (driving_adjust); // return motor output
     }
+    
+    public double areaDistance(Target Target){ // Returns inches significant up to the tenths place
+        if(TargetA.size() > 0 && TargetV.size() > 2){ // Checks for errors
+            double ta = TargetA.get(0);
+            boolean tv0 = TargetV.get(0); // Looks back 3 frames to see if the target was on the screen just to make sure that the limelight glitched and did not see the target for a split second
+            boolean tv1 = TargetV.get(1);
+            boolean tv2 = TargetV.get(2);
 
-    public double areaDistance(Target Target) { // Returns inches significant up to the tenths place
-        double ta = TargetA.get(0);
-        boolean tv0 = TargetV.get(0); // Looks back 3 frames to see if the target was on the screen just to make sure
-                                      // that the limelight glitched and did not see the target for a split second
-        boolean tv1 = TargetV.get(1);
-        boolean tv2 = TargetV.get(2);
-        double minDifference = 10000; // Just so that it finds a smaller value
-        int minIndex = Target.AREA_PERCENT_MEASUREMENTS - 1; // The indexes of the array of percentages is the distance
-                                                             // that the robot is from the target in inches
-        if (tv0 == true || tv1 == true || tv2 == true) { // If the target is on screen in the past 3 frames
-            for (int i = 0; i < Target.AREA_PERCENT_MEASUREMENTS - 1; i++) {
-                if (Target.AREA_TO_DISTANCE[i] - ta < minDifference && Target.AREA_TO_DISTANCE[i] - ta > 0) { // Finds
-                                                                                                              // the
-                                                                                                              // smallest
-                                                                                                              // difference
-                                                                                                              // in
-                                                                                                              // areas
-                                                                                                              // to find
-                                                                                                              // the
-                                                                                                              // distance
-                                                                                                              // the
-                                                                                                              // robot
-                                                                                                              // is from
-                                                                                                              // the
-                                                                                                              // target
-                    minDifference = Target.AREA_TO_DISTANCE[i] - ta;
-                    minIndex = i;
+            double minDifference = 10000; // Just so that it finds a smaller value
+            int minIndex = Target.AREA_PERCENT_MEASUREMENTS - 1; // The indexes of the array of percentages is the distance that the robot is from the target in inches
+            if(tv0 == true || tv1 == true || tv2 == true){ // If the target is on screen in the past 3 frames
+                for(int i = 0; i < Target.AREA_PERCENT_MEASUREMENTS - 1; i++){
+                    if(Target.AREA_TO_DISTANCE[i] - ta < minDifference && Target.AREA_TO_DISTANCE[i] - ta > 0){ // Finds the smallest difference in areas to find the distance the robot is from the target
+                        minDifference = Target.AREA_TO_DISTANCE[i] - ta;
+                        minIndex = i; 
+                    }
                 }
-            }
 
-            // Finds the average of the area between the two recorded constant points to
-            // find the average inch measurement in between
-            if (ta > Target.AREA_TO_DISTANCE[minIndex]) {
-                minIndex += (ta - Target.AREA_TO_DISTANCE[minIndex])
-                        / (Target.AREA_TO_DISTANCE[minIndex + 1] - Target.AREA_TO_DISTANCE[minIndex]);
-            } else if (ta < Target.AREA_TO_DISTANCE[minIndex]) {
-                minIndex += 1 - (Target.AREA_TO_DISTANCE[minIndex] - ta)
-                        / (Target.AREA_TO_DISTANCE[minIndex + 1] - Target.AREA_TO_DISTANCE[minIndex]);
-            }
+                // Finds the average of the area between the two recorded constant points to find the average inch measurement in between
+                if(ta > Target.AREA_TO_DISTANCE[minIndex]){
+                    minIndex += (ta - Target.AREA_TO_DISTANCE[minIndex]) / (Target.AREA_TO_DISTANCE[minIndex + 1] - Target.AREA_TO_DISTANCE[minIndex]);
+                }
+                else if (ta < Target.AREA_TO_DISTANCE[minIndex]){
+                    minIndex += 1 - (Target.AREA_TO_DISTANCE[minIndex] - ta) / (Target.AREA_TO_DISTANCE[minIndex + 1] - Target.AREA_TO_DISTANCE[minIndex]);
+                }
 
-            return (minIndex);
-        } else { // If there is no target on the screen then return 0 as a distance so that the
-                 // robot does not do something unexpected
-            return (0);
+                return(minIndex);
+            }
+            else{ // If there is no target on the screen then return 0 as a distance so that the robot does not do something unexpected
+                return(0);
+            }
         }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
+    return(0);
     }
 
-    public double trigDistance(Target Target) { // More accurate than area distance but the target has to be high in the
-                                                // air above the camera
-        // Distance from Target = (Target Height - Camera Height) / tan(Angle of the
-        // Camera + Angle of the target above the Crosshair)
-        double distanceFromTarget = (Target.TARGET_HEIGHT - CAMERA_HEIGHT)
-                / Math.tan(Math.toRadians(CAMERA_ANGLE + TargetY.get(0)));
-        return (distanceFromTarget);
+    public double trigDistance(Target Target){ // More accurate than area distance but the target has to be high in the air above the camera
+        // Distance from Target = (Target Height - Camera Height) / tan(Angle of the Camera + Angle of the target above the Crosshair)
+        double distanceFromTarget = 0;
+        if(TargetY.size() > 0){
+            distanceFromTarget = (Target.TARGET_HEIGHT - CAMERA_HEIGHT) / Math.tan(Math.toRadians(CAMERA_ANGLE + TargetY.get(0)));
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
+        return(distanceFromTarget);
     }
 
-    public double findCameraAngle(double currentDistance, Target Target) { // Give the distance from a known target in
-                                                                           // inches
-        // Camera Angle = arctan((Target Height - Camera Height) / Distance from Target)
-        // - Angle of Target Above Camera's Crosshair
-        double cameraAngle = Math
-                .atan(Math.toRadians(((Target.TARGET_HEIGHT - CAMERA_HEIGHT) / currentDistance) - TargetY.get(0)));
-        System.out.println("Camera Angle" + cameraAngle);
-        return (cameraAngle);
+    public double findCameraAngle(double currentDistance, Target Target){ // Give the distance from a known target in inches
+        // Camera Angle = arctan((Target Height - Camera Height) / Distance from Target) - Angle of Target Above Camera's Crosshair
+        double cameraAngle = 0;
+        if(TargetY.size() > 0){
+            cameraAngle = Math.atan(Math.toRadians( ( (Target.TARGET_HEIGHT - CAMERA_HEIGHT) / currentDistance) - TargetY.get(0)));
+            System.out.println("Camera Angle" + cameraAngle);
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
+        return(cameraAngle);
     }
 
-    public double findTarget() {
-        boolean tv = TargetV.get(0);
+    public double findTarget(){
+        boolean tv = true;
+        if(TargetV.size() > 0){
+            tv = TargetV.get(0);
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
 
-        if (tv == true) { // If the target is not on the screen then spin towards it
-            if (horizontalAngleFromTarget < 0) {
-                return (-0.5);
-            } else if (horizontalAngleFromTarget > 0) {
-                return (0.5);
+        if(tv == false){ // If the target is not on the screen then spin towards it
+            if(horizontalAngleFromTarget < 0){
+                return(-0.5);
+            }
+            else if(horizontalAngleFromTarget > 0){
+                return(0.5);
             }
         } else if (tv == true) { // If the target is on the screen then auto-aim towards it
             return (angleCorrect());
@@ -265,17 +293,27 @@ public class SnailVision {
     public void trackTargetPosition() {
         if (useGyro == true) { // Track where the target is to turn towards it quicker
             horizontalAngleFromTarget = getRotationalAngle();
-        } else if (useGyro == false) { // Track where the target last left the screen to turn towards there
-            if (TargetV.get(0) == true) { // Once the target is off screen, the function saves the last seen side
-                horizontalAngleFromTarget = TargetX.get(0);
+        }
+        else if (useGyro == false){ // Track where the target last left the screen to turn towards there
+            if(TargetV.size() > 0){
+                if(TargetV.get(0) == true){ // Once the target is off screen, the function saves the last seen side 
+                    if(TargetX.size() > 0){
+                        horizontalAngleFromTarget = TargetX.get(0); 
+                    }
+                }
             }
         }
     }
 
-    // The next 3 functions are used to record the target area to distance for
-    // distance estimation using area
-    public void recordTargetArea() { // Pressing a button loads area for that distance and removes outliers
-        double ta = TargetA.get(0);
+    // The next 3 functions are used to record the target area to distance for distance estimation using area
+    public void recordTargetArea(){ // Pressing a button loads area for that distance and removes outliers
+        double ta = 0;
+        if(TargetA.size() > 0){
+            ta = TargetA.get(0);
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
         storedTargetAreaValues.add(ta);
         Collections.sort(storedTargetAreaValues); // Sorts the values so that the maximum and minimum could be found
         if (storedTargetAreaValues.size() > 50) { // Removes outliers on the very edges
@@ -309,11 +347,11 @@ public class SnailVision {
         for (int i = 0; i < targetAreaValues.size() - 1; i++) {
             System.out.print(targetAreaValues.get(i) + ", ");
         }
-        if (targetAreaValues.size() > 0) { // So that if a user presses the button without first saving any valeus the
-                                           // program does not crash
-            System.out.println(targetAreaValues.get(targetAreaValues.size() - 1)); // Just used to print out data so
-                                                                                   // that it could easily be copy and
-                                                                                   // pasted into array format
+        if(targetAreaValues.size() > 0){ // So that if a user presses the button without first saving any values the program does not crash
+            System.out.println(targetAreaValues.get(targetAreaValues.size() - 1)); // Just used to print out data so that it could easily be copy and pasted into array format
+        }
+        else{
+            Util.printError("No target areas have been recorded yet and so they cannot be printed out yet.");
         }
     }
 
@@ -367,10 +405,15 @@ public class SnailVision {
     // even if it is nowhere else in the project
     public void gyroFunctionality() {
         // Used for tracking the target offscreen
-        // if (TargetV.get(0) == true) {
-        //     resetRotationalAngle(); // Make the front of robot's current position 0
-        //     resetAngle -= TargetX.get(0); // Changes the robot's current position to the center of the target
-        // }
+        if(TargetV.size() > 0 && TargetX.size() > 0){
+            if(TargetV.get(0) == true){
+                resetRotationalAngle(); // Make the front of robot's current position 0
+                resetAngle -= TargetX.get(0); // Changes the robot's current position to the center of the target
+            }
+        }
+        else{
+            Util.printError("ArrayLists are missing values. A function is called before the SnailVision object gets values from the camera.");
+        }
 
         // Allows the user to see how long the RoboRIO delays between iterations if
         // printIterationTime = true
@@ -379,27 +422,29 @@ public class SnailVision {
         // Used for jerk and collision detection
         instantaneousJerk = calculateJerk();
     }
-
-    public double getRotationalAngle() { // Angle of the robot as it rotates
-        if (rotationalAxis.equals("yaw")) {
-            return getYawAngle(); // Even though yaw has a reset funciton it is used with resetAngle so that an
-                                  // origin could be set
-        } else if (rotationalAxis.equals("roll")) {
+    
+    public double getRotationalAngle(){ // Angle of the robot as it rotates
+        if(rotationalAxis.equals("yaw")){
+            return getYawAngle(); // Even though yaw has a reset funciton it is used with resetAngle so that an origin could be set
+        }
+        else if(rotationalAxis.equals("roll")){
             return getRollAngle(); // resetAngle is here to act as a reset function
-        } else if (rotationalAxis.equals("pitch")) {
+        }
+        else if(rotationalAxis.equals("pitch")){
             return getPitchAngle(); // resetAngle is here to act as a reset function
         } else {
             return (0); // Just in case something breaks
         }
     }
 
-    public void resetRotationalAngle() {
-        if (rotationalAxis.equals("yaw")) {
-            resetAngle = navx.getYaw(); // Even though yaw has a reset funciton it is used like this so that an origin
-                                        // could be set
-        } else if (rotationalAxis.equals("roll")) {
+    public void resetRotationalAngle(){
+        if(rotationalAxis.equals("yaw")){
+            resetAngle = navx.getYaw(); // Even though yaw has a reset funciton it is used like this so that an origin could be set
+        }
+        else if(rotationalAxis.equals("roll")){
             resetAngle = navx.getRoll();
-        } else if (rotationalAxis.equals("pitch")) {
+        }
+        else if(rotationalAxis.equals("pitch")){
             resetAngle = navx.getPitch();
         }
     }
@@ -418,21 +463,24 @@ public class SnailVision {
     }
 
     public double getAcceleration() {
-        if (rotationalAxis.equals("yaw")) {
-            return (navx.getRawAccelX());
-        } else if (rotationalAxis.equals("roll")) {
-            return (navx.getRawAccelY());
-        } else if (rotationalAxis.equals("pitch")) {
-            return (navx.getRawAccelZ());
-        } else {
-            return (0); // Just in case something breaks
+        if(rotationalAxis.equals("yaw")){
+           return(navx.getRawAccelX());
+        }
+        else if(rotationalAxis.equals("roll")){
+            return(navx.getRawAccelY());
+        }
+        else if(rotationalAxis.equals("pitch")){
+            return(navx.getRawAccelZ());
+        }   
+        else{
+            return(0); // Just in case something breaks
         }
     }
 
-    public double calculateJerk() {
+    public double calculateJerk(){
         pastAcceleration = currentAcceleration;
         currentAcceleration = getAcceleration();
-        double jerk = (pastAcceleration - currentAcceleration) / Timer.get(); // Change in Acceleration = jerk
+        double jerk = (pastAcceleration - currentAcceleration) / Timer.get(); // Change in accelleration = jerk
         Timer.reset();
         Timer.start();
         return (jerk);
@@ -443,4 +491,5 @@ public class SnailVision {
             System.out.print(Timer.get() + ", ");
         }
     }
-}
+
+} 

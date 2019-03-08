@@ -195,16 +195,15 @@ public class Robot extends TimedRobot {
 
     public void visionFunctionality() {
         // vision.gyroFunctionality();
-        vision.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
 
-        if (oi.getTurnCorrect() > 0 && oi.getTurnCorrect() < 0.9) {
-            if (vision.currentPipeline.get(0) != 1) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1
-                                                                                                        // target to
-                                                                                                        // expand vision
-            }
-            turnSpeed -= vision.angleCorrect();
-        } else if (oi.getTurnCorrect() > 0.9) {
+        // if (oi.getTurnCorrect() > 0 && oi.getTurnCorrect() < 0.9) {
+        //     if (vision.currentPipeline.get(0) != 1){
+        //         SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1 target to expand vision
+        //     }
+        //     turnSpeed += vision.angleCorrect();
+        // }
+        // else 
+        if (oi.getTurnCorrect() > 0) {
             if (vision.currentPipeline.get(0) != 0) {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
             }
@@ -221,10 +220,8 @@ public class Robot extends TimedRobot {
         }
 
         if (oi.getAimbot() > 0) {
-            if (vision.currentPipeline.get(0) != 1) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 1); // Changes to 1
-                                                                                                        // target to
-                                                                                                        // expand vision
+            if(vision.currentPipeline.get(0) != 0) {
+                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0);
             }
             turnSpeed += vision.angleCorrect();
             if (vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD) {
@@ -244,7 +241,7 @@ public class Robot extends TimedRobot {
         }
         outputVisionValues();
     }
-
+    
     public void setVisionConstantTuning() {
         SmartDashboard.putNumber("Vision Angle Correct P", vision.ANGLE_CORRECT_P);
         SmartDashboard.putNumber("Vision Angle Correct F", vision.ANGLE_CORRECT_F);
