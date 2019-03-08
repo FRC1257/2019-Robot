@@ -3,7 +3,13 @@ package frc.util;
 import com.kauailabs.navx.frc.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.I2C.Port;
+
+/**
+ * Wrapper class for the navX-MXP and ADXRS450_Gyro
+ * Mostly utilizes the navX-MXP, but uses the ADXRS450 as backup if it disconnects
+ */
 
 public class Gyro {
 
@@ -13,10 +19,14 @@ public class Gyro {
     private double resetRoll;
     private double resetPitch;
 
+    private ADXRS450_Gyro gyro;
+
     private Gyro() {
         navx = new AHRS(Port.kMXP);
         resetRoll = 0;
         resetPitch = 0;
+
+        gyro = new ADXRS450_Gyro();
     }
 
     /**
@@ -45,7 +55,6 @@ public class Gyro {
     public double getPitchAngle() {
         return navx.getPitch() - resetPitch;
     }
-
     /**
      * Sets the current yaw angle to "0".
      */
@@ -82,7 +91,12 @@ public class Gyro {
      * @return THe angle in degrees
      */
     public double getClimbTiltAngle() {
-        return getRollAngle();
+        if(navXConnected()) {
+            return getRollAngle();
+        }
+        else {
+            return gyro.getAngle();
+        }
     }
 
     /**
@@ -97,9 +111,10 @@ public class Gyro {
      */
     public void zeroClimbTiltAngle() {
         zeroRollAngle();
+        gyro.reset();
     }
 
-    public boolean isConnected() {
+    public boolean navXConnected() {
         return navx.isConnected();
     }
 
@@ -113,7 +128,7 @@ public class Gyro {
 
         SmartDashboard.putNumber("Robot Angle", getRobotAngle());
         SmartDashboard.putNumber("Climb Tilt Angle", getClimbTiltAngle());
-        SmartDashboard.putBoolean("Gyro Connected", isConnected());
+        SmartDashboard.putBoolean("Gyro Connected", navXConnected());
     }
 
     public static Gyro getInstance() {

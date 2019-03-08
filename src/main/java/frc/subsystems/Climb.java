@@ -90,6 +90,7 @@ public class Climb {
     public void advanceClimb() {
         if(state == 0) {
             state = 1;
+            Gyro.getInstance().zeroClimbTiltAngle();
             extendFront();
             extendBack();
         }
