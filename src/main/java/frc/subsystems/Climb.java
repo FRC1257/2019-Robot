@@ -46,6 +46,7 @@ public class Climb {
         retractBack();
 
         state = 0;
+        Gyro.getInstance().zeroClimbTiltAngle();
     }
 
     public void toggleFront() {
@@ -101,6 +102,22 @@ public class Climb {
         else if(state == 2) {
             state = 0;
             retractFront();
+        }
+    }
+
+    public void backClimb() {
+        if(state == 0) {
+            state = 2;
+            extendFront();
+        }
+        else if(state == 1) {
+            state = 0;
+            retractFront();
+            retractBack();
+        }
+        else if(state == 2) {
+            state = 1;
+            extendBack();
         }
     }
 

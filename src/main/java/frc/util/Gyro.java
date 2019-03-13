@@ -27,6 +27,7 @@ public class Gyro {
         resetPitch = 0;
 
         gyro = new ADXRS450_Gyro();
+        gyro.calibrate();
     }
 
     /**
@@ -95,7 +96,7 @@ public class Gyro {
             return getRollAngle();
         }
         else {
-            return gyro.getAngle();
+            return -gyro.getAngle();
         }
     }
 

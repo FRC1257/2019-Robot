@@ -22,6 +22,7 @@ public class IntakeArm {
     private CANPIDController intakeArmPID;
 
     private DigitalInput limitSwitch;
+    private boolean lastLimit;
 
     private int currentPositionState; // 0 - ground, 1 - rocket, 2 - cargo ship
 
@@ -32,8 +33,9 @@ public class IntakeArm {
 
     private IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
+        intakeArmMotor.restoreFactoryDefaults();
         intakeArmMotor.setIdleMode(IdleMode.kBrake);
-        intakeArmMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
+        // intakeArmMotor.setSmartCurrentLimit(RobotMap.INTAKE_ARM_NEO_CURRENT_LIMIT);
         intakeArmEncoder = intakeArmMotor.getEncoder();
         intakeArmPID = intakeArmMotor.getPIDController();
         intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
@@ -44,6 +46,7 @@ public class IntakeArm {
         intakeArmPID.setOutputRange(RobotMap.INTAKE_ARM_PID_MIN_OUTPUT, RobotMap.INTAKE_ARM_PID_MAX_OUTPUT);
         
         limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
+        lastLimit = getLimitSwitch();
 
         notifier = new Notifier(this::updatePID);
         notifier.stop();
@@ -160,6 +163,7 @@ public class IntakeArm {
     }
 
     public double getEncoderPosition() {
+        
         return intakeArmEncoder.getPosition();
     }
 
@@ -181,6 +185,7 @@ public class IntakeArm {
         } else {
             currentPositionState = 3;
         }
+        lastLimit = getLimitSwitch();
     }
 
     /*
@@ -195,6 +200,12 @@ public class IntakeArm {
     public boolean getLimitSwitch() {
         return !limitSwitch.get();
     }
+    
+
+    // Whether or not the bottom limit switch is pressed
+    public boolean getLimitSwitchPressed() {
+        return lastLimit != getLimitSwitch();
+    }
 
     public boolean getPIDRunning() {
         return running;
@@ -208,6 +219,9 @@ public class IntakeArm {
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
+        SmartDashboard.putNumber("Intake Arm Output", intakeArmMotor.getAppliedOutput());
+        SmartDashboard.putNumber("Intake Arm Current", intakeArmMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Intake Arm Temperature (C)", intakeArmMotor.getMotorTemperature());
     }
 
     // Initialize constants in Smart Dashboard

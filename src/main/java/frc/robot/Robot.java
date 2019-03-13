@@ -3,7 +3,7 @@ package frc.robot;
 import frc.subsystems.*;
 import frc.util.*;
 import frc.util.snail_vision.*;
-
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -17,6 +17,7 @@ public class Robot extends TimedRobot {
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
     Climb climb;
+    PowerDistributionPanel pdp;
 
     Gyro gyro;
 
@@ -47,9 +48,13 @@ public class Robot extends TimedRobot {
         RobotMap.initializeVision(vision);
         driveSpeed = 0;
         turnSpeed = 0;
-        CameraServer.getInstance().startAutomaticCapture();
+        CameraServer.getInstance().startAutomaticCapture(0);
+        CameraServer.getInstance().startAutomaticCapture(1);
+
         limelightNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
         setVisionConstantTuning();
+
+        pdp = new PowerDistributionPanel();
     }
 
     @Override
@@ -144,7 +149,7 @@ public class Robot extends TimedRobot {
         if (!intakeArm.getPIDRunning()) {
             intakeArm.setSpeed(oi.getArmSpeed());
 
-            if (intakeArm.getLimitSwitch()) {
+            if (intakeArm.getLimitSwitchPressed()) {
                 intakeArm.resetEncoder();
             }
         }
@@ -194,6 +199,8 @@ public class Robot extends TimedRobot {
         // Climb
         if (oi.getClimbAdvance())
             climb.advanceClimb();
+        if(oi.getClimbBackward())
+            climb.backClimb();
         if (oi.getClimbReset())
             climb.reset();
         climb.climbDrive(oi.getClimbDriveSpeed());
@@ -202,6 +209,8 @@ public class Robot extends TimedRobot {
         gyro.displayAngle();
 
         oi.updateControllers();
+
+        SmartDashboard.putNumber("Intake Arm Current", pdp.getCurrent(3));
     }
 
     public void visionFunctionality() {

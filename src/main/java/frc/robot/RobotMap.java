@@ -11,6 +11,7 @@ public class RobotMap {
 
     // General
     public static final int NEO_CURRENT_LIMIT = 50; // amps
+    public static final int INTAKE_ARM_NEO_CURRENT_LIMIT = 80; // amps
     public static final int PCM_SECONDARY_ID = 10;
 
     // Controllers
@@ -62,13 +63,13 @@ public class RobotMap {
     public static final double[] INTAKE_ARM_PIDF = { 0.1, 0.0, 0.0, 0.0 };
     public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
     public static final double INTAKE_ARM_PID_MIN_OUTPUT = -1.0;
-    public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How often the PID will be checked in sec
+    public static final double INTAKE_ARM_PID_UPDATE_PERIOD = 0.020; // How noteoften the PID will be checked in sec
     public static final double INTAKE_ARM_PID_TOLERANCE = 1.0; // How close the PID can be
     public static final double INTAKE_ARM_PID_TIME = 0.01; // How long the PID has to be on target in sec
 
     // Cargo Intake
     public static final int CARGO_INTAKE_MOTOR_ID = 7;
-    public static double CARGO_OUTTAKE_SPEED = -1.0; // percentage
+    public static double CARGO_OUTTAKE_SPEED = -0.8; // percentage
     public static double CARGO_INTAKE_SPEED = 1.0; // percentage
     public static double CARGO_CONSTANT_INTAKE_SPEED = 0.2; // percentage
 

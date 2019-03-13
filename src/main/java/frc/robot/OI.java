@@ -129,21 +129,27 @@ public class OI {
 
     // Climb
     public boolean getClimbAdvance() {
-        return operatorController.getDPadUpPressed();
-    }
-
-    public boolean getClimbFrontToggle() {
-        return operatorController.getBackButtonPressed();
-        // return operatorController.getBumperPressed(Hand.kLeft);
-    }
-
-    public boolean getClimbBackToggle() {
         return operatorController.getStartButtonPressed();
-        // return operatorController.getBumperPressed(Hand.kRight);
+    }
+
+    public boolean getClimbBackward() {
+        return operatorController.getBackButtonPressed();
     }
 
     public boolean getClimbReset() {
-        return operatorController.getDPadDownPressed();
+        return driveController.getStartButtonPressed();
+    }
+
+    public boolean getClimbFrontToggle() {
+        // return operatorController.getBackButtonPressed();
+        // return operatorController.getBumperPressed(Hand.kLeft);
+        return false;
+    }
+
+    public boolean getClimbBackToggle() {
+        // return operatorController.getStartButtonPressed();
+        // return operatorController.getBumperPressed(Hand.kRight);
+        return false;
     }
 
     public double getClimbDriveSpeed() {
