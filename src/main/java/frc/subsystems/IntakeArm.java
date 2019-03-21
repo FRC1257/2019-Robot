@@ -23,19 +23,19 @@ public class IntakeArm {
 
     private DigitalInput limitSwitch;
     private boolean lastLimit;
+    
+    public enum ArmPositionState {
+        GROUND, ROCKET, CARGO_SHIP, RAISED;
+    }
 
-    private int currentPositionState; // 0 - ground, 1 - rocket, 2 - cargo ship
-
-    private Notifier notifier; // looper for updating PID loop for arm
+    private ArmPositionState currentPositionState;
     private double currentPIDSetpoint; // current target position of arm
-    private double pidTime; // the timestamp for when the PID enters the tolerance range
-    private boolean running; // whether or not the PID loop is currently running
 
     private IntakeArm() {
         intakeArmMotor = new CANSparkMax(RobotMap.INTAKE_ARM_MOTOR_ID, MotorType.kBrushless);
         intakeArmMotor.restoreFactoryDefaults();
         intakeArmMotor.setIdleMode(IdleMode.kBrake);
-        // intakeArmMotor.setSmartCurrentLimit(RobotMap.INTAKE_ARM_NEO_CURRENT_LIMIT);
+        intakeArmMotor.setSmartCurrentLimit(RobotMap.NEO_CURRENT_LIMIT);
         intakeArmEncoder = intakeArmMotor.getEncoder();
         intakeArmPID = intakeArmMotor.getPIDController();
         intakeArmPID.setP(RobotMap.INTAKE_ARM_PIDF[0]);
@@ -48,54 +48,60 @@ public class IntakeArm {
         limitSwitch = new DigitalInput(RobotMap.INTAKE_ARM_LIMIT_SWITCH_ID);
         lastLimit = getLimitSwitch();
 
-        notifier = new Notifier(this::updatePID);
-        notifier.stop();
-
         reset();
+    }
+
+    public void update() {
+        if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
+            currentPositionState = ArmPositionState.GROUND;
+        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
+            currentPositionState = ArmPositionState.ROCKET;
+        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_CARGO + RobotMap.INTAKE_ARM_PID_RAISED) / 2.0) {
+            currentPositionState = ArmPositionState.CARGO_SHIP;
+        } else {
+            currentPositionState = ArmPositionState.RAISED;
+        }
+
+        if (getLimitSwitchPressed()) {
+            resetEncoder();
+        }
+
+        lastLimit = getLimitSwitch();
     }
 
     public void reset() {
         intakeArmMotor.set(0);
 
-        currentPositionState = 0;
-        currentPIDSetpoint = 0;
-        pidTime = -1;
-        running = false;
-        
+        currentPIDSetpoint = -1257;
         resetEncoderTop();
+        
+        currentPositionState = ArmPositionState.GROUND;
     }
 
-    // Moves the arm at a set speed and restricts the motion of the arm
     public void setSpeed(double value) {
         double adjustedSpeed = value * RobotMap.INTAKE_ARM_MOTOR_MAX_SPEED;
-        // // Arm is moving up and is past the upper threshold
-        // if(speed > 0.0 && getEncoderPosition() >=
-        // RobotMap.INTAKE_ARM_UPPER_THRESHOLD) {
-        // adjustedSpeed = 0.0;
-        // }
-        // // Arm is moving down and is past the lower threshold
-        // if(speed < 0.0 && getEncoderPosition() <=
-        // RobotMap.INTAKE_ARM_LOWER_THRESHOLD) {
-        // adjustedSpeed = 0.0;
-        // }
-        if(adjustedSpeed != 0.0 || intakeArmMotor.get() != 0.0) intakeArmMotor.set(adjustedSpeed);
+        if(adjustedSpeed < 0.0 && getLimitSwitch()) adjustedSpeed = 0.0; 
+        if(adjustedSpeed != 0.0 || intakeArmMotor.get() != 0.0) {
+            intakeArmMotor.set(adjustedSpeed);
+            currentPIDSetpoint = -1257;
+        }
     }
 
     public void raiseArm() {
-        if (getPositionState() == 0)
+        if (getPositionState() == ArmPositionState.GROUND)
             moveRocket();
-        else if (getPositionState() == 1)
+        else if (getPositionState() == ArmPositionState.ROCKET)
             moveCargo();
-        else if (getPositionState() == 2)
+        else if (getPositionState() == ArmPositionState.CARGO_SHIP)
             moveRaised();
     }
 
     public void lowerArm() {
-        if (getPositionState() == 3)
+        if (getPositionState() == ArmPositionState.RAISED)
             moveCargo();
-        else if (getPositionState() == 2)
+        else if (getPositionState() == ArmPositionState.CARGO_SHIP)
             moveRocket();
-        else if (getPositionState() == 1)
+        else if (getPositionState() == ArmPositionState.ROCKET)
             moveGround();
     }
 
@@ -116,36 +122,9 @@ public class IntakeArm {
     }
 
     public void setPIDPosition(double value) {
+        intakeArmPID.setIAccum(0);
         intakeArmPID.setReference(value, ControlType.kPosition);
         currentPIDSetpoint = value;
-        intakeArmPID.setIAccum(0);
-        notifier.startPeriodic(RobotMap.INTAKE_ARM_PID_UPDATE_PERIOD);
-    }
-
-    private void updatePID() {
-        running = true;
-        intakeArmPID.setReference(currentPIDSetpoint, ControlType.kPosition);
-
-        // Check if the encoder's position is within the tolerance
-        if (Math.abs(getEncoderPosition() - currentPIDSetpoint) < RobotMap.INTAKE_ARM_PID_TOLERANCE) {
-            // If this is the first time it has been detected, then update the timestamp
-            if (pidTime == -1) {
-                pidTime = Timer.getFPGATimestamp();
-            }
-
-            // Check if the encoder's position has been inside the tolerance for long enough
-            if ((Timer.getFPGATimestamp() - pidTime) >= RobotMap.INTAKE_ARM_PID_TIME) {
-                breakPID();
-            }
-        } else {
-            pidTime = -1;
-        }
-    }
-
-    public void breakPID() {
-        notifier.stop();
-        running = false;
-        pidTime = -1;
     }
 
     /* 
@@ -172,27 +151,9 @@ public class IntakeArm {
     }
 
     /*
-     * Sets the current position state dependent on the encoder position 0 - ground,
-     * 1 - rocket, 2 - cargo, 3 - raised
+     * Returns the current position state dependent on the encoder position
      */
-    public void updatePositionState() {
-        if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_GROUND + RobotMap.INTAKE_ARM_PID_ROCKET) / 2.0) {
-            currentPositionState = 0;
-        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_ROCKET + RobotMap.INTAKE_ARM_PID_CARGO) / 2.0) {
-            currentPositionState = 1;
-        } else if (getEncoderPosition() <= (RobotMap.INTAKE_ARM_PID_CARGO + RobotMap.INTAKE_ARM_PID_RAISED) / 2.0) {
-            currentPositionState = 2;
-        } else {
-            currentPositionState = 3;
-        }
-        lastLimit = getLimitSwitch();
-    }
-
-    /*
-     * Returns the current position state dependent on the encoder position 0 -
-     * ground, 1 - rocket, 2 - cargo, 3 - raised
-     */
-    public int getPositionState() {
+    public ArmPositionState getPositionState() {
         return currentPositionState;
     }
 
@@ -207,18 +168,14 @@ public class IntakeArm {
         return lastLimit != getLimitSwitch();
     }
 
-    public boolean getPIDRunning() {
-        return running;
-    }
-
     // Output values to Smart Dashboard
     public void outputValues() {
-        SmartDashboard.putNumber("Intake Arm Position State", getPositionState());
-        SmartDashboard.putBoolean("Intake Arm PID Active", running);
+        SmartDashboard.putString("Intake Arm Position State", getPositionState().name());
         SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
+
         SmartDashboard.putNumber("Intake Arm Output", intakeArmMotor.getAppliedOutput());
         SmartDashboard.putNumber("Intake Arm Current", intakeArmMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake Arm Temperature (C)", intakeArmMotor.getMotorTemperature());

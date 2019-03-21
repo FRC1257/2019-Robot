@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
         driveSpeed = 0;
         turnSpeed = 0;
         CameraServer.getInstance().startAutomaticCapture(0);
-        CameraServer.getInstance().startAutomaticCapture(1);
+        // CameraServer.getInstance().startAutomaticCapture(1);
 
         limelightNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
         setVisionConstantTuning();
@@ -142,21 +142,14 @@ public class Robot extends TimedRobot {
         drive.outputValues();
 
         // Intake Arm
-        if (oi.getArmRaise())
+        if (oi.getArmRaise()) {
             intakeArm.raiseArm();
-        if (oi.getArmLower())
+        }
+        if (oi.getArmLower()) {
             intakeArm.lowerArm();
-        if (!intakeArm.getPIDRunning()) {
-            intakeArm.setSpeed(oi.getArmSpeed());
-
-            if (intakeArm.getLimitSwitchPressed()) {
-                intakeArm.resetEncoder();
-            }
         }
-        if (oi.getArmPIDBreak()) {
-            intakeArm.breakPID();
-        }
-        intakeArm.updatePositionState();
+        intakeArm.setSpeed(oi.getArmSpeed());
+        intakeArm.update();
         intakeArm.outputValues();
 
         // Cargo Intake
@@ -169,40 +162,37 @@ public class Robot extends TimedRobot {
         }
 
         // Hatch Intake
-        if (oi.getHatchRaise())
+        if (oi.getHatchRaise()) {
             hatchIntake.raisePivot();
-        if (oi.getHatchLower())
+        }
+        if (oi.getHatchLower()) {
             hatchIntake.lowerPivot();
-        if (!hatchIntake.getPIDRunning()) {
-            hatchIntake.setPickup(oi.getHatchPickup());
-            hatchIntake.setPivot(oi.getHatchPivot());
-
-            // Only allow the hatch to eject if the hatch is not lowered and there is a
-            // hatch detected
-            // if(!hatchIntake.isLowered() && hatchIntake.getLimitSwitchHatch()) {
-            hatchIntake.setEject(oi.getHatchEject());
-            // }
-            // else {
-            // hatchIntake.ejectRetract();
-            // }
-
-            if (hatchIntake.getLimitSwitchPivotPressed()) {
-                hatchIntake.resetEncoder();
-            }
         }
-        if (oi.getHatchPIDBreak()) {
-            hatchIntake.breakPID();
-        }
-        hatchIntake.updatePositionState();
+        hatchIntake.setPickup(oi.getHatchPickup());
+        hatchIntake.setPivot(oi.getHatchPivot());
+        hatchIntake.setEject(oi.getHatchEject());
+
+        hatchIntake.update();
         hatchIntake.outputValues();
 
         // Climb
-        if (oi.getClimbAdvance())
+        if (oi.getClimbAdvance()) {
             climb.advanceClimb();
-        if(oi.getClimbBackward())
+        }
+        if(oi.getClimbBackward()) {
             climb.backClimb();
-        if (oi.getClimbReset())
+        }
+        if (oi.getClimbReset()) {
             climb.reset();
+        }
+        // if(climb.getState() == 0) {
+        //     if(oi.getYeetThing()) {
+        //         climb.extendFront();
+        //     }
+        //     else {
+        //         climb.retractFront();
+        //     }
+        // }
         climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
 
@@ -210,7 +200,8 @@ public class Robot extends TimedRobot {
 
         oi.updateControllers();
 
-        SmartDashboard.putNumber("Intake Arm Current", pdp.getCurrent(3));
+        SmartDashboard.putNumber("PDP Temperature", pdp.getTemperature());
+        SmartDashboard.putData(pdp);
     }
 
     public void visionFunctionality() {

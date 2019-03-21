@@ -78,10 +78,10 @@ public class DriveTrain {
 
     public void drive(double x, double z) {
         if(reversed) {
-            driveTrain.arcadeDrive(-x, z);
+            driveTrain.arcadeDrive(-x, z * RobotMap.MAX_TURN_SPEED);
         }
         else {
-            driveTrain.arcadeDrive(x, z);
+            driveTrain.arcadeDrive(x, z * RobotMap.MAX_TURN_SPEED);
         }
     }
 
@@ -127,6 +127,11 @@ public class DriveTrain {
     // Output values to Smart Dashboard
     public void outputValues() {
         SmartDashboard.putBoolean("Drive Reversed", reversed);
+
+        SmartDashboard.putNumber("Drive FL Current", flDrive.getOutputCurrent());
+        SmartDashboard.putNumber("Drive FR Current", frDrive.getOutputCurrent());
+        SmartDashboard.putNumber("Drive BL Current", blDrive.getOutputCurrent());
+        SmartDashboard.putNumber("Drive BR Current", brDrive.getOutputCurrent());
     }
 
     // Initialize constants in Smart Dashboard

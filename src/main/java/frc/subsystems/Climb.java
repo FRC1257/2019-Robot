@@ -72,11 +72,11 @@ public class Climb {
     }
 
     public void retractBack() {
-        backSolenoid.set(Value.kForward);
+        backSolenoid.set(Value.kReverse);
     }
 
     public void extendBack() {
-        backSolenoid.set(Value.kReverse);
+        backSolenoid.set(Value.kForward);
     }
 
     public void turnOffBack() {
@@ -124,7 +124,7 @@ public class Climb {
     public void climbDrive(double speed) {
         double adjustedSpeed = speed * RobotMap.CLIMB_MOTOR_MAX_SPEED;
         frontMotor.set(adjustedSpeed);
-        backMotor.set(adjustedSpeed);
+        backMotor.set(-adjustedSpeed);
     }
 
     // If the robot is tilted beyond a critical angle while rising, stop appropriate solenoid
@@ -154,7 +154,11 @@ public class Climb {
 
     // Whether or not the back is currently extended
     public boolean isBackExtended() {
-        return backSolenoid.get() == DoubleSolenoid.Value.kReverse;
+        return backSolenoid.get() == DoubleSolenoid.Value.kForward;
+    }
+
+    public int getState() {
+        return state;
     }
 
     public void outputValues() {

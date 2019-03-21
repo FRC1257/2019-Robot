@@ -152,6 +152,10 @@ public class OI {
         return false;
     }
 
+    public boolean getYeetThing() {
+        return driveController.getBackButton();
+    }
+
     public double getClimbDriveSpeed() {
         return squareInput(driveController.getForwardSpeed());
     }
