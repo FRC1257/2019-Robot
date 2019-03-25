@@ -103,14 +103,6 @@ public class OI {
     }
 
     // Hatch Intake
-    public boolean getHatchLower() {
-        return operatorController.getTriggerAxis(Hand.kLeft) > 0.5;
-    }
-
-    public boolean getHatchRaise() {
-        return operatorController.getTriggerAxis(Hand.kRight) > 0.5;
-    }
-
     public boolean getHatchPickup() {
         return operatorController.getYButton();
     }
@@ -119,13 +111,6 @@ public class OI {
         return operatorController.getXButton();
     }
 
-    public double getHatchPivot() {
-        return squareInput(operatorController.getY(Hand.kLeft));
-    }
-
-    public boolean getHatchPIDBreak() {
-        return operatorController.getStickButton(Hand.kLeft);
-    }
 
     // Climb
     public boolean getClimbAdvance() {

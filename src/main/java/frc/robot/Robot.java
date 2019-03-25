@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
 
         intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
-        hatchIntake.setConstantTuning();
 
         vision = new SnailVision(true);
         RobotMap.initializeVision(vision);
@@ -162,18 +161,14 @@ public class Robot extends TimedRobot {
         }
 
         // Hatch Intake
-        if (oi.getHatchRaise()) {
-            hatchIntake.raisePivot();
-        }
-        if (oi.getHatchLower()) {
-            hatchIntake.lowerPivot();
-        }
-        hatchIntake.setPickup(oi.getHatchPickup());
-        hatchIntake.setPivot(oi.getHatchPivot());
-        hatchIntake.setEject(oi.getHatchEject());
 
-        hatchIntake.update();
-        hatchIntake.outputValues();
+        if (oi.getHatchEject()) {
+            hatchIntake.eject();
+        } else if (oi.getHatchPickup()) {
+            hatchIntake.intake();
+        } else {
+            hatchIntake.stop();
+        }
 
         // Climb
         if (oi.getClimbAdvance()) {
@@ -230,17 +225,17 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if (oi.getAimbot() > 0) {
-            if(vision.currentPipeline.get(0) != 0) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0);
-            }
-            turnSpeed += vision.angleCorrect();
-            if (vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD) {
-                hatchIntake.pickupExtend();
-            } else {
-                hatchIntake.pickupRetract();
-            }
-        }
+        // if (oi.getAimbot() > 0) {
+        //     if(vision.currentPipeline.get(0) != 0) {
+        //         SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0);
+        //     }
+        //     turnSpeed += vision.angleCorrect();
+        //     if (vision.instantaneousJerk > vision.JERK_COLLISION_THRESHOLD) {
+        //         hatchIntake.pickupExtend();
+        //     } else {
+        //         hatchIntake.pickupRetract();
+        //     }
+        // }
 
         if (oi.getAimbotRelease()) {
             if (vision.currentPipeline.get(0) != 2) {
