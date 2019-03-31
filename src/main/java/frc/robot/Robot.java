@@ -230,7 +230,7 @@ public class Robot extends TimedRobot {
             }
         }
         
-        if (oi.getAimbotRelease()) {
+        if (oi.getAimbotRelease()) { 
             if(vision.currentPipeline.get(0) != 2) {
                 SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to default driver pipeline
             }
