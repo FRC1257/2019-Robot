@@ -4,7 +4,7 @@ import com.kauailabs.navx.frc.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * Wrapper class for the navX-MXP and ADXRS450_Gyro
@@ -22,7 +22,7 @@ public class Gyro {
     private ADXRS450_Gyro gyro;
 
     private Gyro() {
-        navx = new AHRS(Port.kMXP);
+        navx = new AHRS(SPI.Port.kMXP);
         resetRoll = 0;
         resetPitch = 0;
 
