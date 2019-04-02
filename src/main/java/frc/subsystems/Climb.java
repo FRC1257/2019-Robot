@@ -22,6 +22,7 @@ public class Climb {
     private WPI_VictorSPX backMotor;
 
     private int state = 0;
+    private int secondaryState = 0;
 
     private Notifier notifier;
 
@@ -46,6 +47,7 @@ public class Climb {
         retractBack();
 
         state = 0;
+        secondaryState = 0;
         Gyro.getInstance().zeroClimbTiltAngle();
     }
 
@@ -89,35 +91,59 @@ public class Climb {
      * 2 - Back is retracted, front is extended
      */
     public void advanceClimb() {
-        if(state == 0) {
-            state = 1;
-            Gyro.getInstance().zeroClimbTiltAngle();
-            extendFront();
-            extendBack();
-        }
-        else if(state == 1) {
-            state = 2;
-            retractBack();
-        }
-        else if(state == 2) {
-            state = 0;
-            retractFront();
+        // only allow if secondary climb is not active
+        if(secondaryState == 0) {
+            if(state == 0) {
+                state = 1;
+                Gyro.getInstance().zeroClimbTiltAngle();
+                extendFront();
+                extendBack();
+            }
+            else if(state == 1) {
+                state = 2;
+                retractBack();
+            }
+            else if(state == 2) {
+                state = 0;
+                retractFront();
+            }
         }
     }
 
     public void backClimb() {
+        // only allow if secondary climb is not active
+        if(secondaryState == 0) {
+            if(state == 0) {
+                state = 2;
+                extendFront();
+            }
+            else if(state == 1) {
+                state = 0;
+                retractFront();
+                retractBack();
+            }
+            else if(state == 2) {
+                state = 1;
+                extendBack();
+            }
+        }
+    }
+
+    public void advanceSecondaryClimb() {
+        // only allow if the primary climb is not active
         if(state == 0) {
-            state = 2;
-            extendFront();
-        }
-        else if(state == 1) {
-            state = 0;
-            retractFront();
-            retractBack();
-        }
-        else if(state == 2) {
-            state = 1;
-            extendBack();
+            if(secondaryState == 0) {
+                extendBack();
+                secondaryState = 1;
+            }
+            else if(secondaryState == 1) {
+                turnOffBack();
+                secondaryState = 2;
+            }
+            else if(secondaryState == 2) {
+                retractBack();
+                secondaryState = 0;
+            }
         }
     }
 
@@ -167,6 +193,7 @@ public class Climb {
         SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
         SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
         SmartDashboard.putNumber("Climb State", state);
+        SmartDashboard.putNumber("Climb Secondary State", secondaryState);
     }
     
     public static Climb getInstance() { 

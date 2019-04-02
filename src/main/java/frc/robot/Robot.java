@@ -177,17 +177,12 @@ public class Robot extends TimedRobot {
         if(oi.getClimbBackward()) {
             climb.backClimb();
         }
+        if (oi.getYeetThing()) {
+            climb.advanceSecondaryClimb();
+        }
         if (oi.getClimbReset()) {
             climb.reset();
         }
-        // if(climb.getState() == 0) {
-        //     if(oi.getYeetThing()) {
-        //         climb.extendFront();
-        //     }
-        //     else {
-        //         climb.retractFront();
-        //     }
-        // }
         climb.climbDrive(oi.getClimbDriveSpeed());
         climb.outputValues();
 
