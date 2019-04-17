@@ -138,7 +138,7 @@ public class OI {
     }
 
     public boolean getYeetThing() {
-        return driveController.getBackButton();
+        return driveController.getBackButtonPressed();
     }
 
     public double getClimbDriveSpeed() {

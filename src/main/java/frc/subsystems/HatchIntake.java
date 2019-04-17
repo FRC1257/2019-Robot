@@ -30,19 +30,20 @@ public class HatchIntake {
     }
 
     public void stop() {
-        hatchIntakeMotor.set(0.0);
+        hatchIntakeMotor.set(RobotMap.HATCH_CONSTANT_INTAKE_SPEED);
     }
 
     public void setConstantTuning() {
         SmartDashboard.putNumber("Hatch Intake Speed", RobotMap.HATCH_INTAKE_SPEED);
         SmartDashboard.putNumber("Hatch Outtake Speed", RobotMap.HATCH_OUTTAKE_SPEED);
+        SmartDashboard.putNumber("Hatch Constant Intake Speed", RobotMap.HATCH_CONSTANT_INTAKE_SPEED);
 
     }
 
     public void getConstantTuning() {
         RobotMap.HATCH_INTAKE_SPEED = SmartDashboard.getNumber("Hatch Intake Speed", RobotMap.HATCH_INTAKE_SPEED);
-        RobotMap.HATCH_OUTTAKE_SPEED = SmartDashboard.getNumber("Hatch Intake Speed", RobotMap.HATCH_OUTTAKE_SPEED);
-
+        RobotMap.HATCH_OUTTAKE_SPEED = SmartDashboard.getNumber("Hatch Outtake Speed", RobotMap.HATCH_OUTTAKE_SPEED);
+        RobotMap.HATCH_CONSTANT_INTAKE_SPEED = SmartDashboard.getNumber("Hatch Constant Intake Speed", RobotMap.HATCH_CONSTANT_INTAKE_SPEED);
     }
 
     public static HatchIntake getInstance() {

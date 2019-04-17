@@ -170,13 +170,13 @@ public class IntakeArm {
 
     // Output values to Smart Dashboard
     public void outputValues() {
-        SmartDashboard.putString("Intake Arm Position State", getPositionState().name());
-        SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
+        // SmartDashboard.putString("Intake Arm Position State", getPositionState().name());
+        // SmartDashboard.putNumber("Intake Arm PID Setpoint", currentPIDSetpoint);
         SmartDashboard.putBoolean("Intake Arm Limit Switch", getLimitSwitch());
         SmartDashboard.putNumber("Intake Arm Position", getEncoderPosition());
-        SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
+        // SmartDashboard.putNumber("Intake Arm Velocity", getEncoderVelocity());
 
-        SmartDashboard.putNumber("Intake Arm Output", intakeArmMotor.getAppliedOutput());
+        // SmartDashboard.putNumber("Intake Arm Output", intakeArmMotor.getAppliedOutput());
         SmartDashboard.putNumber("Intake Arm Current", intakeArmMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake Arm Temperature (C)", intakeArmMotor.getMotorTemperature());
     }

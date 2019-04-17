@@ -149,6 +149,7 @@ public class Climb {
 
     public void climbDrive(double speed) {
         double adjustedSpeed = speed * RobotMap.CLIMB_MOTOR_MAX_SPEED;
+        if(DriveTrain.getInstance().isReversed()) adjustedSpeed *= -1;
         frontMotor.set(adjustedSpeed);
         backMotor.set(-adjustedSpeed);
     }
@@ -190,8 +191,8 @@ public class Climb {
     public void outputValues() {
         SmartDashboard.putBoolean("Climb Front Extended", isFrontExtended());
         SmartDashboard.putBoolean("Climb Back Extended", isBackExtended());
-        SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
-        SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
+        // SmartDashboard.putNumber("Climb Front Speed", frontMotor.get());
+        // SmartDashboard.putNumber("Climb Back Speed", backMotor.get());
         SmartDashboard.putNumber("Climb State", state);
         SmartDashboard.putNumber("Climb Secondary State", secondaryState);
     }

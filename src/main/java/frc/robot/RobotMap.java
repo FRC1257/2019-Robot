@@ -29,9 +29,10 @@ public class RobotMap {
     public static double MAX_TURN_SPEED = 0.8;
 
     // Hatch Intake
-    public static final int HATCH_INTAKE_MOTOR_ID = 11;
-    public static double HATCH_INTAKE_SPEED = 1.0;
-    public static double HATCH_OUTTAKE_SPEED = -1.0;
+    public static final int HATCH_INTAKE_MOTOR_ID = 5;
+    public static double HATCH_INTAKE_SPEED = -1.0;
+    public static double HATCH_OUTTAKE_SPEED = 0.5;
+    public static double HATCH_CONSTANT_INTAKE_SPEED = -0.3;
 
     // Hatch Intake: 0 is at top, positive means lower
     public static final double HATCH_PID_LOWERED = 11.0; // Position of the hatch intake when lowered

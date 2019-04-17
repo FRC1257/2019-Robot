@@ -124,6 +124,10 @@ public class DriveTrain {
         reversed = !reversed;
     }
 
+    public boolean isReversed() {
+        return reversed;
+    }
+
     // Output values to Smart Dashboard
     public void outputValues() {
         SmartDashboard.putBoolean("Drive Reversed", reversed);
