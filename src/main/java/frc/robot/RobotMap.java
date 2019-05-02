@@ -26,7 +26,8 @@ public class RobotMap {
     public static final int DRIVE_BACK_RIGHT = 1;
 
     public static double[] DRIVE_TURN_PIDF = { 0.01, 0.0, 0.0, 0.0 };
-    public static double MAX_TURN_SPEED = 0.8;
+    public static double MAX_DRIVE_SPEED = 0.6;
+    public static double MAX_TURN_SPEED = 0.6;
 
     // Hatch Intake
     public static final int HATCH_INTAKE_MOTOR_ID = 5;
@@ -54,7 +55,7 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_ROCKET = 11.0; // Target position for rocket
     public static final double INTAKE_ARM_PID_CARGO = 18.5; // Target position for cargo ship
     public static final double INTAKE_ARM_PID_RAISED = 29.5; // Target position for straight up
-    public static double INTAKE_ARM_MOTOR_MAX_SPEED = 1.0;
+    public static double INTAKE_ARM_MOTOR_MAX_SPEED = 0.7;
 
     public static final double[] INTAKE_ARM_PIDF = { 0.1, 0.0, 0.0, 0.0 };
     public static final double INTAKE_ARM_PID_MAX_OUTPUT = 1.0;
@@ -64,7 +65,7 @@ public class RobotMap {
     public static final int CARGO_INTAKE_MOTOR_ID = 7;
     public static double CARGO_OUTTAKE_SPEED = -0.8; // percentage
     public static double CARGO_INTAKE_SPEED = 1.0; // percentage
-    public static double CARGO_CONSTANT_INTAKE_SPEED = 0.2; // percentage
+    public static double CARGO_CONSTANT_INTAKE_SPEED = 0; // percentage
 
     // Climb
     public static final int CLIMB_FRONT_MOTOR = 9;
@@ -85,15 +86,15 @@ public class RobotMap {
     public static final double[] AREA_TO_DISTANCE_SHIP = {1};
 
     public static void initializeVision(SnailVision vision) {
-        vision.ANGLE_CORRECT_P = -0.02;
-        vision.ANGLE_CORRECT_F = 0.2;
-        vision.ANGLE_CORRECT_MIN_ANGLE = 2.0; // degrees
+        vision.ANGLE_CORRECT_P = 0.048;
+        vision.ANGLE_CORRECT_F = 0.5;
+        vision.ANGLE_CORRECT_MIN_ANGLE = 10.01; // degrees
         
         vision.GET_IN_DISTANCE_P = 4.0;
         vision.GET_IN_DISTANCE_ERROR = 3.0; // inches
         vision.DISTANCE_ESTIMATION_METHOD = "area";
 
-        vision.JERK_COLLISION_THRESHOLD = 1;
+        // vision.JERK_COLLISION_THRESHOLD = 1;
 
         vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_ROCKET)); // Rocket
         vision.TARGETS.add(new Target(0, 12, 60, AREA_TO_DISTANCE_SHIP)); // Cargo Ship

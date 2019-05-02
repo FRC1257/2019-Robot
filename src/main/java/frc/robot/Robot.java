@@ -3,6 +3,7 @@ package frc.robot;
 import frc.subsystems.*;
 import frc.util.*;
 import frc.util.snail_vision.*;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,10 +17,10 @@ public class Robot extends TimedRobot {
     IntakeArm intakeArm;
     CargoIntake cargoIntake;
     HatchIntake hatchIntake;
-    Climb climb;
+    // Climb climb;
     PowerDistributionPanel pdp;
 
-    Gyro gyro;
+    // Gyro gyro;
 
     OI oi;
 
@@ -34,9 +35,9 @@ public class Robot extends TimedRobot {
         intakeArm = IntakeArm.getInstance();
         cargoIntake = CargoIntake.getInstance();
         hatchIntake = HatchIntake.getInstance();
-        climb = Climb.getInstance();
+        // climb = Climb.getInstance();
 
-        gyro = Gyro.getInstance();
+        // gyro = Gyro.getInstance();
 
         oi = OI.getInstance();
 
@@ -91,12 +92,12 @@ public class Robot extends TimedRobot {
         cargoIntake.getConstantTuning();
         hatchIntake.getConstantTuning();
 
-        if (oi.getClimbBackToggle()) {
-            climb.toggleBack();
-        }
-        if (oi.getClimbFrontToggle()) {
-            climb.toggleFront();
-        }
+        // if (oi.getClimbBackToggle()) {
+        //     climb.toggleBack();
+        // }
+        // if (oi.getClimbFrontToggle()) {
+        //     climb.toggleFront();
+        // }
 
         // Vision recording measurements for area to distance
         if (oi.getRecordArea()) {
@@ -120,10 +121,15 @@ public class Robot extends TimedRobot {
         turnSpeed = 0;
 
         // Vision
+        vision.networkTableFunctionality(NetworkTableInstance.getDefault().getTable("limelight"));
         visionFunctionality();
         driveSpeed += oi.getDriveForwardSpeed();
         turnSpeed += oi.getDriveTurnSpeed();
 
+        if(oi.driveController.getTriggerAxis(GenericHID.Hand.kRight) > 0.1){
+            turnSpeed += vision.angleCorrect();
+            System.out.println(vision.angleCorrect());
+        }
         // Drive
         if (oi.getDriveReverse()) {
             drive.toggleReverse();
@@ -138,7 +144,8 @@ public class Robot extends TimedRobot {
             drive.resetPID();
             drive.drive(driveSpeed, turnSpeed);
         }
-        drive.outputValues();
+        // drive.outputValues();
+        drive.drive(driveSpeed, turnSpeed);
 
         // Intake Arm
         if (oi.getArmRaise()) {
@@ -171,23 +178,23 @@ public class Robot extends TimedRobot {
         }
 
         // Climb
-        if (oi.getClimbAdvance()) {
-            climb.advanceClimb();
-        }
-        if(oi.getClimbBackward()) {
-            climb.backClimb();
-        }
-        if (oi.getYeetThing()) {
-            climb.advanceSecondaryClimb();
-        }
-        if (oi.getClimbReset()) {
-            climb.reset();
-        }
-        climb.climbDrive(oi.getClimbDriveSpeed());
-        climb.outputValues();
+        // if (oi.getClimbAdvance()) {
+        //     climb.advanceClimb();
+        // }
+        // if(oi.getClimbBackward()) {
+        //     climb.backClimb();
+        // }
+        // if (oi.getYeetThing()) {
+        //     climb.advanceSecondaryClimb();
+        // }
+        // if (oi.getClimbReset()) {
+        //     climb.reset();
+        // }
+        // climb.climbDrive(oi.getClimbDriveSpeed());
+        // climb.outputValues();
 
-        gyro.displayAngle();
-
+        // gyro.displayAngle();
+// 
         oi.updateControllers();
 
         SmartDashboard.putNumber("PDP Temperature", pdp.getTemperature());
@@ -206,14 +213,14 @@ public class Robot extends TimedRobot {
         // else 
         if (oi.getTurnCorrect() > 0) {
             if (vision.currentPipeline.get(0) != 0) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
+                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
             }
             turnSpeed -= vision.angleCorrect();
         }
 
         if (oi.getTurnCorrectRelease()) {
             if (vision.currentPipeline.get(0) != 2) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
                                                                                                         // default
                                                                                                         // driver
                                                                                                         // pipeline
@@ -234,7 +241,7 @@ public class Robot extends TimedRobot {
 
         if (oi.getAimbotRelease()) {
             if (vision.currentPipeline.get(0) != 2) {
-                SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
                                                                                                         // default
                                                                                                         // driver
                                                                                                         // pipeline
@@ -256,6 +263,6 @@ public class Robot extends TimedRobot {
     }
 
     public void outputVisionValues() {
-        SmartDashboard.putNumber("Vision Jerk Value", vision.instantaneousJerk);
+        // SmartDashboard.putNumber("Vision Jerk Value", vision.instantaneousJerk);
     }
 }

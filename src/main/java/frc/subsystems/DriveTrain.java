@@ -29,6 +29,8 @@ public class DriveTrain {
     private boolean turnPIDActive;
     private double lastTime;
     private SynchronousPIDF pidController;
+
+    
     
     private DriveTrain() {
         flDrive = new CANSparkMax(RobotMap.DRIVE_FRONT_LEFT, MotorType.kBrushless);
@@ -78,10 +80,10 @@ public class DriveTrain {
 
     public void drive(double x, double z) {
         if(reversed) {
-            driveTrain.arcadeDrive(-x, z * RobotMap.MAX_TURN_SPEED);
+            driveTrain.arcadeDrive(-x * RobotMap.MAX_DRIVE_SPEED, z * RobotMap.MAX_TURN_SPEED);
         }
         else {
-            driveTrain.arcadeDrive(x, z * RobotMap.MAX_TURN_SPEED);
+            driveTrain.arcadeDrive(x * RobotMap.MAX_DRIVE_SPEED, z * RobotMap.MAX_TURN_SPEED);
         }
     }
 
