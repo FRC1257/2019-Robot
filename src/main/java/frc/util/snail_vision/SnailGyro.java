@@ -5,7 +5,7 @@ import java.util.*;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 
-public class Gyro {
+public class SnailGyro {
     
     // Gyroscope Variables
     public boolean useGyro;
@@ -20,7 +20,7 @@ public class Gyro {
     public boolean printIterationTime;
     public double JERK_CALCULATION_RATE; // seconds
 
-    public Gyro(boolean utilizeGyro){
+    public SnailGyro(boolean utilizeGyro){
         useGyro = utilizeGyro;
         if(useGyro == true){
             rotationalAxis = "yaw"; // Default is yaw

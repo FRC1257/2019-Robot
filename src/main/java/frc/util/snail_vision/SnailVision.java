@@ -48,10 +48,10 @@ public class SnailVision {
 
     public  ArrayList<Target> TARGETS = new ArrayList<Target>();
 
-    Gyro Gyro;
+    SnailGyro Gyro;
 
     public SnailVision(boolean utilizeGyro){
-        Gyro = new Gyro(utilizeGyro);
+        Gyro = new SnailGyro(utilizeGyro);
         retainedData = 60;
         TargetX = new ArrayList<Double>(); // Target's angle on the x-axis 
         TargetY = new ArrayList<Double>(); // Target's angle on the y-axis 

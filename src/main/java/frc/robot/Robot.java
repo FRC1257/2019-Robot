@@ -212,22 +212,22 @@ public class Robot extends TimedRobot {
         // }
         // else 
         if (oi.getTurnCorrect() > 0) {
-            if (vision.currentPipeline.get(0) != 0) {
-                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
-            }
+            // if (vision.currentPipeline.get(0) != 0) {
+            //     NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0); // Dual Target
+            // }
             turnSpeed -= vision.angleCorrect();
         }
 
         if (oi.getTurnCorrectRelease()) {
             if (vision.currentPipeline.get(0) != 2) {
-                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                // NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
                                                                                                         // default
                                                                                                         // driver
                                                                                                         // pipeline
             }
         }
 
-        // if (oi.getAimbot() > 0) {
+        // if (oi.getAimbot() > 0) { 
         //     if(vision.currentPipeline.get(0) != 0) {
         //         SnailVision.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 0);
         //     }
@@ -241,7 +241,7 @@ public class Robot extends TimedRobot {
 
         if (oi.getAimbotRelease()) {
             if (vision.currentPipeline.get(0) != 2) {
-                NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
+                // NetworkTableHelper.changePipeline(NetworkTableInstance.getDefault().getTable("limelight"), 2); // Switches to
                                                                                                         // default
                                                                                                         // driver
                                                                                                         // pipeline
