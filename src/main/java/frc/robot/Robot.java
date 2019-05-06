@@ -29,6 +29,9 @@ public class Robot extends TimedRobot {
     double turnSpeed;
     NetworkTable limelightNetworkTable;
 
+    Target target;
+    double[] areaToPercent;
+
     @Override
     public void robotInit() {
         drive = DriveTrain.getInstance();
@@ -40,6 +43,9 @@ public class Robot extends TimedRobot {
         // gyro = Gyro.getInstance();
 
         oi = OI.getInstance();
+
+        areaToPercent = new double[] {5,3,2};
+        target = new Target(5,48,100, areaToPercent); // height, desired distance, number of entrys, array of percent
 
         intakeArm.setConstantTuning();
         cargoIntake.setConstantTuning();
@@ -130,6 +136,11 @@ public class Robot extends TimedRobot {
             turnSpeed += vision.angleCorrect();
             System.out.println(vision.angleCorrect());
         }
+        if(oi.driveController.getTriggerAxis(GenericHID.Hand.kLeft) > 0.1){
+            turnSpeed += vision.angleCorrect();
+            driveSpeed += vision.getInDistance(target);
+        }
+
         // Drive
         if (oi.getDriveReverse()) {
             drive.toggleReverse();
